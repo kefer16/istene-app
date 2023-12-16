@@ -34,7 +34,7 @@ export default function ButtonOptionCustom({
                alignItems: "center",
                backgroundColor: Colors[colorScheme ?? "light"].card,
                borderRadius: 10,
-               elevation: 5,
+               elevation: 3,
             },
          ]}
          onPress={onPress}
@@ -42,7 +42,7 @@ export default function ButtonOptionCustom({
          <Ionicons
             style={{
                marginRight: 10,
-               color: Colors[colorScheme ?? "light"].iconPrimary,
+               color: Colors[colorScheme ?? "light"].optionButtonIcon,
             }}
             size={25}
             name={iconName}

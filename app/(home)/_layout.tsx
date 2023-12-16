@@ -25,9 +25,10 @@ export default function TabLayout() {
                Colors[colorScheme ?? "light"].footerButton,
             headerShown: false,
          }}
+         initialRouteName="inicio"
       >
          <Tabs.Screen
-            name="index"
+            name="inicio"
             options={{
                title: "",
                tabBarIcon: ({ color }) => (
@@ -63,18 +64,18 @@ export default function TabLayout() {
          />
 
          <Tabs.Screen
-            name="two"
+            name="calendario"
             options={{
                title: "",
                tabBarIcon: ({ color }) => (
                   <View style={styles.tabContainer}>
                      <Ionicons
                         style={styles.tabIcon}
-                        name={"search"}
+                        name={"calendar"}
                         color={color}
                      />
                      <Text style={[styles.tabText, { color: `${color}` }]}>
-                        Búsqueda
+                        Calendario
                      </Text>
                   </View>
                ),

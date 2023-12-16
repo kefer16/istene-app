@@ -47,7 +47,7 @@ export default function LoginScreen() {
             });
 
             guardarSesion(resp);
-            router.replace("/(home)");
+            router.replace("/(home)/inicio");
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });

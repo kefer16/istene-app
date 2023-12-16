@@ -1,11 +1,5 @@
 import { useContext, useState } from "react";
-import {
-   Text,
-   TouchableOpacity,
-   View,
-   Alert,
-   useColorScheme,
-} from "react-native";
+import { Text, TouchableOpacity, View, useColorScheme } from "react-native";
 import InputTextCustom from "../components/InputTextCustom";
 import InputPasswordCustom from "../components/InputPasswordCustom";
 import { Link } from "expo-router";
@@ -36,6 +30,7 @@ export default function RegistroScreen() {
       useState<boolean>(true);
 
    const funLimpiarFormulario = () => {
+      setDni("");
       setNombre("");
       setApellidoPaterno("");
       setApellidoMaterno("");
@@ -46,43 +41,55 @@ export default function RegistroScreen() {
    };
    const funCrearCuenta = () => {
       if (!dni) {
-         Alert.alert("Ingrese un dni");
+         mostrarNotificacion({ tipo: "warn", detalle: "Ingrese un dni" });
          return;
       }
       if (!nombre) {
-         Alert.alert("Ingrese un nombre");
+         mostrarNotificacion({ tipo: "warn", detalle: "Ingrese un nombre" });
          return;
       }
       if (!apellidoPaterno) {
-         Alert.alert("Ingrese un apellido paterno");
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "Ingrese un apellido paterno",
+         });
          return;
       }
       if (!apellidoMaterno) {
-         Alert.alert("Ingrese un apellido materno");
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "Ingrese un apellido materno",
+         });
          return;
       }
       if (!correo) {
-         Alert.alert("Ingrese un correo");
+         mostrarNotificacion({ tipo: "warn", detalle: "Ingrese un correo" });
          return;
       }
 
       if (!usuario) {
-         Alert.alert("Ingrese un usuario");
+         mostrarNotificacion({ tipo: "warn", detalle: "Ingrese un usuario" });
          return;
       }
 
       if (!contrasenia) {
-         Alert.alert("Ingrese una contraseña");
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "Ingrese una contraseña",
+         });
          return;
       }
 
       if (!repetirContrasenia) {
-         Alert.alert("Repita su contraseña");
+         mostrarNotificacion({ tipo: "warn", detalle: "Repita su contraseña" });
          return;
       }
 
       if (contrasenia !== repetirContrasenia) {
-         Alert.alert("Las contraseñas deben ser iguales");
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "Las contraseñas deben ser iguales",
+         });
          return;
       }
 
@@ -107,10 +114,10 @@ export default function RegistroScreen() {
       srvUsuario
          .registrar(data)
          .then(() => {
-            Alert.alert(
-               "Exito",
-               "se creó la cuenta correctamente, ahora Inicia Sesión"
-            );
+            mostrarNotificacion({
+               tipo: "success",
+               detalle: "Se creó la cuenta correctamente, ahora Inicia Sesión",
+            });
             funLimpiarFormulario();
          })
          .catch((error: Error) => {

@@ -44,33 +44,9 @@ const index = () => {
             />
 
             <ButtonOptionCustom
-               iconName={"cart"}
-               textTitle="Carrito"
-               textDescription="Gestionar carrito de compras"
-            />
-
-            <ButtonOptionCustom
-               iconName={"wallet"}
-               textTitle="Compras"
-               textDescription="Gestionar compras"
-            />
-
-            <ButtonOptionCustom
                iconName={"notifications"}
                textTitle="Notificaciones"
                textDescription="Gestionar Notificaciones"
-            />
-
-            <ButtonOptionCustom
-               iconName={"contrast"}
-               textTitle="Tema"
-               textDescription="Configurar Tema de la aplicación"
-            />
-
-            <ButtonOptionCustom
-               iconName={"call"}
-               textTitle="Soporte al cliente"
-               textDescription="Contactar con personal de ayuda"
             />
 
             <TouchableOpacity

@@ -35,6 +35,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "9f724d7a-3121-472b-916f-a4850318aaef"
+      }
+    },
+    "owner": "kefer"
   }
 }

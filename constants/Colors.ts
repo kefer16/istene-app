@@ -11,11 +11,13 @@ export default {
       card: "#fff",
       background: "#fff",
       tint: "#33105d",
+      //optionButtton
+      optionButtonIcon: "#F6A626",
       //tab
       tabIconDefault: "#000",
       tabIconSelected: "#F9C95B",
       footerButton: "#ABB0B6",
-      footerButtonHover: "#2A166D",
+      footerButtonHover: "#F6A626",
 
       //input
       inputContainer: "#fff",
@@ -40,11 +42,13 @@ export default {
       card: "#282C34",
       background: "#232323",
       tint: "#fff",
+      //optionButtton
+      optionButtonIcon: "#F6A626",
       //tab
       tabIconDefault: "#000",
       tabIconSelected: "fff",
       footerButton: "#DAD8D9",
-      footerButtonHover: "#BFA3F9",
+      footerButtonHover: "#F6A626",
       //input
       inputContainer: "#282C34",
       input: "#fff",
