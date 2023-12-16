@@ -1,6 +1,3 @@
-const tintColorLight = "#33105d";
-const tintColorDark = "#fff";
-
 export default {
    light: {
       container: "#fff",
@@ -13,11 +10,12 @@ export default {
       borderSepare: "#6f6f6f",
       card: "#fff",
       background: "#fff",
-      tint: tintColorLight,
+      tint: "#33105d",
+      //tab
       tabIconDefault: "#000",
-      tabIconSelected: tintColorLight,
-      footerButton: "#6f6f6f",
-      footerButtonHover: "#BFA3F9",
+      tabIconSelected: "#F9C95B",
+      footerButton: "#ABB0B6",
+      footerButtonHover: "#2A166D",
 
       //input
       inputContainer: "#fff",
@@ -41,9 +39,10 @@ export default {
       borderSepare: "#6f6f6f",
       card: "#282C34",
       background: "#232323",
-      tint: tintColorDark,
+      tint: "#fff",
+      //tab
       tabIconDefault: "#000",
-      tabIconSelected: tintColorDark,
+      tabIconSelected: "fff",
       footerButton: "#DAD8D9",
       footerButtonHover: "#BFA3F9",
       //input

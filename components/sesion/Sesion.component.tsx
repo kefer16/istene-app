@@ -29,13 +29,9 @@ export const SesionProvider = ({ children }: any) => {
 
    const obtenerSesion = async () => {
       const result = await SecureStore.getItemAsync("sesion_istene");
-      console.log("result", result);
-
       if (result) {
          setIsteneSesion(JSON.parse(result));
          setPrivilegio(JSON.parse(result).cls_privilegio.abreviatura);
-      } else {
-         console.log("No se obtuvo la llave");
       }
    };
 

@@ -120,10 +120,10 @@ export default function RegistroScreen() {
 
    const funObtenerNombresReniec = (dni: string) => {
       if (dni.length !== 8) {
-         // mostrarNotificacion({
-         //    tipo: "warn",
-         //    detalle: "Ingrese los 8 dígitos, verifique DNI",
-         // });
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "Ingrese los 8 dígitos, verifique DNI",
+         });
          return;
       }
       const srvReniec = new ReniecService();
@@ -135,7 +135,7 @@ export default function RegistroScreen() {
             setApellidoMaterno(resp.apellidoMaterno);
          })
          .catch((error: Error) => {
-            // mostrarNotificacion({ tipo: "error", detalle: error.message });
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
    };
 

@@ -14,8 +14,6 @@ export class UsuarioApi {
             },
          };
          const body = JSON.stringify({ usuario, contrasenia });
-         console.log(UsuarioEntity.url);
-
          return await axios.post(`${UsuarioEntity.url}/login`, body, config);
       } catch (error: any) {
          error.message = personalizarMensajeError(error);

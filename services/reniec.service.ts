@@ -8,8 +8,6 @@ export class ReniecService {
 
    async obtenerNombres(dni: string): Promise<ReniecReponse> {
       await this.apiReniec.obtenerNombres(dni).then((resp) => {
-         console.log("resp:", resp.data);
-
          this.rspObtenerNombres = resp.data;
       });
       return this.rspObtenerNombres;

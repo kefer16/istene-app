@@ -50,8 +50,6 @@ export default function LoginScreen() {
             router.replace("/(home)");
          })
          .catch((error: Error) => {
-            console.log(error);
-
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
    };

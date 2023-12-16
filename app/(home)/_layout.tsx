@@ -38,7 +38,7 @@ export default function TabLayout() {
                         color={color}
                      />
                      <Text style={[styles.tabText, { color: `${color}` }]}>
-                        Casa
+                        Inicio
                      </Text>
                   </View>
                ),

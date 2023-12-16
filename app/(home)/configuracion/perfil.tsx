@@ -33,7 +33,6 @@ const user = () => {
             ? ""
             : isteneSesion.cls_privilegio.tipo
       );
-      console.log("seseion3", isteneSesion);
    }, []);
 
    return (

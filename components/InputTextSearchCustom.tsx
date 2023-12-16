@@ -99,6 +99,7 @@ const InputTextSearchCustom = ({
             placeholder={placeholder}
             onChangeText={functionChangeText}
             onFocus={onFocus}
+            onSubmitEditing={funButtonSearch}
             onBlur={onBlur}
             keyboardType={keyboardType}
             maxLength={maxLength}

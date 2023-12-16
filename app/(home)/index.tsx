@@ -1,32 +1,27 @@
-import { StyleSheet } from "react-native";
-import { Text, View } from "../../components/Themed";
+import ContainerCustom from "../../components/ContainerCustom";
+import HeaderCustom from "../../components/HeaderCustom";
+import { useContext } from "react";
+import { IsteneSesionContext } from "../../components/sesion/Sesion.component";
+import { Text, View } from "react-native";
 
 export default function TabOneScreen() {
+   const { isteneSesion } = useContext(IsteneSesionContext);
    return (
-      <View style={styles.container}>
-         <Text style={styles.title}>Casa</Text>
-         <View
-            style={styles.separator}
-            lightColor="#eee"
-            darkColor="rgba(255,255,255,0.1)"
+      <ContainerCustom>
+         <HeaderCustom
+            title={`Bienvenido ${isteneSesion.usuario} `}
+            isSecondaryPage={false}
          />
-      </View>
+         <View
+            style={{
+               flex: 1,
+               flexDirection: "column",
+               paddingHorizontal: 20,
+               gap: 10,
+            }}
+         >
+            <Text>¿Que deseas hacer hoy?</Text>
+         </View>
+      </ContainerCustom>
    );
 }
-
-const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   title: {
-      fontSize: 20,
-      fontWeight: "bold",
-   },
-   separator: {
-      marginVertical: 30,
-      height: 1,
-      width: "80%",
-   },
-});
