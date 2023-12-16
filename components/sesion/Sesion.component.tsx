@@ -7,8 +7,8 @@ export interface NotificacionProps {
    tipo: "success" | "info" | "warn" | "error" | undefined;
    detalle: string;
 }
-export interface SesionGamertecContextProps {
-   sesionGamertec: LogeoUsuario;
+export interface InsteneSesionContextProps {
+   isteneSesion: LogeoUsuario;
    privilegio: privilegio;
    obtenerSesion: () => void;
    guardarSesion: (sesion: LogeoUsuario) => void;
@@ -16,23 +16,23 @@ export interface SesionGamertecContextProps {
    mostrarNotificacion: (prosp: NotificacionProps) => void;
 }
 
-export const GamertecSesionContext = createContext<SesionGamertecContextProps>(
-   {} as SesionGamertecContextProps
+export const IsteneSesionContext = createContext<InsteneSesionContextProps>(
+   {} as InsteneSesionContextProps
 );
 export type privilegio = "ADM" | "USU" | "INV";
 
 export const SesionProvider = ({ children }: any) => {
    const [privilegio, setPrivilegio] = useState<privilegio>("INV");
-   const [sesionGamertec, setSesionGamertec] = useState<LogeoUsuario>(
+   const [isteneSesion, setIsteneSesion] = useState<LogeoUsuario>(
       {} as LogeoUsuario
    );
 
    const obtenerSesion = async () => {
-      const result = await SecureStore.getItemAsync("sesion_gamertec");
+      const result = await SecureStore.getItemAsync("sesion_istene");
       console.log("result", result);
 
       if (result) {
-         setSesionGamertec(JSON.parse(result));
+         setIsteneSesion(JSON.parse(result));
          setPrivilegio(JSON.parse(result).cls_privilegio.abreviatura);
       } else {
          console.log("No se obtuvo la llave");
@@ -55,14 +55,14 @@ export const SesionProvider = ({ children }: any) => {
             abreviatura: sesion.cls_privilegio.abreviatura,
          },
       };
-      await SecureStore.setItemAsync("sesion_gamertec", JSON.stringify(sesion));
-      setSesionGamertec(sesion);
+      await SecureStore.setItemAsync("sesion_istene", JSON.stringify(sesion));
+      setIsteneSesion(sesion);
    };
 
    const cerrarSesion = () => {
-      SecureStore.deleteItemAsync("sesion_gamertec");
-      setSesionGamertec({
-         usuario_id: 0,
+      SecureStore.deleteItemAsync("sesion_istene");
+      setIsteneSesion({
+         usuario_id: "",
          usuario: "",
          correo: "",
          nombre: "",
@@ -71,7 +71,7 @@ export const SesionProvider = ({ children }: any) => {
          telefono: "",
          foto: "",
          cls_privilegio: {
-            privilegio_id: 0,
+            privilegio_id: "",
             tipo: "",
             abreviatura: "INV",
          },
@@ -100,7 +100,6 @@ export const SesionProvider = ({ children }: any) => {
          titulo = "Éxito";
          pegado = false;
       }
-      console.log(titulo, pegado);
 
       ToastAndroid.showWithGravityAndOffset(
          detalle,
@@ -112,9 +111,9 @@ export const SesionProvider = ({ children }: any) => {
    };
 
    return (
-      <GamertecSesionContext.Provider
+      <IsteneSesionContext.Provider
          value={{
-            sesionGamertec,
+            isteneSesion,
             privilegio,
             obtenerSesion,
             guardarSesion,
@@ -123,6 +122,6 @@ export const SesionProvider = ({ children }: any) => {
          }}
       >
          {children}
-      </GamertecSesionContext.Provider>
+      </IsteneSesionContext.Provider>
    );
 };

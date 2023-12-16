@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
    Text,
    TouchableOpacity,
@@ -15,12 +15,17 @@ import { crearFechaISO } from "../utils/funciones.util";
 import ContainerCustom from "../components/ContainerCustom";
 import Colors from "../constants/Colors";
 import HeaderCustom from "../components/HeaderCustom";
+import InputTextSearchCustom from "../components/InputTextSearchCustom";
+import { ReniecService } from "../services/reniec.service";
+import { IsteneSesionContext } from "../components/sesion/Sesion.component";
 
 export default function RegistroScreen() {
+   const { mostrarNotificacion } = useContext(IsteneSesionContext);
    const colorScheme = useColorScheme();
-
+   const [dni, setDni] = useState<string>("");
    const [nombre, setNombre] = useState<string>("");
-   const [apellido, setApellido] = useState<string>("");
+   const [apellidoPaterno, setApellidoPaterno] = useState<string>("");
+   const [apellidoMaterno, setApellidoMaterno] = useState<string>("");
    const [correo, setCorreo] = useState<string>("");
    const [usuario, setUsuario] = useState<string>("");
    const [contrasenia, setContrasenia] = useState<string>("");
@@ -32,19 +37,28 @@ export default function RegistroScreen() {
 
    const funLimpiarFormulario = () => {
       setNombre("");
-      setApellido("");
+      setApellidoPaterno("");
+      setApellidoMaterno("");
       setCorreo("");
       setUsuario("");
       setContrasenia("");
       setRepetirContrasenia("");
    };
    const funCrearCuenta = () => {
+      if (!dni) {
+         Alert.alert("Ingrese un dni");
+         return;
+      }
       if (!nombre) {
          Alert.alert("Ingrese un nombre");
          return;
       }
-      if (!apellido) {
-         Alert.alert("Ingrese un apellido");
+      if (!apellidoPaterno) {
+         Alert.alert("Ingrese un apellido paterno");
+         return;
+      }
+      if (!apellidoMaterno) {
+         Alert.alert("Ingrese un apellido materno");
          return;
       }
       if (!correo) {
@@ -73,9 +87,11 @@ export default function RegistroScreen() {
       }
 
       const data: UsuarioEntity = new UsuarioEntity(
-         0,
+         "",
+         dni,
          nombre,
-         apellido,
+         apellidoPaterno,
+         apellidoMaterno,
          correo,
          usuario,
          contrasenia,
@@ -84,7 +100,7 @@ export default function RegistroScreen() {
          "",
          "",
          true,
-         1
+         "763EE9D5-7BD0-401D-BA4A-4D126B5E396C"
       );
       const srvUsuario = new UsuarioService();
 
@@ -98,7 +114,28 @@ export default function RegistroScreen() {
             funLimpiarFormulario();
          })
          .catch((error: Error) => {
-            Alert.alert("Error", error.message);
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
+         });
+   };
+
+   const funObtenerNombresReniec = (dni: string) => {
+      if (dni.length !== 8) {
+         // mostrarNotificacion({
+         //    tipo: "warn",
+         //    detalle: "Ingrese los 8 dígitos, verifique DNI",
+         // });
+         return;
+      }
+      const srvReniec = new ReniecService();
+      srvReniec
+         .obtenerNombres(dni)
+         .then((resp) => {
+            setNombre(resp.nombres);
+            setApellidoPaterno(resp.apellidoPaterno);
+            setApellidoMaterno(resp.apellidoMaterno);
+         })
+         .catch((error: Error) => {
+            // mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
    };
 
@@ -139,6 +176,16 @@ export default function RegistroScreen() {
             >
                para comenzar ahora!
             </Text>
+
+            <InputTextSearchCustom
+               title="DNI"
+               placeholder="Ingrese DNI"
+               value={dni}
+               functionChangeText={setDni}
+               funButtonSearch={() => funObtenerNombresReniec(dni)}
+               keyboardType="number-pad"
+               maxLength={8}
+            />
             <InputTextCustom
                title="Nombre"
                placeholder="Ingrese nombre"
@@ -149,9 +196,17 @@ export default function RegistroScreen() {
             />
             <InputTextCustom
                title="Apellido"
-               placeholder="Ingrese apellido"
-               value={apellido}
-               functionChangeText={setApellido}
+               placeholder="Ingrese apellido paterno"
+               value={apellidoPaterno}
+               functionChangeText={setApellidoPaterno}
+               keyboardType="default"
+               maxLength={45}
+            />
+            <InputTextCustom
+               title="Apellido"
+               placeholder="Ingrese apellido materno"
+               value={apellidoMaterno}
+               functionChangeText={setApellidoMaterno}
                keyboardType="default"
                maxLength={45}
             />

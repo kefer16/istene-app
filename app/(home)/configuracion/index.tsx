@@ -4,13 +4,13 @@ import { Ionicons } from "@expo/vector-icons";
 import ButtonOptionCustom from "../../../components/ButtonOptionCustom";
 import { router } from "expo-router";
 import { useContext, useEffect } from "react";
-import { GamertecSesionContext } from "../../../components/sesion/Sesion.component";
+import { IsteneSesionContext } from "../../../components/sesion/Sesion.component";
 import Colors from "../../../constants/Colors";
 import ContainerCustom from "../../../components/ContainerCustom";
 import HeaderCustom from "../../../components/HeaderCustom";
 
 const index = () => {
-   const { cerrarSesion } = useContext(GamertecSesionContext);
+   const { cerrarSesion } = useContext(IsteneSesionContext);
 
    const colorScheme = useColorScheme();
 

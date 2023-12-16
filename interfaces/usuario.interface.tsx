@@ -1,7 +1,7 @@
 export type privilegio = "ADM" | "USU" | "INV";
 
 export interface LogeoUsuario {
-   usuario_id: number;
+   usuario_id: string;
    nombre: string;
    apellido: string;
    correo: string;
@@ -13,7 +13,7 @@ export interface LogeoUsuario {
 }
 
 export interface PrivilegioLogin {
-   privilegio_id: number;
+   privilegio_id: string;
    abreviatura: privilegio;
    tipo: string;
 }

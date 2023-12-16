@@ -33,7 +33,7 @@ export class UsuarioApi {
          const body = JSON.stringify(data);
 
          return await axios.post(
-            `${UsuarioEntity.url}/registrar`,
+            `${UsuarioEntity.url}/registrar_uno`,
             body,
             config
          );

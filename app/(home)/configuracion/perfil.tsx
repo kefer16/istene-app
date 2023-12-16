@@ -4,12 +4,12 @@ import { useContext, useEffect, useState } from "react";
 import Colors from "../../../constants/Colors";
 import HeaderCustom from "../../../components/HeaderCustom";
 import ContainerCustom from "../../../components/ContainerCustom";
-import { GamertecSesionContext } from "../../../components/sesion/Sesion.component";
+import { IsteneSesionContext } from "../../../components/sesion/Sesion.component";
 import ButtonCustom from "../../../components/ButtonCustom";
 
 const user = () => {
    const colorScheme = useColorScheme();
-   const { sesionGamertec, obtenerSesion } = useContext(GamertecSesionContext);
+   const { isteneSesion, obtenerSesion } = useContext(IsteneSesionContext);
    const [nombre, setNombre] = useState<string>("");
    const [apellido, setApellido] = useState<string>("");
    const [telefono, setTelefono] = useState<string>("");
@@ -22,18 +22,18 @@ const user = () => {
 
    useEffect(() => {
       obtenerSesion();
-      setNombre(sesionGamertec.nombre);
-      setApellido(sesionGamertec.apellido);
-      setTelefono(sesionGamertec.telefono);
-      setDireccion(sesionGamertec.direccion);
-      setCorreo(sesionGamertec.correo);
-      setUsuario(sesionGamertec.usuario);
+      setNombre(isteneSesion.nombre);
+      setApellido(isteneSesion.apellido);
+      setTelefono(isteneSesion.telefono);
+      setDireccion(isteneSesion.direccion);
+      setCorreo(isteneSesion.correo);
+      setUsuario(isteneSesion.usuario);
       setPrivilegio(
-         sesionGamertec.cls_privilegio === undefined
+         isteneSesion.cls_privilegio === undefined
             ? ""
-            : sesionGamertec.cls_privilegio.tipo
+            : isteneSesion.cls_privilegio.tipo
       );
-      console.log("seseion3", sesionGamertec);
+      console.log("seseion3", isteneSesion);
    }, []);
 
    return (

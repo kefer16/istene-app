@@ -6,15 +6,14 @@ import { Link } from "expo-router";
 import { UsuarioService } from "../services/usuario.service";
 import { LogeoUsuario } from "../interfaces/usuario.interface";
 import { router } from "expo-router";
-import { GamertecSesionContext } from "../components/sesion/Sesion.component";
+import { IsteneSesionContext } from "../components/sesion/Sesion.component";
 import ContainerCustom from "../components/ContainerCustom";
 import Colors from "../constants/Colors";
 import ButtonCustom from "../components/ButtonCustom";
 
 export default function LoginScreen() {
-   const { mostrarNotificacion, guardarSesion } = useContext(
-      GamertecSesionContext
-   );
+   const { mostrarNotificacion, guardarSesion } =
+      useContext(IsteneSesionContext);
 
    const colorScheme = useColorScheme();
 

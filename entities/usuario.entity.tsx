@@ -3,9 +3,11 @@ const ENV_API_URL: string = API_URL ?? "";
 
 export class UsuarioEntity {
    constructor(
-      public usuario_id: number = 0,
+      public usuario_id: string = "",
+      public dni: string = "",
       public nombre: string = "",
-      public apellido: string = "",
+      public apellido_paterno: string = "",
+      public apellido_materno: string = "",
       public correo: string = "",
       public usuario: string = "",
       public contrasenia: string = "",
@@ -14,9 +16,7 @@ export class UsuarioEntity {
       public direccion: string = "",
       public telefono: string = "",
       public activo: boolean = false,
-      public fk_privilegio: number = 0,
-      public fecha_inicial: string = "",
-      public fecha_final: string = ""
+      public fk_privilegio: string = ""
    ) {}
    public static url = `${ENV_API_URL}/usuario`;
 }
