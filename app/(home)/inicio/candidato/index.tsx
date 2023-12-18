@@ -14,16 +14,16 @@ import ButtonCrudCustom from "../../../../components/ButtonCrudCustom";
 const index = () => {
    const { mostrarNotificacion } = useContext(IsteneSesionContext);
 
-   const [buscarCandidato, setBuscarCandidato] = useState<string>("");
+   const [busqueda, setBusqueda] = useState<string>("");
    const [arrayCandidatos, setArrayCandidatos] = useState<CandidatoResponse[]>(
       []
    );
 
-   const funCandidatosListarGrupal = async () => {
+   const funCandidatosListarGrupal = async (dni: string) => {
       const srvCandidato = new CandidatoService();
 
       await srvCandidato
-         .listarGrupal()
+         .listarGrupalDni(dni)
          .then((resp) => {
             setArrayCandidatos(resp);
          })
@@ -33,7 +33,7 @@ const index = () => {
    };
 
    useEffect(() => {
-      funCandidatosListarGrupal();
+      funCandidatosListarGrupal(busqueda);
    }, []);
 
    return (
@@ -54,12 +54,12 @@ const index = () => {
             }}
          >
             <InputTextSearchCustom
-               title="Buscar"
-               placeholder="Ingrese nombre a buscar"
+               title="Buscar por DNI"
+               placeholder="Ingrese DNI a buscar"
                keyboardType="web-search"
-               value={buscarCandidato}
-               functionChangeText={setBuscarCandidato}
-               funButtonSearch={() => {}}
+               value={busqueda}
+               functionChangeText={setBusqueda}
+               funButtonSearch={() => funCandidatosListarGrupal(busqueda)}
             />
             <ButtonCrudCustom
                buttonBackgroundColor="#8bc34a"

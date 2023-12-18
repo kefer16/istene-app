@@ -249,10 +249,16 @@ const gestionar = () => {
                      }}
                   >
                      <ButtonIconCustom
-                        iconName={"create"}
+                        iconName={
+                           opcionGestion.tipo === OpcionGestion.EDITAR
+                              ? "close"
+                              : "create"
+                        }
                         iconColor="#F6A626"
                         onPress={() => {
-                           setOpcionGestion(funValidarOpcionGestion("2"));
+                           opcionGestion.tipo === OpcionGestion.EDITAR
+                              ? setOpcionGestion(funValidarOpcionGestion("0"))
+                              : setOpcionGestion(funValidarOpcionGestion("2"));
                         }}
                      />
                      <ButtonIconCustom

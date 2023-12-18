@@ -68,7 +68,8 @@ const InputTextSearchCustom = ({
                   fontFamily: "Poppins300",
                   paddingTop: 20,
                   paddingBottom: 10,
-                  paddingHorizontal: 10,
+                  paddingLeft: 10,
+                  paddingRight: 50,
                   borderRadius: 5,
                   backgroundColor:
                      Colors[colorScheme ?? "light"].inputContainer,
@@ -117,16 +118,17 @@ const InputTextSearchCustom = ({
          <View
             style={{
                flexDirection: "row",
+               gap: 5,
                position: "absolute",
-               top: 5,
+               top: 15,
                right: 10,
                zIndex: 1,
             }}
          >
             <TouchableOpacity
                style={{
-                  width: 50,
-                  height: 50,
+                  width: 30,
+                  height: 30,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -145,8 +147,8 @@ const InputTextSearchCustom = ({
             {!inputIsEditable && (
                <TouchableOpacity
                   style={{
-                     width: 50,
-                     height: 50,
+                     width: 30,
+                     height: 30,
                      display: "flex",
                      alignItems: "center",
                      justifyContent: "center",

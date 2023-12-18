@@ -1,10 +1,10 @@
 import axios, { AxiosResponse } from "axios";
-import { CandidatoEntity } from "../entities/candidato.entity";
+import { CarreraEntity } from "../entities/carrera.entity";
 import { personalizarMensajeError } from "../utils/funciones.util";
 
-export class CandidatoApi {
+export class CarreraApi {
    //individual
-   async registrarIndividual(data: CandidatoEntity): Promise<AxiosResponse> {
+   async registrarIndividual(data: CarreraEntity): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
@@ -14,7 +14,7 @@ export class CandidatoApi {
          const body = JSON.stringify(data);
 
          return await axios.post(
-            `${CandidatoEntity.url}/registrar_individual`,
+            `${CarreraEntity.url}/registrar_individual`,
             body,
             config
          );
@@ -26,12 +26,12 @@ export class CandidatoApi {
 
    async actualizarIndividual(
       id: string,
-      data: CandidatoEntity
+      data: CarreraEntity
    ): Promise<AxiosResponse> {
       try {
          const config = {
             params: {
-               candidato_id: id,
+               carrera_id: id,
             },
             headers: {
                "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export class CandidatoApi {
          const body = JSON.stringify(data);
 
          return await axios.put(
-            `${CandidatoEntity.url}/actualizar_individual`,
+            `${CarreraEntity.url}/actualizar_individual`,
             body,
             config
          );
@@ -50,11 +50,11 @@ export class CandidatoApi {
       }
    }
 
-   async ListarIndividual(id: string): Promise<AxiosResponse> {
+   async listarIndividual(id: string): Promise<AxiosResponse> {
       try {
          const config = {
             params: {
-               candidato_id: id,
+               carrera_id: id,
             },
             headers: {
                "Content-Type": "application/json",
@@ -62,7 +62,7 @@ export class CandidatoApi {
          };
 
          return await axios.get(
-            `${CandidatoEntity.url}/listar_individual`,
+            `${CarreraEntity.url}/listar_individual`,
             config
          );
       } catch (error: any) {
@@ -72,11 +72,11 @@ export class CandidatoApi {
    }
 
    //grupal
-   async listarGrupalDni(dni: string): Promise<AxiosResponse> {
+   async listarGrupalNombre(nombre: string): Promise<AxiosResponse> {
       try {
          const config = {
             params: {
-               dni: dni,
+               nombre: nombre,
             },
             headers: {
                "Content-Type": "application/json",
@@ -84,7 +84,7 @@ export class CandidatoApi {
          };
 
          return await axios.get(
-            `${CandidatoEntity.url}/listar_grupal_dni`,
+            `${CarreraEntity.url}/listar_grupal_nombre`,
             config
          );
       } catch (error: any) {
@@ -102,7 +102,7 @@ export class CandidatoApi {
          };
 
          return await axios.get(
-            `${CandidatoEntity.url}/listar_grupal_activos`,
+            `${CarreraEntity.url}/listar_grupal_activos`,
             config
          );
       } catch (error: any) {

@@ -40,8 +40,8 @@ export class CandidatoService {
    }
 
    //grupal
-   async listarGrupal(): Promise<CandidatoResponse[]> {
-      await this.apiCandidato.listarGrupal().then((resp) => {
+   async listarGrupalDni(dni: string): Promise<CandidatoResponse[]> {
+      await this.apiCandidato.listarGrupalDni(dni).then((resp) => {
          this.rspListarGrupal = resp.data.data;
       });
       return this.rspListarGrupal;

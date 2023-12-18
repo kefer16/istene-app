@@ -67,11 +67,11 @@ export default function InputTextCustom({
                   fontFamily: "Poppins300",
                   paddingTop: 20,
                   paddingBottom: 10,
-                  paddingHorizontal: 10,
+                  paddingLeft: 10,
+                  paddingRight: 50,
                   borderRadius: 5,
                   backgroundColor:
                      Colors[colorScheme ?? "light"].inputContainer,
-                  // elevation: 3,
                   borderStyle: "solid",
                   borderWidth: 1,
                   borderColor: Colors[colorScheme ?? "light"].inputBorder,
@@ -116,15 +116,14 @@ export default function InputTextCustom({
             <TouchableOpacity
                style={{
                   position: "absolute",
-                  top: 5,
+                  top: 15,
                   right: 10,
                   zIndex: 1,
-                  width: 50,
-                  height: 50,
+                  width: 30,
+                  height: 30,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  // borderStyle:1,
                }}
                onPress={funCopiarAPortaPapeles}
             >
