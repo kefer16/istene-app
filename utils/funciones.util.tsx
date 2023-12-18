@@ -54,6 +54,16 @@ export function crearFechaISO(): string {
    return fecha_ISO;
 }
 
+export function formatoFecha(fecha: string): string {
+   if (fecha.substring(0, 8) === "1/1/1900") {
+      return "";
+   }
+   let fechaObj = new Date(fecha);
+   let dia = fechaObj.getDate().toString().padStart(2, "0");
+   let mes = (fechaObj.getMonth() + 1).toString().padStart(2, "0");
+   let anio = fechaObj.getFullYear();
+   return dia + "/" + mes + "/" + anio;
+}
 export function fechaActualISO(): string {
    return new Date(
       new Date().setHours(new Date().getHours() - 5)

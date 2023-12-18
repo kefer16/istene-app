@@ -90,12 +90,9 @@ const user = () => {
          <View
             style={{
                flex: 1,
-               paddingBottom: 10,
-               paddingHorizontal: 20,
+               padding: 10,
                backgroundColor: Colors[colorScheme ?? "light"].container,
-               borderTopLeftRadius: 30,
-               borderTopRightRadius: 30,
-               zIndex: 1,
+               gap: 10,
             }}
          >
             <View style={{ display: "flex", flexDirection: "column", gap: 10 }}>

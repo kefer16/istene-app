@@ -100,7 +100,7 @@ export const SesionProvider = ({ children }: any) => {
       ToastAndroid.showWithGravityAndOffset(
          detalle,
          ToastAndroid.LONG,
-         ToastAndroid.TOP,
+         ToastAndroid.CENTER,
          25,
          50
       );

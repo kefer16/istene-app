@@ -21,13 +21,14 @@ export default {
 
       //input
       inputContainer: "#fff",
+      inputBorder: "#E3E6E9",
       input: "#000",
       inputTitle: "#6f6f6f",
       InputTextPlaceHolder: "#ABB0B6",
       inputText: "#000",
 
       //button
-      buttonContainer: "#F9C95B",
+      buttonContainer: "#F6A626",
       buttonText: "#fff",
    },
    dark: {
@@ -51,13 +52,14 @@ export default {
       footerButtonHover: "#F6A626",
       //input
       inputContainer: "#282C34",
+      inputBorder: "#424b57",
       input: "#fff",
       inputTitle: "#6f6f6f",
       InputTextPlaceHolder: "#555555",
-      inputText: "#fff",
+      inputText: "rgba(255, 255, 255, 0.87)",
 
       //button
-      buttonContainer: "#F9C95B",
+      buttonContainer: "#F6A626",
       buttonText: "#fff",
    },
 };

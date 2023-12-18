@@ -5,6 +5,7 @@ import Constants from "expo-constants";
 const ContainerCustom = (props: any) => {
    const colorScheme = useColorScheme();
 
+   // const RutasSinScroll: string[] = ["/inicio/candidato"];
    return (
       <View
          style={{

@@ -8,6 +8,7 @@ import { IsteneSesionContext } from "../../../components/sesion/Sesion.component
 import Colors from "../../../constants/Colors";
 import ContainerCustom from "../../../components/ContainerCustom";
 import HeaderCustom from "../../../components/HeaderCustom";
+import TitleCustom from "../../../components/TitleCustom";
 
 const index = () => {
    const { cerrarSesion } = useContext(IsteneSesionContext);
@@ -29,7 +30,12 @@ const index = () => {
       <ContainerCustom>
          <HeaderCustom title="Configuración" isSecondaryPage={false} />
 
-         <View style={{ padding: 15, paddingVertical: 20, gap: 7 }}>
+         <View style={{ padding: 10, paddingVertical: 10, gap: 7 }}>
+            <TitleCustom
+               // textStyle={{ marginTop: 10 }}
+               textSize={20}
+               text="Gestiona tus datos usuario"
+            />
             <ButtonOptionCustom
                iconName={"person-circle"}
                textTitle="Perfil"

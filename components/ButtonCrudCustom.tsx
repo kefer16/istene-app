@@ -1,15 +1,24 @@
-import { StyleProp, Text, View, ViewStyle, useColorScheme } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+   View,
+   Text,
+   useColorScheme,
+   TouchableOpacity,
+   StyleProp,
+   ViewStyle,
+} from "react-native";
+import React from "react";
 import Colors from "../constants/Colors";
 
 interface Props {
    text: string;
    onPress: () => void;
+   buttonBackgroundColor: `#${string}`;
    styleButton?: StyleProp<ViewStyle>;
    isEnabled?: boolean;
 }
-const ButtonCustom = ({
+const ButtonCrudCustom = ({
    styleButton,
+   buttonBackgroundColor,
    text,
    onPress,
    isEnabled = true,
@@ -17,6 +26,7 @@ const ButtonCustom = ({
    const colorScheme = useColorScheme();
    return (
       <TouchableOpacity
+         style={{ borderRadius: 10, overflow: "hidden" }}
          onPress={() => {
             isEnabled && onPress();
          }}
@@ -26,9 +36,7 @@ const ButtonCustom = ({
                {
                   width: "100%",
                   paddingVertical: 15,
-                  borderRadius: 10,
-                  backgroundColor:
-                     Colors[colorScheme ?? "light"].buttonContainer,
+                  backgroundColor: buttonBackgroundColor,
                },
                !isEnabled && {
                   opacity: 0.6,
@@ -50,4 +58,4 @@ const ButtonCustom = ({
    );
 };
 
-export default ButtonCustom;
+export default ButtonCrudCustom;

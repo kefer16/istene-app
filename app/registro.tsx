@@ -152,7 +152,7 @@ export default function RegistroScreen() {
          <View
             style={{
                flex: 1,
-               padding: 20,
+               padding: 10,
                gap: 10,
                backgroundColor: Colors[colorScheme ?? "light"].container,
                borderTopLeftRadius: 20,

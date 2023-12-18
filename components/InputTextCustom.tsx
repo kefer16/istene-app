@@ -8,8 +8,11 @@ import {
    KeyboardTypeOptions,
    TextStyle,
    useColorScheme,
+   TouchableOpacity,
 } from "react-native";
 import Colors from "../constants/Colors";
+import * as Clipboard from "expo-clipboard";
+import { Ionicons } from "@expo/vector-icons";
 interface Props {
    title: string;
    placeholder: string;
@@ -19,6 +22,7 @@ interface Props {
    styleContainer?: StyleProp<ViewStyle>;
    styleInput?: StyleProp<TextStyle>;
    maxLength?: number;
+   inputIsRequired?: boolean;
    inputIsEditable?: boolean;
 }
 export default function InputTextCustom({
@@ -30,7 +34,8 @@ export default function InputTextCustom({
    styleInput,
    keyboardType,
    maxLength,
-   inputIsEditable,
+   inputIsRequired = false,
+   inputIsEditable = true,
 }: Props) {
    const colorScheme = useColorScheme();
    const [focus, setfocus] = useState<boolean>(false);
@@ -40,41 +45,13 @@ export default function InputTextCustom({
    const onBlur = () => {
       setfocus(false);
    };
+
+   const funCopiarAPortaPapeles = async () => {
+      await Clipboard.setStringAsync(value);
+   };
+
    return (
-      <View
-         style={[
-            {
-               width: "100%",
-               padding: 10,
-               borderRadius: 5,
-               backgroundColor: Colors[colorScheme ?? "light"].inputContainer,
-               elevation: 5,
-               borderStyle: "solid",
-               borderWidth: 2,
-               borderColor: Colors[colorScheme ?? "light"].inputContainer,
-            },
-            focus && {
-               borderColor: "#007bff",
-            },
-         ]}
-      >
-         <Text
-            style={[
-               {
-                  width: "100%",
-                  fontSize: 11,
-                  lineHeight: 13,
-                  textAlign: "left",
-                  color: Colors[colorScheme ?? "light"].inputTitle,
-                  fontFamily: "Poppins500",
-               },
-               focus && {
-                  color: "#007bff",
-               },
-            ]}
-         >
-            {title}
-         </Text>
+      <View>
          <TextInput
             editable={inputIsEditable}
             placeholderTextColor={
@@ -88,8 +65,23 @@ export default function InputTextCustom({
                   lineHeight: 17,
                   color: Colors[colorScheme ?? "light"].inputText,
                   fontFamily: "Poppins300",
+                  paddingTop: 20,
+                  paddingBottom: 10,
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                  backgroundColor:
+                     Colors[colorScheme ?? "light"].inputContainer,
+                  // elevation: 3,
+                  borderStyle: "solid",
+                  borderWidth: 1,
+                  borderColor: Colors[colorScheme ?? "light"].inputBorder,
                },
-               styleInput,
+               focus && {
+                  borderColor: "#007bff",
+               },
+               !inputIsEditable && {
+                  opacity: 0.6,
+               },
             ]}
             value={value}
             placeholder={placeholder}
@@ -99,6 +91,50 @@ export default function InputTextCustom({
             keyboardType={keyboardType}
             maxLength={maxLength}
          />
+         <Text
+            style={[
+               {
+                  position: "absolute",
+                  top: 10,
+                  left: 10,
+                  zIndex: 1,
+                  width: "100%",
+                  fontSize: 11,
+                  lineHeight: 13,
+                  textAlign: "left",
+                  color: Colors[colorScheme ?? "light"].inputTitle,
+                  fontFamily: "Poppins500",
+               },
+               focus && {
+                  color: "#007bff",
+               },
+            ]}
+         >
+            {`${title} ${inputIsRequired ? "*" : ""}`}
+         </Text>
+         {!inputIsEditable && (
+            <TouchableOpacity
+               style={{
+                  position: "absolute",
+                  top: 5,
+                  right: 10,
+                  zIndex: 1,
+                  width: 50,
+                  height: 50,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  // borderStyle:1,
+               }}
+               onPress={funCopiarAPortaPapeles}
+            >
+               <Ionicons
+                  style={{ color: Colors[colorScheme ?? "light"].inputTitle }}
+                  name={"copy-outline"}
+                  size={20}
+               />
+            </TouchableOpacity>
+         )}
       </View>
    );
 }

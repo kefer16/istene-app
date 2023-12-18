@@ -21,7 +21,7 @@ const index = () => {
             title={`Bienvenid@ ${isteneSesion.usuario} `}
             isSecondaryPage={false}
          />
-         <View style={{ paddingHorizontal: 10 }}>
+         <View style={{ flex: 1, paddingHorizontal: 10 }}>
             <TitleCustom
                textStyle={{ marginTop: 10 }}
                textSize={20}
@@ -93,7 +93,7 @@ const index = () => {
                   textDescription="Gestionar Carreras"
                   iconName={"school"}
                   onPress={() => {
-                     router.push("/(home)/inicio/candidato/");
+                     router.push("/(home)/inicio/carrera/");
                   }}
                />
                <ButtonOptionCustom
