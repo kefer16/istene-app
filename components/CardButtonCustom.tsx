@@ -38,7 +38,9 @@ const CardButtonCustom = ({
                alignItems: "center",
                backgroundColor: Colors[colorScheme ?? "light"].card,
                borderRadius: 10,
-               elevation: 3,
+               borderStyle: "solid",
+               borderWidth: 1,
+               borderColor: Colors[colorScheme ?? "light"].inputBorder,
             },
          ]}
          onPress={onPress}

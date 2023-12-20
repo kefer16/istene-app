@@ -8,11 +8,13 @@ const ContainerCustom = (props: any) => {
    // const RutasSinScroll: string[] = ["/inicio/candidato"];
    return (
       <View
-         style={{
-            flex: 1,
-            paddingTop: Constants.statusBarHeight,
-            backgroundColor: Colors[colorScheme ?? "light"].container,
-         }}
+         style={[
+            {
+               flex: 1,
+               paddingTop: Constants.statusBarHeight,
+               backgroundColor: Colors[colorScheme ?? "light"].container,
+            },
+         ]}
       >
          <ScrollView style={{ flex: 1 }}>{props.children}</ScrollView>
       </View>

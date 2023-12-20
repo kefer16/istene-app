@@ -1,7 +1,9 @@
 import { createContext, useState } from "react";
 import { LogeoUsuario } from "../../interfaces/usuario.interface";
-import { ToastAndroid } from "react-native";
+import { Alert } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
+// import {  ToastAndroid } from "react-native";
 
 export interface NotificacionProps {
    tipo: "success" | "info" | "warn" | "error" | undefined;
@@ -28,7 +30,13 @@ export const SesionProvider = ({ children }: any) => {
    );
 
    const obtenerSesion = async () => {
-      const result = await SecureStore.getItemAsync("sesion_istene");
+      let result;
+      if (Platform.OS === "web") {
+         result = sessionStorage.getItem("sesion_istene");
+      } else {
+         result = await SecureStore.getItemAsync("sesion_istene");
+      }
+
       if (result) {
          setIsteneSesion(JSON.parse(result));
          setPrivilegio(JSON.parse(result).cls_privilegio.abreviatura);
@@ -51,12 +59,26 @@ export const SesionProvider = ({ children }: any) => {
             abreviatura: sesion.cls_privilegio.abreviatura,
          },
       };
-      await SecureStore.setItemAsync("sesion_istene", JSON.stringify(sesion));
+
+      if (Platform.OS === "web") {
+         sessionStorage.setItem("sesion_istene", JSON.stringify(sesion));
+      } else {
+         await SecureStore.setItemAsync(
+            "sesion_istene",
+            JSON.stringify(sesion)
+         );
+      }
+
       setIsteneSesion(sesion);
    };
 
    const cerrarSesion = () => {
-      SecureStore.deleteItemAsync("sesion_istene");
+      if (Platform.OS === "web") {
+         sessionStorage.removeItem("sesion_istene");
+      } else {
+         SecureStore.deleteItemAsync("sesion_istene");
+      }
+
       setIsteneSesion({
          usuario_id: "",
          usuario: "",
@@ -97,13 +119,18 @@ export const SesionProvider = ({ children }: any) => {
          pegado = false;
       }
 
-      ToastAndroid.showWithGravityAndOffset(
-         detalle,
-         ToastAndroid.LONG,
-         ToastAndroid.CENTER,
-         25,
-         50
-      );
+      if (Platform.OS === "android") {
+         //    ToastAndroid.showWithGravityAndOffset(
+         //       detalle,
+         //       ToastAndroid.LONG,
+         //       ToastAndroid.CENTER,
+         //       25,
+         //       50
+         //    );
+         Alert.alert(titulo, detalle);
+      } else {
+         window.alert(detalle);
+      }
    };
 
    return (

@@ -21,6 +21,7 @@ import {
    funValidarOpcionGestion,
 } from "../../../../constants/OpcionGestion";
 import ButtonCrudCustom from "../../../../components/ButtonCrudCustom";
+import ContainerWebCustom from "../../../../components/ContainerWebCustom";
 
 const gestionar = () => {
    const { obtenerSesion, isteneSesion, mostrarNotificacion } =
@@ -214,166 +215,172 @@ const gestionar = () => {
             isSecondaryPage={true}
             urlBack={"/(home)/inicio/candidato/"}
          />
-         <View
-            style={{
-               flex: 1,
-               padding: 10,
-               gap: 10,
-               backgroundColor: Colors[colorScheme ?? "light"].container,
-            }}
-         >
+         <ContainerWebCustom>
             <View
                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  flex: 1,
+                  padding: 10,
+                  gap: 10,
+                  backgroundColor: Colors[colorScheme ?? "light"].container,
                }}
             >
-               <TitleCustom
-                  textStyle={{
-                     backgroundColor: opcionGestion.color,
-                     padding: 10,
-                     borderRadius: 5,
+               <View
+                  style={{
+                     flexDirection: "row",
+                     justifyContent: "space-between",
+                     alignItems: "center",
                   }}
-                  text={`Modo ${opcionGestion.nombre}`}
-                  textSize={15}
-               />
-
-               {opcionGestion.habilitarBotones && (
-                  <View
-                     style={{
-                        gap: 5,
-                        flexDirection: "row",
-                        justifyContent: "space-around",
-                        alignItems: "center",
+               >
+                  <TitleCustom
+                     textStyle={{
+                        backgroundColor: opcionGestion.color,
+                        padding: 10,
+                        borderRadius: 5,
                      }}
-                  >
-                     <ButtonIconCustom
-                        iconName={
-                           opcionGestion.tipo === OpcionGestion.EDITAR
-                              ? "close"
-                              : "create"
-                        }
-                        iconColor="#F6A626"
-                        onPress={() => {
-                           opcionGestion.tipo === OpcionGestion.EDITAR
-                              ? setOpcionGestion(funValidarOpcionGestion("0"))
-                              : setOpcionGestion(funValidarOpcionGestion("2"));
-                        }}
-                     />
-                     <ButtonIconCustom
-                        iconName={"trash"}
-                        iconColor="#f44336"
-                        onPress={() => {}}
-                     />
-                     <ButtonIconCustom
-                        iconName={"call"}
-                        iconColor="#00bcd4"
-                        onPress={() => {}}
-                     />
-                  </View>
-               )}
-            </View>
+                     text={`Modo ${opcionGestion.nombre}`}
+                     textSize={15}
+                  />
 
-            <InputDateTimeCustom
-               title="Fecha Registro"
-               value={fechaRegistro}
-               onChange={setFechaRegistro}
-            />
-            <SelectCustom
-               title="Selecciona Estado"
-               value={estado}
-               onValueChange={setEstado}
-               options={[
-                  { label: "opcion1", value: "1" },
-                  { label: "opcion2", value: "2" },
-               ]}
-            />
-            <InputTextSearchCustom
-               title="DNI"
-               placeholder="Ingrese DNI"
-               value={dni}
-               functionChangeText={setDni}
-               funButtonSearch={() => funObtenerNombresReniec(dni)}
-               keyboardType="number-pad"
-               maxLength={8}
-               inputIsEditable={opcionGestion.esEditable}
-               inputIsRequired={true}
-            />
-            <InputTextCustom
-               title="Nombre"
-               placeholder="Ingrese nombre"
-               value={nombre}
-               functionChangeText={setNombre}
-               keyboardType="default"
-               maxLength={45}
-               inputIsEditable={opcionGestion.esEditable}
-               inputIsRequired={true}
-            />
-            <InputTextCustom
-               title="Apellido Paterno"
-               placeholder="Ingrese apellido paterno"
-               value={apellidoPaterno}
-               functionChangeText={setApellidoPaterno}
-               keyboardType="default"
-               maxLength={45}
-               inputIsEditable={opcionGestion.esEditable}
-               inputIsRequired={true}
-            />
-            <InputTextCustom
-               title="Apellido Materno"
-               placeholder="Ingrese apellido materno"
-               value={apellidoMaterno}
-               functionChangeText={setApellidoMaterno}
-               keyboardType="default"
-               maxLength={45}
-               inputIsEditable={opcionGestion.esEditable}
-               inputIsRequired={true}
-            />
-            <InputTextCustom
-               title="Teléfono"
-               placeholder="Ingrese teléfono"
-               value={telefono}
-               functionChangeText={setTelefono}
-               keyboardType="phone-pad"
-               maxLength={9}
-               inputIsEditable={opcionGestion.esEditable}
-               inputIsRequired={true}
-            />
-            <InputTextCustom
-               title="Dirección"
-               placeholder="Ingrese dirección"
-               value={direccion}
-               functionChangeText={setDireccion}
-               keyboardType="default"
-               maxLength={300}
-               inputIsEditable={opcionGestion.esEditable}
-               inputIsRequired={true}
-            />
-            <InputTextCustom
-               title="Observación"
-               placeholder="Ingrese observación"
-               value={observacion}
-               functionChangeText={setObservacion}
-               keyboardType="default"
-               maxLength={500}
-               inputIsEditable={opcionGestion.esEditable}
-            />
-            <ButtonCrudCustom
-               isEnabled={opcionGestion.esEditable}
-               buttonBackgroundColor={opcionGestion.color}
-               text={
-                  opcionGestion.tipo === OpcionGestion.REGISTRAR
-                     ? "Registar"
-                     : "Actualizar"
-               }
-               onPress={() => {
-                  opcionGestion.tipo === OpcionGestion.REGISTRAR
-                     ? funCandidatoRegistarIndividual()
-                     : funCandidatoActualizarIndividual(candidatoId);
-               }}
-            />
-         </View>
+                  {opcionGestion.habilitarBotones && (
+                     <View
+                        style={{
+                           gap: 5,
+                           flexDirection: "row",
+                           justifyContent: "space-around",
+                           alignItems: "center",
+                        }}
+                     >
+                        <ButtonIconCustom
+                           iconName={
+                              opcionGestion.tipo === OpcionGestion.EDITAR
+                                 ? "close"
+                                 : "create"
+                           }
+                           iconColor="#F6A626"
+                           onPress={() => {
+                              opcionGestion.tipo === OpcionGestion.EDITAR
+                                 ? setOpcionGestion(
+                                      funValidarOpcionGestion("0")
+                                   )
+                                 : setOpcionGestion(
+                                      funValidarOpcionGestion("2")
+                                   );
+                           }}
+                        />
+                        <ButtonIconCustom
+                           iconName={"trash"}
+                           iconColor="#f44336"
+                           onPress={() => {}}
+                        />
+                        <ButtonIconCustom
+                           iconName={"call"}
+                           iconColor="#00bcd4"
+                           onPress={() => {}}
+                        />
+                     </View>
+                  )}
+               </View>
+
+               <InputDateTimeCustom
+                  title="Fecha Registro"
+                  value={fechaRegistro}
+                  onChange={setFechaRegistro}
+               />
+               <SelectCustom
+                  title="Selecciona Estado"
+                  value={estado}
+                  onValueChange={setEstado}
+                  options={[
+                     { label: "opcion1", value: "1" },
+                     { label: "opcion2", value: "2" },
+                  ]}
+               />
+               <InputTextSearchCustom
+                  title="DNI"
+                  placeholder="Ingrese DNI"
+                  value={dni}
+                  functionChangeText={setDni}
+                  funButtonSearch={() => funObtenerNombresReniec(dni)}
+                  keyboardType="number-pad"
+                  maxLength={8}
+                  inputIsEditable={opcionGestion.esEditable}
+                  inputIsRequired={true}
+               />
+               <InputTextCustom
+                  title="Nombre"
+                  placeholder="Ingrese nombre"
+                  value={nombre}
+                  functionChangeText={setNombre}
+                  keyboardType="default"
+                  maxLength={45}
+                  inputIsEditable={opcionGestion.esEditable}
+                  inputIsRequired={true}
+               />
+               <InputTextCustom
+                  title="Apellido Paterno"
+                  placeholder="Ingrese apellido paterno"
+                  value={apellidoPaterno}
+                  functionChangeText={setApellidoPaterno}
+                  keyboardType="default"
+                  maxLength={45}
+                  inputIsEditable={opcionGestion.esEditable}
+                  inputIsRequired={true}
+               />
+               <InputTextCustom
+                  title="Apellido Materno"
+                  placeholder="Ingrese apellido materno"
+                  value={apellidoMaterno}
+                  functionChangeText={setApellidoMaterno}
+                  keyboardType="default"
+                  maxLength={45}
+                  inputIsEditable={opcionGestion.esEditable}
+                  inputIsRequired={true}
+               />
+               <InputTextCustom
+                  title="Teléfono"
+                  placeholder="Ingrese teléfono"
+                  value={telefono}
+                  functionChangeText={setTelefono}
+                  keyboardType="phone-pad"
+                  maxLength={9}
+                  inputIsEditable={opcionGestion.esEditable}
+                  inputIsRequired={true}
+               />
+               <InputTextCustom
+                  title="Dirección"
+                  placeholder="Ingrese dirección"
+                  value={direccion}
+                  functionChangeText={setDireccion}
+                  keyboardType="default"
+                  maxLength={300}
+                  inputIsEditable={opcionGestion.esEditable}
+                  inputIsRequired={true}
+               />
+               <InputTextCustom
+                  title="Observación"
+                  placeholder="Ingrese observación"
+                  value={observacion}
+                  functionChangeText={setObservacion}
+                  keyboardType="default"
+                  maxLength={500}
+                  inputIsEditable={opcionGestion.esEditable}
+               />
+               <ButtonCrudCustom
+                  isEnabled={opcionGestion.esEditable}
+                  buttonBackgroundColor={opcionGestion.color}
+                  text={
+                     opcionGestion.tipo === OpcionGestion.REGISTRAR
+                        ? "Registar"
+                        : "Actualizar"
+                  }
+                  onPress={() => {
+                     opcionGestion.tipo === OpcionGestion.REGISTRAR
+                        ? funCandidatoRegistarIndividual()
+                        : funCandidatoActualizarIndividual(candidatoId);
+                  }}
+               />
+            </View>
+         </ContainerWebCustom>
       </ContainerCustom>
    );
 };

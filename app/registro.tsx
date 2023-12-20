@@ -12,6 +12,7 @@ import HeaderCustom from "../components/HeaderCustom";
 import InputTextSearchCustom from "../components/InputTextSearchCustom";
 import { ReniecService } from "../services/reniec.service";
 import { IsteneSesionContext } from "../components/sesion/Sesion.component";
+import ContainerWebCustom from "../components/ContainerWebCustom";
 
 export default function RegistroScreen() {
    const { mostrarNotificacion } = useContext(IsteneSesionContext);
@@ -149,165 +150,167 @@ export default function RegistroScreen() {
    return (
       <ContainerCustom>
          <HeaderCustom title="Registro" isSecondaryPage={true} urlBack="/" />
-         <View
-            style={{
-               flex: 1,
-               padding: 10,
-               gap: 10,
-               backgroundColor: Colors[colorScheme ?? "light"].container,
-               borderTopLeftRadius: 20,
-               borderTopRightRadius: 20,
-            }}
-         >
-            <Text
-               style={{
-                  marginTop: 20,
-                  fontSize: 30,
-                  lineHeight: 32,
-                  color: Colors[colorScheme ?? "light"].textTitle,
-                  textAlign: "center",
-                  fontFamily: "Poppins900",
-               }}
-            >
-               Crea una cuenta
-            </Text>
-            <Text
-               style={{
-                  fontSize: 20,
-                  lineHeight: 22,
-                  color: Colors[colorScheme ?? "light"].textSubtitle,
-                  textAlign: "center",
-                  fontFamily: "Poppins400",
-                  marginBottom: 20,
-               }}
-            >
-               para comenzar ahora!
-            </Text>
-
-            <InputTextSearchCustom
-               title="DNI"
-               placeholder="Ingrese DNI"
-               value={dni}
-               functionChangeText={setDni}
-               funButtonSearch={() => funObtenerNombresReniec(dni)}
-               keyboardType="number-pad"
-               maxLength={8}
-            />
-            <InputTextCustom
-               title="Nombre"
-               placeholder="Ingrese nombre"
-               value={nombre}
-               functionChangeText={setNombre}
-               keyboardType="default"
-               maxLength={45}
-            />
-            <InputTextCustom
-               title="Apellido"
-               placeholder="Ingrese apellido paterno"
-               value={apellidoPaterno}
-               functionChangeText={setApellidoPaterno}
-               keyboardType="default"
-               maxLength={45}
-            />
-            <InputTextCustom
-               title="Apellido"
-               placeholder="Ingrese apellido materno"
-               value={apellidoMaterno}
-               functionChangeText={setApellidoMaterno}
-               keyboardType="default"
-               maxLength={45}
-            />
-            <InputTextCustom
-               title="Correo"
-               placeholder="Ingrese correo"
-               value={correo}
-               functionChangeText={setCorreo}
-               keyboardType="default"
-               maxLength={30}
-            />
-            <InputTextCustom
-               title="Usuario"
-               placeholder="Ingrese usuario"
-               value={usuario}
-               functionChangeText={setUsuario}
-               keyboardType="default"
-               maxLength={30}
-            />
-            <InputPasswordCustom
-               title="Contraseña"
-               placeholder="Ingrese contraseña"
-               value={contrasenia}
-               functionChangeText={setContrasenia}
-               activePassword={esconderContrasenia}
-               functionActivePassword={() =>
-                  setEsconderContrasenia(!esconderContrasenia)
-               }
-            />
-            <InputPasswordCustom
-               title="Repetir Contraseña"
-               placeholder="Ingrese otra vez la contraseña"
-               value={repetirContrasenia}
-               functionChangeText={setRepetirContrasenia}
-               activePassword={esconderRepetirContrasenia}
-               functionActivePassword={() =>
-                  setEsconderRepetirContrasenia(!esconderRepetirContrasenia)
-               }
-            />
-
-            <TouchableOpacity
-               style={{
-                  marginTop: 10,
-                  width: "100%",
-                  paddingVertical: 15,
-                  borderRadius: 10,
-                  backgroundColor:
-                     Colors[colorScheme ?? "light"].buttonContainer,
-               }}
-               onPress={funCrearCuenta}
-            >
-               <Text
-                  style={{
-                     textAlign: "center",
-                     color: Colors[colorScheme ?? "light"].buttonText,
-                     fontSize: 16,
-                     fontFamily: "Poppins600",
-                  }}
-               >
-                  Crea cuenta
-               </Text>
-            </TouchableOpacity>
+         <ContainerWebCustom>
             <View
                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginVertical: 20,
+                  flex: 1,
+                  padding: 10,
+                  gap: 10,
+                  backgroundColor: Colors[colorScheme ?? "light"].container,
+                  borderTopLeftRadius: 20,
+                  borderTopRightRadius: 20,
                }}
             >
                <Text
                   style={{
-                     color: Colors[colorScheme ?? "light"].text,
-                     fontSize: 13,
-                     fontFamily: "Poppins400",
+                     marginTop: 20,
+                     fontSize: 30,
+                     lineHeight: 32,
+                     color: Colors[colorScheme ?? "light"].textTitle,
+                     textAlign: "center",
+                     fontFamily: "Poppins900",
                   }}
                >
-                  Ya tienes una cuenta?
+                  Crea una cuenta
                </Text>
-               <Link
-                  href={"/"}
+               <Text
                   style={{
-                     color: Colors[colorScheme ?? "light"].text,
-                     marginLeft: 10,
-                     fontSize: 13,
+                     fontSize: 20,
+                     lineHeight: 22,
+                     color: Colors[colorScheme ?? "light"].textSubtitle,
+                     textAlign: "center",
                      fontFamily: "Poppins400",
-                     textDecorationLine: "underline",
+                     marginBottom: 20,
                   }}
                >
-                  <Text>Inicia Sesión</Text>
-               </Link>
+                  para comenzar ahora!
+               </Text>
+
+               <InputTextSearchCustom
+                  title="DNI"
+                  placeholder="Ingrese DNI"
+                  value={dni}
+                  functionChangeText={setDni}
+                  funButtonSearch={() => funObtenerNombresReniec(dni)}
+                  keyboardType="number-pad"
+                  maxLength={8}
+               />
+               <InputTextCustom
+                  title="Nombre"
+                  placeholder="Ingrese nombre"
+                  value={nombre}
+                  functionChangeText={setNombre}
+                  keyboardType="default"
+                  maxLength={45}
+               />
+               <InputTextCustom
+                  title="Apellido"
+                  placeholder="Ingrese apellido paterno"
+                  value={apellidoPaterno}
+                  functionChangeText={setApellidoPaterno}
+                  keyboardType="default"
+                  maxLength={45}
+               />
+               <InputTextCustom
+                  title="Apellido"
+                  placeholder="Ingrese apellido materno"
+                  value={apellidoMaterno}
+                  functionChangeText={setApellidoMaterno}
+                  keyboardType="default"
+                  maxLength={45}
+               />
+               <InputTextCustom
+                  title="Correo"
+                  placeholder="Ingrese correo"
+                  value={correo}
+                  functionChangeText={setCorreo}
+                  keyboardType="default"
+                  maxLength={30}
+               />
+               <InputTextCustom
+                  title="Usuario"
+                  placeholder="Ingrese usuario"
+                  value={usuario}
+                  functionChangeText={setUsuario}
+                  keyboardType="default"
+                  maxLength={30}
+               />
+               <InputPasswordCustom
+                  title="Contraseña"
+                  placeholder="Ingrese contraseña"
+                  value={contrasenia}
+                  functionChangeText={setContrasenia}
+                  activePassword={esconderContrasenia}
+                  functionActivePassword={() =>
+                     setEsconderContrasenia(!esconderContrasenia)
+                  }
+               />
+               <InputPasswordCustom
+                  title="Repetir Contraseña"
+                  placeholder="Ingrese otra vez la contraseña"
+                  value={repetirContrasenia}
+                  functionChangeText={setRepetirContrasenia}
+                  activePassword={esconderRepetirContrasenia}
+                  functionActivePassword={() =>
+                     setEsconderRepetirContrasenia(!esconderRepetirContrasenia)
+                  }
+               />
+
+               <TouchableOpacity
+                  style={{
+                     marginTop: 10,
+                     width: "100%",
+                     paddingVertical: 15,
+                     borderRadius: 10,
+                     backgroundColor:
+                        Colors[colorScheme ?? "light"].buttonContainer,
+                  }}
+                  onPress={funCrearCuenta}
+               >
+                  <Text
+                     style={{
+                        textAlign: "center",
+                        color: Colors[colorScheme ?? "light"].buttonText,
+                        fontSize: 16,
+                        fontFamily: "Poppins600",
+                     }}
+                  >
+                     Crea cuenta
+                  </Text>
+               </TouchableOpacity>
+               <View
+                  style={{
+                     width: "100%",
+                     display: "flex",
+                     flexDirection: "row",
+                     justifyContent: "center",
+                     marginVertical: 20,
+                  }}
+               >
+                  <Text
+                     style={{
+                        color: Colors[colorScheme ?? "light"].text,
+                        fontSize: 13,
+                        fontFamily: "Poppins400",
+                     }}
+                  >
+                     Ya tienes una cuenta?
+                  </Text>
+                  <Link
+                     href={"/"}
+                     style={{
+                        color: Colors[colorScheme ?? "light"].text,
+                        marginLeft: 10,
+                        fontSize: 13,
+                        fontFamily: "Poppins400",
+                        textDecorationLine: "underline",
+                     }}
+                  >
+                     <Text>Inicia Sesión</Text>
+                  </Link>
+               </View>
             </View>
-         </View>
+         </ContainerWebCustom>
       </ContainerCustom>
    );
 }
