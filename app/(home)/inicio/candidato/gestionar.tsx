@@ -9,7 +9,7 @@ import { View, useColorScheme } from "react-native";
 import Colors from "../../../../constants/Colors";
 import TitleCustom from "../../../../components/TitleCustom";
 import InputDateTimeCustom from "../../../../components/InputDateTimeCustom";
-import SelectCustom from "../../../../components/SelectCustom";
+import SelectCustom, { Option } from "../../../../components/SelectCustom";
 import { CandidatoService } from "../../../../services/candidato.service";
 import { CandidatoEntity } from "../../../../entities/candidato.entity";
 import { fechaActualISO } from "../../../../utils/funciones.util";
@@ -22,6 +22,14 @@ import {
 } from "../../../../constants/OpcionGestion";
 import ButtonCrudCustom from "../../../../components/ButtonCrudCustom";
 import ContainerWebCustom from "../../../../components/ContainerWebCustom";
+import { CandidatoEstadoService } from "../../../../services/candidato_estado.service";
+import { CarreraService } from "../../../../services/carrera.service";
+import {
+   CandidatoCarreraRequest,
+   CandidatoRequest,
+} from "../../../../interfaces/resquests/candidato.request";
+import { OperadorService } from "../../../../services/operador.service";
+import { CandidatoListarIndividualResponse } from "../../../../interfaces/responses/candidato.response";
 
 const gestionar = () => {
    const { obtenerSesion, isteneSesion, mostrarNotificacion } =
@@ -38,7 +46,6 @@ const gestionar = () => {
       {} as OpcionesGestionPros
    );
    const [fechaRegistro, setFechaRegistro] = useState<Date>(new Date());
-   const [estado, setEstado] = useState<string>("");
    const [candidatoId, setCandidatoId] = useState<string>("");
    const [dni, setDni] = useState<string>("");
    const [nombre, setNombre] = useState<string>("");
@@ -47,7 +54,56 @@ const gestionar = () => {
    const [telefono, setTelefono] = useState<string>("");
    const [direccion, setDireccion] = useState<string>("");
    const [observacion, setObservacion] = useState<string>("");
+   const [arrayCandidatoEstado, setArrayCandidatoEstado] = useState<Option[]>(
+      []
+   );
+   const [fkCandidatoEstado, setFkCandidatoEstado] = useState<string>("0");
 
+   const [arrayCarrera, setArrayCarrera] = useState<Option[]>([]);
+   const [arrayOperador, setArrayOperador] = useState<Option[]>([]);
+   const [fkOperador, setFkOperador] = useState<string>("0");
+   const [carreraOpcionUno, setCarreraOpcionUno] = useState<string>("0");
+   const [carreraOpcionDos, setCarreraOpcionDos] = useState<string>("0");
+   const [carreraOpcionTres, setCarreraOpcionTres] = useState<string>("0");
+
+   const funLlenarComboOperador = async () => {
+      const srvOperador = new OperadorService();
+
+      await srvOperador
+         .llenarCombo()
+         .then((resp) => {
+            setArrayOperador(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+         });
+   };
+
+   const funLlenarComboCandidatoEstado = async () => {
+      const srvCandEstado = new CandidatoEstadoService();
+
+      await srvCandEstado
+         .llenarCombo()
+         .then((resp) => {
+            setArrayCandidatoEstado(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+         });
+   };
+
+   const funLlenarComboCarrera = async () => {
+      const srvCarrera = new CarreraService();
+
+      await srvCarrera
+         .llenarCombo()
+         .then((resp) => {
+            setArrayCarrera(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+         });
+   };
    const funCandidatoListarIndividual = async (id: string) => {
       if (id === "") {
          return;
@@ -56,13 +112,33 @@ const gestionar = () => {
 
       await srvCandidato
          .listarIndividual(id)
-         .then((resp) => {
+         .then((resp: CandidatoListarIndividualResponse) => {
+            setFkCandidatoEstado(resp.fk_candidato_estado);
             setDni(resp.dni);
             setNombre(resp.nombre);
             setApellidoPaterno(resp.apellido_paterno);
             setApellidoMaterno(resp.apellido_materno);
+            setFkOperador(resp.fk_operador);
             setTelefono(resp.telefono);
             setDireccion(resp.direccion);
+            setObservacion(resp.observacion);
+
+            setCarreraOpcionUno(
+               resp.lst_candidato_carrera.find(
+                  (item) => item.numero_opcion === 1
+               )?.fk_carrera ?? "0"
+            );
+            setCarreraOpcionDos(
+               resp.lst_candidato_carrera.find(
+                  (item) => item.numero_opcion === 2
+               )?.fk_carrera ?? "0"
+            );
+            setCarreraOpcionTres(
+               resp.lst_candidato_carrera.find(
+                  (item) => item.numero_opcion === 3
+               )?.fk_carrera ?? "0"
+            );
+
             setObservacion(resp.observacion);
          })
          .catch((error: Error) => {
@@ -77,12 +153,15 @@ const gestionar = () => {
       const srvCandidato = new CandidatoService();
       setCandidatoId(srvCandidato.obtenerIdDeURL(url_candidato_id));
       setOpcionGestion(funValidarOpcionGestion(url_opcion_gestion));
+      funLlenarComboCandidatoEstado();
+      funLlenarComboOperador();
+      funLlenarComboCarrera();
       funCandidatoListarIndividual(
          srvCandidato.obtenerIdDeURL(url_candidato_id)
       );
    }, []);
 
-   const funObtenerNombresReniec = (dni: string) => {
+   const funObtenerNombresReniec = async (dni: string) => {
       if (dni.length !== 8) {
          mostrarNotificacion({
             tipo: "warn",
@@ -92,7 +171,7 @@ const gestionar = () => {
       }
 
       const srvReniec = new ReniecService();
-      srvReniec
+      await srvReniec
          .obtenerNombres(dni)
          .then((resp) => {
             setNombre(resp.nombres);
@@ -146,8 +225,36 @@ const gestionar = () => {
          return;
       }
 
-      const data: CandidatoEntity = {
-         candidato_id: "",
+      const arrayCandCarrera: CandidatoCarreraRequest[] = [];
+
+      if (carreraOpcionUno !== "0") {
+         arrayCandCarrera.push({
+            numero_opcion: 1,
+            activo: true,
+            fk_candidato: "",
+            fk_carrera: carreraOpcionUno,
+         });
+      }
+
+      if (carreraOpcionDos !== "0") {
+         arrayCandCarrera.push({
+            numero_opcion: 2,
+            activo: true,
+            fk_candidato: "",
+            fk_carrera: carreraOpcionDos,
+         });
+      }
+
+      if (carreraOpcionTres !== "0") {
+         arrayCandCarrera.push({
+            numero_opcion: 3,
+            activo: true,
+            fk_candidato: "",
+            fk_carrera: carreraOpcionTres,
+         });
+      }
+
+      const data: CandidatoRequest = {
          dni: dni,
          nombre: nombre,
          apellido_paterno: apellidoPaterno,
@@ -159,6 +266,8 @@ const gestionar = () => {
          fecha_registro: fechaActualISO(),
          fk_operador: "9B4E23F3-FE7B-4B6C-B2F9-6886B10C2AEC",
          fk_usuario: isteneSesion.usuario_id,
+         fk_candidato_estado: fkCandidatoEstado,
+         lst_candidato_carrera: arrayCandCarrera,
       };
       srvCandidato
          .registrarIndividual(data)
@@ -192,7 +301,7 @@ const gestionar = () => {
          observacion: observacion,
          activo: true,
          fecha_registro: fechaActualISO(),
-         fk_operador: "9B4E23F3-FE7B-4B6C-B2F9-6886B10C2AEC",
+         fk_operador: fkOperador,
          fk_usuario: isteneSesion.usuario_id,
       };
       srvCandidato
@@ -236,6 +345,7 @@ const gestionar = () => {
                         backgroundColor: opcionGestion.color,
                         padding: 10,
                         borderRadius: 5,
+                        color: "#fff",
                      }}
                      text={`Modo ${opcionGestion.nombre}`}
                      textSize={15}
@@ -258,13 +368,18 @@ const gestionar = () => {
                            }
                            iconColor="#F6A626"
                            onPress={() => {
-                              opcionGestion.tipo === OpcionGestion.EDITAR
-                                 ? setOpcionGestion(
-                                      funValidarOpcionGestion("0")
-                                   )
-                                 : setOpcionGestion(
-                                      funValidarOpcionGestion("2")
-                                   );
+                              if (opcionGestion.tipo === OpcionGestion.EDITAR) {
+                                 const srvCandidato = new CandidatoService();
+                                 setOpcionGestion(funValidarOpcionGestion("0"));
+
+                                 funCandidatoListarIndividual(
+                                    srvCandidato.obtenerIdDeURL(
+                                       url_candidato_id
+                                    )
+                                 );
+                              } else {
+                                 setOpcionGestion(funValidarOpcionGestion("2"));
+                              }
                            }}
                         />
                         <ButtonIconCustom
@@ -280,21 +395,23 @@ const gestionar = () => {
                      </View>
                   )}
                </View>
-
+               <TitleCustom text="Datos Sistema:" textSize={15} />
                <InputDateTimeCustom
                   title="Fecha Registro"
                   value={fechaRegistro}
                   onChange={setFechaRegistro}
+                  inputIsEditable={false}
+                  inputIsRequired={true}
                />
                <SelectCustom
-                  title="Selecciona Estado"
-                  value={estado}
-                  onValueChange={setEstado}
-                  options={[
-                     { label: "opcion1", value: "1" },
-                     { label: "opcion2", value: "2" },
-                  ]}
+                  title="Estado Candidato"
+                  value={fkCandidatoEstado}
+                  onChangeValue={setFkCandidatoEstado}
+                  items={arrayCandidatoEstado}
+                  pickerIsEditable={opcionGestion.esEditable}
+                  pickerIsRequired={true}
                />
+               <TitleCustom text="Datos Personales:" textSize={15} />
                <InputTextSearchCustom
                   title="DNI"
                   placeholder="Ingrese DNI"
@@ -336,6 +453,14 @@ const gestionar = () => {
                   inputIsEditable={opcionGestion.esEditable}
                   inputIsRequired={true}
                />
+               <SelectCustom
+                  title="Operador Telefónico"
+                  value={fkOperador}
+                  onChangeValue={setFkOperador}
+                  items={arrayOperador}
+                  pickerIsEditable={opcionGestion.esEditable}
+                  pickerIsRequired={true}
+               />
                <InputTextCustom
                   title="Teléfono"
                   placeholder="Ingrese teléfono"
@@ -356,6 +481,30 @@ const gestionar = () => {
                   inputIsEditable={opcionGestion.esEditable}
                   inputIsRequired={true}
                />
+               <TitleCustom text="Datos Carrera:" textSize={15} />
+               <SelectCustom
+                  title="Opción 1"
+                  value={carreraOpcionUno}
+                  onChangeValue={setCarreraOpcionUno}
+                  items={arrayCarrera}
+                  pickerIsEditable={opcionGestion.esEditable}
+                  pickerIsRequired={true}
+               />
+               <SelectCustom
+                  title="Opción 2"
+                  value={carreraOpcionDos}
+                  onChangeValue={setCarreraOpcionDos}
+                  items={arrayCarrera}
+                  pickerIsEditable={opcionGestion.esEditable}
+               />
+               <SelectCustom
+                  title="Opción 3"
+                  value={carreraOpcionTres}
+                  onChangeValue={setCarreraOpcionTres}
+                  items={arrayCarrera}
+                  pickerIsEditable={opcionGestion.esEditable}
+               />
+               <TitleCustom text="Datos Complementarios:" textSize={15} />
                <InputTextCustom
                   title="Observación"
                   placeholder="Ingrese observación"

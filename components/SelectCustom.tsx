@@ -1,20 +1,15 @@
-import {
-   Text,
-   StyleProp,
-   ViewStyle,
-   TouchableOpacity,
-   useColorScheme,
-} from "react-native";
+import { Text, View, useColorScheme } from "react-native";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import Colors from "../constants/Colors";
 
 interface Props {
    title: string;
-   options: Option[];
-   value: string;
-   onValueChange: Dispatch<SetStateAction<string>>;
-   style?: StyleProp<ViewStyle>;
+   items: Option[];
+   value: string; // Valor opcional, puede ser undefined
+   onChangeValue: Dispatch<SetStateAction<string>>;
+   pickerIsEditable?: boolean;
+   pickerIsRequired?: boolean;
 }
 export interface Option {
    label: string;
@@ -23,69 +18,68 @@ export interface Option {
 
 const SelectCustom = ({
    title,
-   options,
+   items,
    value,
-   onValueChange,
-   style,
+   pickerIsEditable = true,
+   pickerIsRequired = false,
+   onChangeValue,
 }: Props) => {
    const colorScheme = useColorScheme();
-   const [focus, setfocus] = useState<boolean>(false);
-
+   const [focus, setFocus] = useState<boolean>(false);
    const onFocus = () => {
-      setfocus(true);
+      setFocus(true);
    };
    const onBlur = () => {
-      setfocus(false);
+      setFocus(false);
    };
    return (
-      <TouchableOpacity
+      <View
          style={[
             {
-               width: "100%",
+               overflow: "hidden",
                borderRadius: 5,
-               backgroundColor: Colors[colorScheme ?? "light"].inputContainer,
-               borderColor: Colors[colorScheme ?? "light"].inputContainer,
                borderStyle: "solid",
-               borderWidth: 2,
-               elevation: 5,
+               borderWidth: 1,
+               borderColor: Colors[colorScheme ?? "light"].inputBorder,
+               paddingTop: 10,
+               backgroundColor: Colors[colorScheme ?? "light"].inputContainer,
             },
             focus && {
                borderColor: "#007bff",
             },
+            !pickerIsEditable && {
+               opacity: 0.6,
+            },
          ]}
       >
          <Picker
-            style={{
-               padding: 10,
-               marginTop: 10,
-               fontSize: 15,
-               lineHeight: 17,
-               color: Colors[colorScheme ?? "light"].inputText,
-               fontFamily: "Poppins300",
-               overflow: "hidden",
-
-               // backgroundColor: "red",
-            }}
+            enabled={pickerIsEditable}
+            selectionColor={Colors[colorScheme ?? "light"].inputContainer}
+            style={[
+               {
+                  fontSize: 15,
+                  color: Colors[colorScheme ?? "light"].inputText,
+                  fontFamily: "Poppins300",
+               },
+            ]}
             selectedValue={value}
-            onValueChange={onValueChange}
+            onValueChange={(itemValue, itemIndex) => {
+               if (pickerIsEditable) {
+                  onChangeValue(itemValue);
+               }
+            }}
             dropdownIconColor={Colors[colorScheme ?? "light"].inputTitle}
+            mode="dialog"
             onFocus={onFocus}
             onBlur={onBlur}
-            mode="dropdown"
-            itemStyle={{ marginTop: 10 }}
          >
-            {options.map((option: Option, index: number) => {
+            {items.map((option: Option, index: number) => {
                return (
                   <Picker.Item
                      style={{
-                        backgroundColor:
-                           Colors[colorScheme ?? "light"].inputContainer,
-                        elevation: 3,
-
                         fontSize: 15,
-                        color: Colors[colorScheme ?? "light"].inputText,
                         fontFamily: "Poppins300",
-                        borderRadius: 3,
+                        overflow: "hidden",
                      }}
                      label={option.label}
                      value={option.value}
@@ -113,9 +107,9 @@ const SelectCustom = ({
                },
             ]}
          >
-            {title}
+            {`${title} ${pickerIsRequired ? "*" : ""}`}
          </Text>
-      </TouchableOpacity>
+      </View>
    );
 };
 export default SelectCustom;

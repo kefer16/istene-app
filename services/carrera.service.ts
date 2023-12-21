@@ -1,4 +1,5 @@
 import { CarreraApi } from "../apis/carrera.api";
+import { Option } from "../components/SelectCustom";
 import { CarreraEntity } from "../entities/carrera.entity";
 import { CarreraResponse } from "../interfaces/responses/carrera.response";
 
@@ -11,6 +12,7 @@ export class CarreraService {
 
    private rspListarGrupalNombre: CarreraResponse[] = [];
    private rspListarGrupalActivos: CarreraResponse[] = [];
+   private rspLlenarCombo: Option[] = [];
 
    //individual
    async registrarIndividual(data: CarreraEntity): Promise<CarreraResponse> {
@@ -50,6 +52,22 @@ export class CarreraService {
          this.rspListarGrupalActivos = resp.data.data;
       });
       return this.rspListarGrupalActivos;
+   }
+
+   async llenarCombo(): Promise<Option[]> {
+      await this.apiCarrera.listarGrupalActivos().then((resp) => {
+         this.rspLlenarCombo.push({
+            value: "0",
+            label: "Selec. Opción",
+         });
+         resp.data.data.map((element: CarreraResponse) => {
+            this.rspLlenarCombo.push({
+               value: element.carrera_id,
+               label: element.nombre,
+            });
+         });
+      });
+      return this.rspLlenarCombo;
    }
 
    obtenerIdDeURL(id: string): string {

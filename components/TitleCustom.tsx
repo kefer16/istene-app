@@ -18,13 +18,13 @@ const TitleCustom = ({ textStyle, textSize, text }: Props) => {
    return (
       <Text
          style={[
-            textStyle,
             {
                fontSize: textSize,
                lineHeight: textSize + 6,
                color: Colors[colorScheme ?? "light"].textTitle,
                fontFamily: "Poppins700",
             },
+            textStyle,
          ]}
       >
          {text}

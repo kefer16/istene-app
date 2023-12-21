@@ -5,6 +5,7 @@ import {
    TouchableOpacity,
    useColorScheme,
    Platform,
+   View,
 } from "react-native";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -17,9 +18,18 @@ interface Props {
    value: Date;
    onChange: Dispatch<SetStateAction<Date>>;
    style?: StyleProp<ViewStyle>;
+   inputIsRequired?: boolean;
+   inputIsEditable?: boolean;
 }
 
-const InputDateTimeCustom = ({ title, value, onChange, style }: Props) => {
+const InputDateTimeCustom = ({
+   title,
+   value,
+   onChange,
+   style,
+   inputIsRequired = false,
+   inputIsEditable = true,
+}: Props) => {
    const colorScheme = useColorScheme();
 
    const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
@@ -69,7 +79,7 @@ const InputDateTimeCustom = ({ title, value, onChange, style }: Props) => {
       );
    } else {
       return (
-         <TouchableOpacity
+         <View
             style={[
                {
                   width: "100%",
@@ -77,19 +87,17 @@ const InputDateTimeCustom = ({ title, value, onChange, style }: Props) => {
                   borderRadius: 5,
                   backgroundColor:
                      Colors[colorScheme ?? "light"].inputContainer,
-                  elevation: 5,
                   borderStyle: "solid",
-                  borderWidth: 2,
-                  borderColor: Colors[colorScheme ?? "light"].inputContainer,
+                  borderWidth: 1,
+                  borderColor: Colors[colorScheme ?? "light"].inputBorder,
                },
                focus && {
                   borderColor: "#007bff",
                },
+               !inputIsEditable && {
+                  opacity: 0.6,
+               },
             ]}
-            onPress={() => {
-               setShowDatePicker(true);
-               onFocus();
-            }}
          >
             <Text
                style={[
@@ -106,7 +114,7 @@ const InputDateTimeCustom = ({ title, value, onChange, style }: Props) => {
                   },
                ]}
             >
-               {title}
+               {`${title} ${inputIsRequired ? "*" : ""}`}
             </Text>
             <Text
                style={[
@@ -121,6 +129,7 @@ const InputDateTimeCustom = ({ title, value, onChange, style }: Props) => {
             >
                {formatoFecha(value.toString())}
             </Text>
+
             <TouchableOpacity
                style={{
                   position: "absolute",
@@ -134,10 +143,17 @@ const InputDateTimeCustom = ({ title, value, onChange, style }: Props) => {
                   justifyContent: "center",
                   // backgroundColor: "red",
                }}
-               onPress={() => setShowDatePicker(true)}
+               onPress={() => {
+                  if (inputIsEditable) {
+                     setShowDatePicker(true);
+                     onFocus();
+                  }
+               }}
             >
                <Ionicons
-                  style={{ color: Colors[colorScheme ?? "light"].inputTitle }}
+                  style={{
+                     color: Colors[colorScheme ?? "light"].inputTitle,
+                  }}
                   name={"calendar"}
                   size={20}
                />
@@ -155,7 +171,7 @@ const InputDateTimeCustom = ({ title, value, onChange, style }: Props) => {
                   }}
                />
             )}
-         </TouchableOpacity>
+         </View>
       );
    }
 };

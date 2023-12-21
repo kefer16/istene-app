@@ -1,10 +1,11 @@
 import axios, { AxiosResponse } from "axios";
 import { CandidatoEntity } from "../entities/candidato.entity";
 import { personalizarMensajeError } from "../utils/funciones.util";
+import { CandidatoRequest } from "../interfaces/resquests/candidato.request";
 
 export class CandidatoApi {
    //individual
-   async registrarIndividual(data: CandidatoEntity): Promise<AxiosResponse> {
+   async registrarIndividual(data: CandidatoRequest): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
