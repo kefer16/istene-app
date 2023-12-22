@@ -5,13 +5,12 @@ import InputTextSearchCustom from "../../../../components/InputTextSearchCustom"
 import { ReniecService } from "../../../../services/reniec.service";
 import { IsteneSesionContext } from "../../../../components/sesion/Sesion.component";
 import InputTextCustom from "../../../../components/InputTextCustom";
-import { View, useColorScheme } from "react-native";
+import { Text, View, useColorScheme } from "react-native";
 import Colors from "../../../../constants/Colors";
 import TitleCustom from "../../../../components/TitleCustom";
 import InputDateTimeCustom from "../../../../components/InputDateTimeCustom";
 import SelectCustom, { Option } from "../../../../components/SelectCustom";
 import { CandidatoService } from "../../../../services/candidato.service";
-import { CandidatoEntity } from "../../../../entities/candidato.entity";
 import { fechaActualISO } from "../../../../utils/funciones.util";
 import { useLocalSearchParams } from "expo-router";
 import ButtonIconCustom from "../../../../components/ButtonIconCustom";
@@ -25,11 +24,14 @@ import ContainerWebCustom from "../../../../components/ContainerWebCustom";
 import { CandidatoEstadoService } from "../../../../services/candidato_estado.service";
 import { CarreraService } from "../../../../services/carrera.service";
 import {
+   CandidatoActualizarRequest,
    CandidatoCarreraRequest,
+   CandidatoHistorialRequest,
    CandidatoRequest,
 } from "../../../../interfaces/resquests/candidato.request";
 import { OperadorService } from "../../../../services/operador.service";
 import { CandidatoListarIndividualResponse } from "../../../../interfaces/responses/candidato.response";
+import ModoVisualizacionCustom from "../../../../components/ModoVisualizacionCustom";
 
 const gestionar = () => {
    const { obtenerSesion, isteneSesion, mostrarNotificacion } =
@@ -46,6 +48,9 @@ const gestionar = () => {
       {} as OpcionesGestionPros
    );
    const [fechaRegistro, setFechaRegistro] = useState<Date>(new Date());
+   const [fechaActualizacion, setFechaActualizacion] = useState<Date>(
+      new Date()
+   );
    const [candidatoId, setCandidatoId] = useState<string>("");
    const [dni, setDni] = useState<string>("");
    const [nombre, setNombre] = useState<string>("");
@@ -54,6 +59,7 @@ const gestionar = () => {
    const [telefono, setTelefono] = useState<string>("");
    const [direccion, setDireccion] = useState<string>("");
    const [observacion, setObservacion] = useState<string>("");
+   const [usuarioActualizacion, setUsuarioActualizacion] = useState<string>("");
    const [arrayCandidatoEstado, setArrayCandidatoEstado] = useState<Option[]>(
       []
    );
@@ -113,6 +119,7 @@ const gestionar = () => {
       await srvCandidato
          .listarIndividual(id)
          .then((resp: CandidatoListarIndividualResponse) => {
+            setFechaActualizacion(resp.fecha_actualizacion);
             setFkCandidatoEstado(resp.fk_candidato_estado);
             setDni(resp.dni);
             setNombre(resp.nombre);
@@ -122,6 +129,9 @@ const gestionar = () => {
             setTelefono(resp.telefono);
             setDireccion(resp.direccion);
             setObservacion(resp.observacion);
+            setUsuarioActualizacion(
+               resp.lst_candidato_historial[0].cls_usuario.usuario
+            );
 
             setCarreraOpcionUno(
                resp.lst_candidato_carrera.find(
@@ -253,6 +263,12 @@ const gestionar = () => {
             fk_carrera: carreraOpcionTres,
          });
       }
+      const fecha_registro = fechaActualISO();
+      const dataHistorial: CandidatoHistorialRequest = {
+         fecha_registro: fecha_registro,
+         fk_candidato: "",
+         fk_usuario: isteneSesion.usuario_id,
+      };
 
       const data: CandidatoRequest = {
          dni: dni,
@@ -263,12 +279,15 @@ const gestionar = () => {
          telefono: telefono,
          observacion: observacion,
          activo: true,
-         fecha_registro: fechaActualISO(),
-         fk_operador: "9B4E23F3-FE7B-4B6C-B2F9-6886B10C2AEC",
+         fecha_registro: fecha_registro,
+         fecha_actualizacion: fecha_registro,
+         fk_operador: fkOperador,
          fk_usuario: isteneSesion.usuario_id,
          fk_candidato_estado: fkCandidatoEstado,
          lst_candidato_carrera: arrayCandCarrera,
+         cls_candidato_historial: dataHistorial,
       };
+
       srvCandidato
          .registrarIndividual(data)
          .then(() => {
@@ -290,8 +309,41 @@ const gestionar = () => {
          return;
       }
 
-      const data: CandidatoEntity = {
-         candidato_id: "",
+      const arrayCandCarrera: CandidatoCarreraRequest[] = [];
+
+      if (carreraOpcionUno !== "0") {
+         arrayCandCarrera.push({
+            numero_opcion: 1,
+            activo: true,
+            fk_candidato: "",
+            fk_carrera: carreraOpcionUno,
+         });
+      }
+
+      if (carreraOpcionDos !== "0") {
+         arrayCandCarrera.push({
+            numero_opcion: 2,
+            activo: true,
+            fk_candidato: "",
+            fk_carrera: carreraOpcionDos,
+         });
+      }
+
+      if (carreraOpcionTres !== "0") {
+         arrayCandCarrera.push({
+            numero_opcion: 3,
+            activo: true,
+            fk_candidato: "",
+            fk_carrera: carreraOpcionTres,
+         });
+      }
+      const fecha_registro = fechaActualISO();
+      const dataHistorial: CandidatoHistorialRequest = {
+         fecha_registro: fecha_registro,
+         fk_candidato: "",
+         fk_usuario: isteneSesion.usuario_id,
+      };
+      const data: CandidatoActualizarRequest = {
          dni: dni,
          nombre: nombre,
          apellido_paterno: apellidoPaterno,
@@ -299,14 +351,17 @@ const gestionar = () => {
          direccion: direccion,
          telefono: telefono,
          observacion: observacion,
-         activo: true,
-         fecha_registro: fechaActualISO(),
+         fecha_actualizacion: fecha_registro,
+         fk_candidato_estado: fkCandidatoEstado,
          fk_operador: fkOperador,
          fk_usuario: isteneSesion.usuario_id,
+         lst_candidato_carrera: arrayCandCarrera,
+         cls_candidato_historial: dataHistorial,
       };
       srvCandidato
          .actualizarIndividual(id, data)
          .then(() => {
+            setOpcionGestion(funValidarOpcionGestion("0"));
             mostrarNotificacion({
                tipo: "success",
                detalle: "Candidato actualizado exitosamente",
@@ -340,7 +395,7 @@ const gestionar = () => {
                      alignItems: "center",
                   }}
                >
-                  <TitleCustom
+                  <ModoVisualizacionCustom
                      textStyle={{
                         backgroundColor: opcionGestion.color,
                         padding: 10,
@@ -395,7 +450,12 @@ const gestionar = () => {
                      </View>
                   )}
                </View>
-               <TitleCustom text="Datos Sistema:" textSize={15} />
+               <TitleCustom
+                  text="Datos Sistema:"
+                  textSize={15}
+                  textoAlternativo={`${fechaActualizacion.toString()} - ${usuarioActualizacion}`}
+               />
+
                <InputDateTimeCustom
                   title="Fecha Registro"
                   value={fechaRegistro}

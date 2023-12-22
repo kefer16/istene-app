@@ -86,8 +86,10 @@ const index = () => {
                         key={item.carrera_id}
                         textTitle={""}
                         textDescription={item.nombre}
-                        textFecha={item.fecha_registro.toString()}
-                        textCarrera=""
+                        footerTextFecha={item.fecha_registro.toString()}
+                        footerTextUsuario={"kefer"}
+                        etiquetaValor={item.activo ? "ACTI" : "INAC"}
+                        etiquetaColor={item.activo ? "#8bc34a" : "#f44336"}
                         onPress={() =>
                            router.push(
                               `/inicio/carrera/gestionar?url_opcion_gestion=${OpcionGestion.VISUALIZAR}&url_carrera_id=${item.carrera_id}`

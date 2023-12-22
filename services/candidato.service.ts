@@ -1,11 +1,13 @@
 import { CandidatoApi } from "../apis/candidato.api";
-import { CandidatoEntity } from "../entities/candidato.entity";
 import {
    CandidatoListarGrupalDNIResponse,
    CandidatoListarIndividualResponse,
    CandidatoResponse,
 } from "../interfaces/responses/candidato.response";
-import { CandidatoRequest } from "../interfaces/resquests/candidato.request";
+import {
+   CandidatoActualizarRequest,
+   CandidatoRequest,
+} from "../interfaces/resquests/candidato.request";
 
 export class CandidatoService {
    private apiCandidato = new CandidatoApi();
@@ -30,7 +32,7 @@ export class CandidatoService {
 
    async actualizarIndividual(
       id: string,
-      data: CandidatoEntity
+      data: CandidatoActualizarRequest
    ): Promise<CandidatoResponse> {
       await this.apiCandidato.actualizarIndividual(id, data).then((resp) => {
          this.rspActualizarIndividual = resp.data.data;

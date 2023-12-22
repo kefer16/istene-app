@@ -6,10 +6,7 @@ import InputTextSearchCustom from "../../../../components/InputTextSearchCustom"
 import CardButtonCustom from "../../../../components/CardButtonCustom";
 import { router } from "expo-router";
 import { CandidatoService } from "../../../../services/candidato.service";
-import {
-   CandidatoListarGrupalDNIResponse,
-   CandidatoResponse,
-} from "../../../../interfaces/responses/candidato.response";
+import { CandidatoListarGrupalDNIResponse } from "../../../../interfaces/responses/candidato.response";
 import { IsteneSesionContext } from "../../../../components/sesion/Sesion.component";
 import { OpcionGestion } from "../../../../constants/OpcionGestion";
 import ButtonCrudCustom from "../../../../components/ButtonCrudCustom";
@@ -28,7 +25,9 @@ const index = () => {
 
       await srvCandidato
          .listarGrupalDni(dni)
-         .then((resp) => {
+         .then((resp: CandidatoListarGrupalDNIResponse[]) => {
+            console.log(resp);
+
             setArrayCandidatos(resp);
          })
          .catch((error: Error) => {
@@ -91,10 +90,19 @@ const index = () => {
                      return (
                         <CardButtonCustom
                            key={item.candidato_id}
-                           textTitle={item.dni}
+                           textTitle={`${item.dni} / ${item.lst_candidato_carrera[0].cls_carrera.nombre}`}
                            textDescription={`${item.apellido_paterno} ${item.apellido_materno}, ${item.nombre}`}
-                           textFecha={item.fecha_registro.toString()}
-                           textCarrera="COMPUTACIÓN E INFORMÁTICA"
+                           footerTextFecha={item.fecha_actualizacion.toString()}
+                           footerTextUsuario={
+                              item.lst_candidato_historial[0].cls_usuario
+                                 .usuario
+                           }
+                           etiquetaValor={item.cls_candidato_estado.abreviatura}
+                           etiquetaColor={
+                              item.cls_candidato_estado.abreviatura === "PEND"
+                                 ? "#F6A626"
+                                 : "#8bc34a"
+                           }
                            onPress={() =>
                               router.push(
                                  `/inicio/candidato/gestionar?url_opcion_gestion=${OpcionGestion.VISUALIZAR}&url_candidato_id=${item.candidato_id}`

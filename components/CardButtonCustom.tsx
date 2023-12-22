@@ -14,17 +14,21 @@ interface Props {
    styleTouchable?: StyleProp<TextStyle>;
    textTitle: string;
    textDescription: string;
-   textFecha: string;
-   textCarrera: string;
+   footerTextFecha: string;
+   footerTextUsuario: string;
+   etiquetaValor: string;
+   etiquetaColor: `#${string}`;
    onPress?: () => void;
 }
 const CardButtonCustom = ({
    styleTouchable,
    textTitle,
    textDescription,
-   textFecha,
-   textCarrera,
+   footerTextFecha,
+   footerTextUsuario,
    onPress,
+   etiquetaValor,
+   etiquetaColor,
 }: Props) => {
    const colorScheme = useColorScheme();
    return (
@@ -45,16 +49,41 @@ const CardButtonCustom = ({
          ]}
          onPress={onPress}
       >
-         <View style={{ width: "90%", flexDirection: "column" }}>
-            <Text
+         <View style={{ width: "100%", flexDirection: "column" }}>
+            <View
                style={{
-                  fontSize: 10,
-                  fontFamily: "Poppins600",
-                  color: Colors[colorScheme ?? "light"].textTitle,
+                  display: "flex",
+                  // alignItems: "center",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
                }}
             >
-               {textTitle}
-            </Text>
+               <Text
+                  style={{
+                     fontSize: 10,
+                     lineHeight: 13,
+                     fontFamily: "Poppins600",
+                     color: Colors[colorScheme ?? "light"].textTitle,
+                  }}
+               >
+                  {textTitle.length <= 45
+                     ? textTitle
+                     : `${textTitle.substring(0, 44)}...`}
+               </Text>
+               <Text
+                  style={{
+                     backgroundColor: etiquetaColor,
+                     fontSize: 10,
+                     // lineHeight: 10,
+                     fontFamily: "Poppins600",
+                     padding: 4,
+                     borderRadius: 5,
+                     color: "#fff",
+                  }}
+               >
+                  {etiquetaValor}
+               </Text>
+            </View>
             <Text
                style={{
                   fontSize: 15,
@@ -62,7 +91,9 @@ const CardButtonCustom = ({
                   color: Colors[colorScheme ?? "light"].textSubtitle,
                }}
             >
-               {textDescription}
+               {textDescription.length <= 30
+                  ? textDescription
+                  : `${textDescription.substring(0, 29)}...`}
             </Text>
             <View
                style={{
@@ -78,7 +109,7 @@ const CardButtonCustom = ({
                      color: Colors[colorScheme ?? "light"].textTitle,
                   }}
                >
-                  {textFecha}
+                  {footerTextFecha}
                </Text>
                <Text
                   style={{
@@ -87,19 +118,19 @@ const CardButtonCustom = ({
                      color: Colors[colorScheme ?? "light"].textSubtitle,
                   }}
                >
-                  {textCarrera}
+                  {`Editado por: ${footerTextUsuario}`}
                </Text>
             </View>
          </View>
-         <View
+         {/* <View
             style={{
                width: "10%",
                display: "flex",
                justifyContent: "center",
                alignItems: "center",
             }}
-         >
-            {/* <TouchableOpacity
+         > */}
+         {/* <TouchableOpacity
                style={{
                   display: "flex",
                   justifyContent: "center",
@@ -118,7 +149,7 @@ const CardButtonCustom = ({
                   name={"create"}
                />
             </TouchableOpacity> */}
-            <TouchableOpacity
+         {/* <TouchableOpacity
                style={{
                   display: "flex",
                   justifyContent: "center",
@@ -136,8 +167,8 @@ const CardButtonCustom = ({
                   }}
                   name={"trash"}
                />
-            </TouchableOpacity>
-         </View>
+            </TouchableOpacity> */}
+         {/* </View> */}
       </TouchableOpacity>
    );
 };

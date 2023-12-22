@@ -1,4 +1,4 @@
-import { Text, View, Image, useColorScheme } from "react-native";
+import { Text, View, Image, useColorScheme, Platform } from "react-native";
 import InputTextCustom from "../components/InputTextCustom";
 import { useState, useContext } from "react";
 import InputPasswordCustom from "../components/InputPasswordCustom";
@@ -57,18 +57,30 @@ export default function LoginScreen() {
    return (
       <ContainerCustom>
          <ContainerWebCustom>
-            <Image
+            <View
                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
                   marginTop: 50,
                   marginBottom: 50,
                   marginHorizontal: "auto",
                   width: "100%",
                   height: 80,
+                  // backgroundColor: "red",
                   alignSelf: "center",
-                  objectFit: "scale-down",
                }}
-               source={require("../assets/logo/logo.png")}
-            />
+            >
+               <Image
+                  style={[
+                     Platform.OS === "android" && {
+                        width: "80%",
+                        height: 80,
+                     },
+                  ]}
+                  source={require("../assets/logo/logo.png")}
+               />
+            </View>
 
             <Text
                style={{

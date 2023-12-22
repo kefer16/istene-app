@@ -1,7 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 import { CandidatoEntity } from "../entities/candidato.entity";
 import { personalizarMensajeError } from "../utils/funciones.util";
-import { CandidatoRequest } from "../interfaces/resquests/candidato.request";
+import {
+   CandidatoActualizarRequest,
+   CandidatoRequest,
+} from "../interfaces/resquests/candidato.request";
 
 export class CandidatoApi {
    //individual
@@ -27,7 +30,7 @@ export class CandidatoApi {
 
    async actualizarIndividual(
       id: string,
-      data: CandidatoEntity
+      data: CandidatoActualizarRequest
    ): Promise<AxiosResponse> {
       try {
          const config = {

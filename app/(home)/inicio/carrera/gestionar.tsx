@@ -16,7 +16,7 @@ import Colors from "../../../../constants/Colors";
 import TitleCustom from "../../../../components/TitleCustom";
 import ButtonIconCustom from "../../../../components/ButtonIconCustom";
 import InputDateTimeCustom from "../../../../components/InputDateTimeCustom";
-import SelectCustom from "../../../../components/SelectCustom";
+import SelectCustom, { Option } from "../../../../components/SelectCustom";
 import InputTextCustom from "../../../../components/InputTextCustom";
 import ButtonCrudCustom from "../../../../components/ButtonCrudCustom";
 import ContainerWebCustom from "../../../../components/ContainerWebCustom";
@@ -25,6 +25,12 @@ const gestionar = () => {
    const { obtenerSesion, isteneSesion, mostrarNotificacion } =
       useContext(IsteneSesionContext);
    const colorScheme = useColorScheme();
+
+   const [estadosCombo] = useState<Option[]>([
+      { label: "Selec. Opción", value: "-1" },
+      { label: "ACTIVO", value: "1" },
+      { label: "INACTIVO", value: "0" },
+   ]);
 
    const { url_carrera_id, url_opcion_gestion } = useLocalSearchParams<{
       url_carrera_id: string;
@@ -36,7 +42,7 @@ const gestionar = () => {
       {} as OpcionesGestionPros
    );
    const [fechaRegistro, setFechaRegistro] = useState<Date>(new Date());
-   const [estado, setEstado] = useState<string>("");
+   const [activo, setActivo] = useState<string>("");
    const [carreraId, setCarreraId] = useState<string>("");
    const [nombre, setNombre] = useState<string>("");
 
@@ -50,6 +56,7 @@ const gestionar = () => {
          .listarIndividual(id)
          .then((resp) => {
             setNombre(resp.nombre);
+            setActivo(resp.activo ? "1" : "0");
          })
          .catch((error: Error) => {
             mostrarNotificacion({
@@ -85,7 +92,7 @@ const gestionar = () => {
       const data: CarreraEntity = {
          carrera_id: "",
          nombre: nombre,
-         activo: true,
+         activo: activo === "1",
          fecha_registro: fechaActualISO(),
          fk_usuario: isteneSesion.usuario_id,
       };
@@ -114,7 +121,7 @@ const gestionar = () => {
       const data: CarreraEntity = {
          carrera_id: "",
          nombre: nombre,
-         activo: true,
+         activo: activo === "1",
          fecha_registro: fechaActualISO(),
          fk_usuario: isteneSesion.usuario_id,
       };
@@ -122,6 +129,7 @@ const gestionar = () => {
       srvCarrera
          .actualizarIndividual(id, data)
          .then(() => {
+            setOpcionGestion(funValidarOpcionGestion("0"));
             mostrarNotificacion({
                tipo: "success",
                detalle: "Carrera actualizada exitosamente",
@@ -203,22 +211,24 @@ const gestionar = () => {
                      </View>
                   )}
                </View>
-
+               <TitleCustom text="Datos Sistema:" textSize={15} />
                <InputDateTimeCustom
                   title="Fecha Registro"
                   value={fechaRegistro}
                   onChange={setFechaRegistro}
-               />
-               <SelectCustom
-                  title="Selecciona Estado"
-                  value={estado}
-                  onValueChange={setEstado}
-                  options={[
-                     { label: "opcion1", value: "1" },
-                     { label: "opcion2", value: "2" },
-                  ]}
+                  inputIsEditable={false}
+                  inputIsRequired={true}
                />
 
+               <SelectCustom
+                  title="Estado Carrera"
+                  value={activo}
+                  onChangeValue={setActivo}
+                  items={estadosCombo}
+                  pickerIsEditable={opcionGestion.esEditable}
+                  pickerIsRequired={true}
+               />
+               <TitleCustom text="Datos Carrera:" textSize={15} />
                <InputTextCustom
                   title="Nombre"
                   placeholder="Ingrese nombre"
