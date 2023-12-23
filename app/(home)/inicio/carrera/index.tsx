@@ -13,7 +13,8 @@ import CardButtonCustom from "../../../../components/CardButtonCustom";
 import ContainerWebCustom from "../../../../components/ContainerWebCustom";
 
 const index = () => {
-   const { mostrarNotificacion } = useContext(IsteneSesionContext);
+   const { mostrarNotificacion, activarCarga } =
+      useContext(IsteneSesionContext);
 
    const [busqueda, setBusqueda] = useState<string>("");
    const [arrayCarreras, setArrayCarreras] = useState<CarreraResponse[]>([]);
@@ -32,7 +33,12 @@ const index = () => {
    };
 
    useEffect(() => {
-      funCarreraListarGrupal(busqueda);
+      const obtenerDatos = async () => {
+         activarCarga(true);
+         await funCarreraListarGrupal(busqueda);
+         activarCarga(false);
+      };
+      obtenerDatos();
    }, []);
    return (
       <ContainerCustom>

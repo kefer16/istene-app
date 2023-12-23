@@ -13,7 +13,8 @@ import ButtonCrudCustom from "../../../../components/ButtonCrudCustom";
 import ContainerWebCustom from "../../../../components/ContainerWebCustom";
 
 const index = () => {
-   const { mostrarNotificacion } = useContext(IsteneSesionContext);
+   const { mostrarNotificacion, activarCarga } =
+      useContext(IsteneSesionContext);
 
    const [busqueda, setBusqueda] = useState<string>("");
    const [arrayCandidatos, setArrayCandidatos] = useState<
@@ -26,8 +27,6 @@ const index = () => {
       await srvCandidato
          .listarGrupalDni(dni)
          .then((resp: CandidatoListarGrupalDNIResponse[]) => {
-            console.log(resp);
-
             setArrayCandidatos(resp);
          })
          .catch((error: Error) => {
@@ -36,7 +35,12 @@ const index = () => {
    };
 
    useEffect(() => {
-      funCandidatosListarGrupal(busqueda);
+      const obtenerDatos = async () => {
+         activarCarga(true);
+         await funCandidatosListarGrupal(busqueda);
+         activarCarga(false);
+      };
+      obtenerDatos();
    }, []);
 
    return (

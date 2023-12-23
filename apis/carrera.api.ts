@@ -8,6 +8,7 @@ export class CarreraApi {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${CarreraEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
@@ -30,11 +31,12 @@ export class CarreraApi {
    ): Promise<AxiosResponse> {
       try {
          const config = {
+            headers: {
+               Authorization: `Bearer ${CarreraEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
             params: {
                carrera_id: id,
-            },
-            headers: {
-               "Content-Type": "application/json",
             },
          };
          const body = JSON.stringify(data);
@@ -53,11 +55,12 @@ export class CarreraApi {
    async listarIndividual(id: string): Promise<AxiosResponse> {
       try {
          const config = {
+            headers: {
+               Authorization: `Bearer ${CarreraEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
             params: {
                carrera_id: id,
-            },
-            headers: {
-               "Content-Type": "application/json",
             },
          };
 
@@ -75,11 +78,12 @@ export class CarreraApi {
    async listarGrupalNombre(nombre: string): Promise<AxiosResponse> {
       try {
          const config = {
+            headers: {
+               Authorization: `Bearer ${CarreraEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
             params: {
                nombre: nombre,
-            },
-            headers: {
-               "Content-Type": "application/json",
             },
          };
 
@@ -97,6 +101,7 @@ export class CarreraApi {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${CarreraEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };

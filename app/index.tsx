@@ -13,7 +13,7 @@ import ButtonCustom from "../components/ButtonCustom";
 import ContainerWebCustom from "../components/ContainerWebCustom";
 
 export default function LoginScreen() {
-   const { mostrarNotificacion, guardarSesion } =
+   const { mostrarNotificacion, guardarSesion, activarCarga } =
       useContext(IsteneSesionContext);
 
    const colorScheme = useColorScheme();
@@ -39,6 +39,7 @@ export default function LoginScreen() {
       }
 
       const srvUsuario = new UsuarioService();
+      activarCarga(true);
       await srvUsuario
          .logearse(usuario, contrasenia)
          .then((resp: LogeoUsuario) => {
@@ -53,7 +54,9 @@ export default function LoginScreen() {
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+      activarCarga(false);
    };
+
    return (
       <ContainerCustom>
          <ContainerWebCustom>

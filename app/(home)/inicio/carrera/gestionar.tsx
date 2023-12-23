@@ -20,9 +20,10 @@ import SelectCustom, { Option } from "../../../../components/SelectCustom";
 import InputTextCustom from "../../../../components/InputTextCustom";
 import ButtonCrudCustom from "../../../../components/ButtonCrudCustom";
 import ContainerWebCustom from "../../../../components/ContainerWebCustom";
+import ModoVisualizacionCustom from "../../../../components/ModoVisualizacionCustom";
 
 const gestionar = () => {
-   const { obtenerSesion, isteneSesion, mostrarNotificacion } =
+   const { obtenerSesion, isteneSesion, mostrarNotificacion, activarCarga } =
       useContext(IsteneSesionContext);
    const colorScheme = useColorScheme();
 
@@ -66,11 +67,18 @@ const gestionar = () => {
          });
    };
    useEffect(() => {
-      obtenerSesion();
-      const srvCarrera = new CarreraService();
-      setCarreraId(srvCarrera.obtenerIdDeURL(url_carrera_id));
-      setOpcionGestion(funValidarOpcionGestion(url_opcion_gestion));
-      funCarreraListarIndividual(srvCarrera.obtenerIdDeURL(url_carrera_id));
+      const obtenerDatos = async () => {
+         activarCarga(true);
+         obtenerSesion();
+         const srvCarrera = new CarreraService();
+         setCarreraId(srvCarrera.obtenerIdDeURL(url_carrera_id));
+         setOpcionGestion(funValidarOpcionGestion(url_opcion_gestion));
+         await funCarreraListarIndividual(
+            srvCarrera.obtenerIdDeURL(url_carrera_id)
+         );
+         activarCarga(false);
+      };
+      obtenerDatos();
    }, []);
 
    const funValidarCamposCorrectos = (): boolean => {
@@ -96,7 +104,7 @@ const gestionar = () => {
          fecha_registro: fechaActualISO(),
          fk_usuario: isteneSesion.usuario_id,
       };
-
+      activarCarga(true);
       await srvCarrera
          .registrarIndividual(data)
          .then(() => {
@@ -109,6 +117,7 @@ const gestionar = () => {
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+      activarCarga(false);
    };
 
    const funCarreraActualizarIndividual = async (id: string) => {
@@ -125,8 +134,8 @@ const gestionar = () => {
          fecha_registro: fechaActualISO(),
          fk_usuario: isteneSesion.usuario_id,
       };
-
-      srvCarrera
+      activarCarga(true);
+      await srvCarrera
          .actualizarIndividual(id, data)
          .then(() => {
             setOpcionGestion(funValidarOpcionGestion("0"));
@@ -138,6 +147,7 @@ const gestionar = () => {
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+      activarCarga(false);
    };
    return (
       <ContainerCustom>
@@ -162,11 +172,12 @@ const gestionar = () => {
                      alignItems: "center",
                   }}
                >
-                  <TitleCustom
+                  <ModoVisualizacionCustom
                      textStyle={{
                         backgroundColor: opcionGestion.color,
                         padding: 10,
                         borderRadius: 5,
+                        color: "#fff",
                      }}
                      text={`Modo ${opcionGestion.nombre}`}
                      textSize={15}

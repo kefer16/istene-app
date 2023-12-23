@@ -5,7 +5,7 @@ import InputTextSearchCustom from "../../../../components/InputTextSearchCustom"
 import { ReniecService } from "../../../../services/reniec.service";
 import { IsteneSesionContext } from "../../../../components/sesion/Sesion.component";
 import InputTextCustom from "../../../../components/InputTextCustom";
-import { Text, View, useColorScheme } from "react-native";
+import { View, useColorScheme } from "react-native";
 import Colors from "../../../../constants/Colors";
 import TitleCustom from "../../../../components/TitleCustom";
 import InputDateTimeCustom from "../../../../components/InputDateTimeCustom";
@@ -34,7 +34,7 @@ import { CandidatoListarIndividualResponse } from "../../../../interfaces/respon
 import ModoVisualizacionCustom from "../../../../components/ModoVisualizacionCustom";
 
 const gestionar = () => {
-   const { obtenerSesion, isteneSesion, mostrarNotificacion } =
+   const { obtenerSesion, isteneSesion, mostrarNotificacion, activarCarga } =
       useContext(IsteneSesionContext);
    const colorScheme = useColorScheme();
 
@@ -159,16 +159,21 @@ const gestionar = () => {
          });
    };
    useEffect(() => {
-      obtenerSesion();
-      const srvCandidato = new CandidatoService();
-      setCandidatoId(srvCandidato.obtenerIdDeURL(url_candidato_id));
-      setOpcionGestion(funValidarOpcionGestion(url_opcion_gestion));
-      funLlenarComboCandidatoEstado();
-      funLlenarComboOperador();
-      funLlenarComboCarrera();
-      funCandidatoListarIndividual(
-         srvCandidato.obtenerIdDeURL(url_candidato_id)
-      );
+      const obtenerDatos = async () => {
+         activarCarga(true);
+         obtenerSesion();
+         const srvCandidato = new CandidatoService();
+         setCandidatoId(srvCandidato.obtenerIdDeURL(url_candidato_id));
+         setOpcionGestion(funValidarOpcionGestion(url_opcion_gestion));
+         await funLlenarComboCandidatoEstado();
+         await funLlenarComboOperador();
+         await funLlenarComboCarrera();
+         await funCandidatoListarIndividual(
+            srvCandidato.obtenerIdDeURL(url_candidato_id)
+         );
+         activarCarga(false);
+      };
+      obtenerDatos();
    }, []);
 
    const funObtenerNombresReniec = async (dni: string) => {
@@ -179,7 +184,7 @@ const gestionar = () => {
          });
          return;
       }
-
+      activarCarga(true);
       const srvReniec = new ReniecService();
       await srvReniec
          .obtenerNombres(dni)
@@ -191,6 +196,7 @@ const gestionar = () => {
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+      activarCarga(false);
    };
 
    const funValidarCamposCorrectos = (): boolean => {
@@ -288,7 +294,8 @@ const gestionar = () => {
          cls_candidato_historial: dataHistorial,
       };
 
-      srvCandidato
+      activarCarga(true);
+      await srvCandidato
          .registrarIndividual(data)
          .then(() => {
             setOpcionGestion(funValidarOpcionGestion("0"));
@@ -300,6 +307,7 @@ const gestionar = () => {
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+      activarCarga(false);
    };
 
    const funCandidatoActualizarIndividual = async (id: string) => {
@@ -358,7 +366,8 @@ const gestionar = () => {
          lst_candidato_carrera: arrayCandCarrera,
          cls_candidato_historial: dataHistorial,
       };
-      srvCandidato
+      activarCarga(true);
+      await srvCandidato
          .actualizarIndividual(id, data)
          .then(() => {
             setOpcionGestion(funValidarOpcionGestion("0"));
@@ -370,6 +379,7 @@ const gestionar = () => {
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+      activarCarga(false);
    };
 
    return (

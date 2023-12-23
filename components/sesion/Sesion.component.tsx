@@ -1,6 +1,6 @@
 import { createContext, useState } from "react";
 import { LogeoUsuario } from "../../interfaces/usuario.interface";
-import { Alert } from "react-native";
+import { ActivityIndicator, Alert, View } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 // import {  ToastAndroid } from "react-native";
@@ -16,6 +16,7 @@ export interface InsteneSesionContextProps {
    guardarSesion: (sesion: LogeoUsuario) => void;
    cerrarSesion: () => void;
    mostrarNotificacion: (prosp: NotificacionProps) => void;
+   activarCarga: (estado: boolean) => void;
 }
 
 export const IsteneSesionContext = createContext<InsteneSesionContextProps>(
@@ -29,6 +30,11 @@ export const SesionProvider = ({ children }: any) => {
       {} as LogeoUsuario
    );
 
+   const [carga, setCarga] = useState<boolean>(false);
+
+   const activarCarga = (estado: boolean) => {
+      setCarga(estado);
+   };
    const obtenerSesion = async () => {
       let result;
       if (Platform.OS === "web") {
@@ -142,9 +148,26 @@ export const SesionProvider = ({ children }: any) => {
             guardarSesion,
             cerrarSesion,
             mostrarNotificacion,
+            activarCarga,
          }}
       >
          {children}
+
+         {carga && (
+            <View
+               style={{
+                  width: "100%",
+                  height: "100%",
+                  position: "absolute",
+                  backgroundColor: "#000000d6",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+               }}
+            >
+               <ActivityIndicator size="large" color="#fff" />
+            </View>
+         )}
       </IsteneSesionContext.Provider>
    );
 };

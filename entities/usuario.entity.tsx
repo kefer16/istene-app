@@ -1,6 +1,6 @@
-import { API_URL } from "@env";
+import { API_URL, BEARER_TOKEN } from "@env";
 const ENV_API_URL: string = API_URL ?? "";
-
+const ENV_BEARER_TOKEN: string = BEARER_TOKEN ?? "";
 export class UsuarioEntity {
    constructor(
       public usuario_id: string = "",
@@ -18,5 +18,6 @@ export class UsuarioEntity {
       public activo: boolean = false,
       public fk_privilegio: string = ""
    ) {}
+   public static bearer = ENV_BEARER_TOKEN;
    public static url = `${ENV_API_URL}/usuario`;
 }

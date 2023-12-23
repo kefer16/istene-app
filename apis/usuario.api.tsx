@@ -10,6 +10,7 @@ export class UsuarioApi {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${UsuarioEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
@@ -21,17 +22,18 @@ export class UsuarioApi {
       }
    }
 
-   async registrar(data: UsuarioEntity): Promise<AxiosResponse> {
+   async registrarIndividual(data: UsuarioEntity): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${UsuarioEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
          const body = JSON.stringify(data);
 
          return await axios.post(
-            `${UsuarioEntity.url}/registrar_uno`,
+            `${UsuarioEntity.url}/registrar_individual`,
             body,
             config
          );
@@ -41,20 +43,24 @@ export class UsuarioApi {
       }
    }
 
-   async actualizar(ID: number, data: UsuarioEntity): Promise<AxiosResponse> {
+   async actualizarIndividual(
+      ID: number,
+      data: UsuarioEntity
+   ): Promise<AxiosResponse> {
       try {
          const config = {
+            headers: {
+               Authorization: `Bearer ${UsuarioEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
             params: {
                usuario_id: ID,
-            },
-            headers: {
-               "Content-Type": "application/json",
             },
          };
          const body = JSON.stringify(data);
 
          return await axios.put(
-            `${UsuarioEntity.url}/actualizar`,
+            `${UsuarioEntity.url}/actualizar_individual`,
             body,
             config
          );
@@ -64,47 +70,37 @@ export class UsuarioApi {
       }
    }
 
-   async listarTodos(): Promise<AxiosResponse> {
+   async listarGrupal(): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${UsuarioEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
 
-         return await axios.get(`${UsuarioEntity.url}/todos`, config);
+         return await axios.get(`${UsuarioEntity.url}/listar_grupal`, config);
       } catch (error: any) {
          error.message = personalizarMensajeError(error);
          return Promise.reject(error);
       }
    }
 
-   async historial(idUsuario: number): Promise<AxiosResponse> {
+   async eliminarIndividual(ID: number): Promise<AxiosResponse> {
       try {
          const config = {
-            params: {
-               usuario_id: idUsuario,
-            },
             headers: {
+               Authorization: `Bearer ${UsuarioEntity.bearer}`,
                "Content-Type": "application/json",
             },
-         };
-
-         return await axios.get(`${UsuarioEntity.url}/historial`, config);
-      } catch (error: any) {
-         error.message = personalizarMensajeError(error);
-         return Promise.reject(error);
-      }
-   }
-
-   async eliminarUno(ID: number): Promise<AxiosResponse> {
-      try {
-         const config = {
             params: {
                usuario_id: ID,
             },
          };
-         return await axios.delete(`${UsuarioEntity.url}/eliminar`, config);
+         return await axios.delete(
+            `${UsuarioEntity.url}/eliminar_indivual`,
+            config
+         );
       } catch (error: any) {
          error.message = personalizarMensajeError(error);
          return Promise.reject(error);

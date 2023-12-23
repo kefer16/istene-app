@@ -12,6 +12,7 @@ export class CandidatoApi {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${CandidatoEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
@@ -34,11 +35,12 @@ export class CandidatoApi {
    ): Promise<AxiosResponse> {
       try {
          const config = {
+            headers: {
+               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
             params: {
                candidato_id: id,
-            },
-            headers: {
-               "Content-Type": "application/json",
             },
          };
          const body = JSON.stringify(data);
@@ -57,11 +59,12 @@ export class CandidatoApi {
    async ListarIndividual(id: string): Promise<AxiosResponse> {
       try {
          const config = {
+            headers: {
+               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
             params: {
                candidato_id: id,
-            },
-            headers: {
-               "Content-Type": "application/json",
             },
          };
 
@@ -79,11 +82,12 @@ export class CandidatoApi {
    async listarGrupalDni(dni: string): Promise<AxiosResponse> {
       try {
          const config = {
+            headers: {
+               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
             params: {
                dni: dni,
-            },
-            headers: {
-               "Content-Type": "application/json",
             },
          };
 
@@ -101,6 +105,7 @@ export class CandidatoApi {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${CandidatoEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };

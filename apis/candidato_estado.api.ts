@@ -7,6 +7,7 @@ export class CandidatoEstadoApi {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${CandidatoEstadoEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
@@ -24,6 +25,7 @@ export class CandidatoEstadoApi {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${CandidatoEstadoEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };

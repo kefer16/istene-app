@@ -7,6 +7,7 @@ export class OperadorApi {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${OperadorEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
@@ -21,6 +22,7 @@ export class OperadorApi {
       try {
          const config = {
             headers: {
+               Authorization: `Bearer ${OperadorEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };

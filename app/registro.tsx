@@ -15,7 +15,8 @@ import { IsteneSesionContext } from "../components/sesion/Sesion.component";
 import ContainerWebCustom from "../components/ContainerWebCustom";
 
 export default function RegistroScreen() {
-   const { mostrarNotificacion } = useContext(IsteneSesionContext);
+   const { mostrarNotificacion, activarCarga } =
+      useContext(IsteneSesionContext);
    const colorScheme = useColorScheme();
    const [dni, setDni] = useState<string>("");
    const [nombre, setNombre] = useState<string>("");
@@ -40,7 +41,7 @@ export default function RegistroScreen() {
       setContrasenia("");
       setRepetirContrasenia("");
    };
-   const funCrearCuenta = () => {
+   const funCrearCuenta = async () => {
       if (!dni) {
          mostrarNotificacion({ tipo: "warn", detalle: "Ingrese un dni" });
          return;
@@ -112,8 +113,9 @@ export default function RegistroScreen() {
       );
       const srvUsuario = new UsuarioService();
 
-      srvUsuario
-         .registrar(data)
+      activarCarga(true);
+      await srvUsuario
+         .registrarIndividual(data)
          .then(() => {
             mostrarNotificacion({
                tipo: "success",
@@ -124,9 +126,10 @@ export default function RegistroScreen() {
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+      activarCarga(false);
    };
 
-   const funObtenerNombresReniec = (dni: string) => {
+   const funObtenerNombresReniec = async (dni: string) => {
       if (dni.length !== 8) {
          mostrarNotificacion({
             tipo: "warn",
@@ -135,7 +138,8 @@ export default function RegistroScreen() {
          return;
       }
       const srvReniec = new ReniecService();
-      srvReniec
+      activarCarga(true);
+      await srvReniec
          .obtenerNombres(dni)
          .then((resp) => {
             setNombre(resp.nombres);
@@ -145,6 +149,7 @@ export default function RegistroScreen() {
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+      activarCarga(false);
    };
 
    return (
