@@ -199,6 +199,7 @@ export default function RegistroScreen() {
                   funButtonSearch={() => funObtenerNombresReniec(dni)}
                   keyboardType="number-pad"
                   maxLength={8}
+                  inputIsRequired={true}
                />
                <InputTextCustom
                   title="Nombre"
@@ -207,38 +208,45 @@ export default function RegistroScreen() {
                   functionChangeText={setNombre}
                   keyboardType="default"
                   maxLength={45}
+                  inputIsRequired={true}
                />
                <InputTextCustom
-                  title="Apellido"
+                  title="Apellido Paterno"
                   placeholder="Ingrese apellido paterno"
                   value={apellidoPaterno}
                   functionChangeText={setApellidoPaterno}
                   keyboardType="default"
                   maxLength={45}
+                  inputIsRequired={true}
                />
                <InputTextCustom
-                  title="Apellido"
+                  title="Apellido Materno"
                   placeholder="Ingrese apellido materno"
                   value={apellidoMaterno}
                   functionChangeText={setApellidoMaterno}
                   keyboardType="default"
                   maxLength={45}
+                  inputIsRequired={true}
                />
                <InputTextCustom
+                  styleInput={{ textTransform: "lowercase" }}
                   title="Correo"
                   placeholder="Ingrese correo"
                   value={correo}
                   functionChangeText={setCorreo}
                   keyboardType="default"
                   maxLength={30}
+                  inputIsRequired={true}
                />
                <InputTextCustom
+                  styleInput={{ textTransform: "lowercase" }}
                   title="Usuario"
                   placeholder="Ingrese usuario"
                   value={usuario}
                   functionChangeText={setUsuario}
                   keyboardType="default"
                   maxLength={30}
+                  inputIsRequired={true}
                />
                <InputPasswordCustom
                   title="Contraseña"

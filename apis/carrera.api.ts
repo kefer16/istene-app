@@ -1,10 +1,16 @@
 import axios, { AxiosResponse } from "axios";
 import { CarreraEntity } from "../entities/carrera.entity";
 import { personalizarMensajeError } from "../utils/funciones.util";
+import {
+   CarreraActualizarIndividualRequest,
+   CarreraRegistrarIndividualRequest,
+} from "../interfaces/resquests/carrera.request";
 
 export class CarreraApi {
    //individual
-   async registrarIndividual(data: CarreraEntity): Promise<AxiosResponse> {
+   async registrarIndividual(
+      data: CarreraRegistrarIndividualRequest
+   ): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
@@ -27,7 +33,7 @@ export class CarreraApi {
 
    async actualizarIndividual(
       id: string,
-      data: CarreraEntity
+      data: CarreraActualizarIndividualRequest
    ): Promise<AxiosResponse> {
       try {
          const config = {

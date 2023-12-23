@@ -102,11 +102,9 @@ const index = () => {
                                  .usuario
                            }
                            etiquetaValor={item.cls_candidato_estado.abreviatura}
-                           etiquetaColor={
-                              item.cls_candidato_estado.abreviatura === "PEND"
-                                 ? "#F6A626"
-                                 : "#8bc34a"
-                           }
+                           etiquetaColor={CandidatoService.obtenerColorEstado(
+                              item.cls_candidato_estado.abreviatura
+                           )}
                            onPress={() =>
                               router.push(
                                  `/inicio/candidato/gestionar?url_opcion_gestion=${OpcionGestion.VISUALIZAR}&url_candidato_id=${item.candidato_id}`

@@ -8,7 +8,6 @@ import {
    funValidarOpcionGestion,
 } from "../../../../constants/OpcionGestion";
 import { CarreraService } from "../../../../services/carrera.service";
-import { CarreraEntity } from "../../../../entities/carrera.entity";
 import { fechaActualISO } from "../../../../utils/funciones.util";
 import ContainerCustom from "../../../../components/ContainerCustom";
 import HeaderCustom from "../../../../components/HeaderCustom";
@@ -21,6 +20,12 @@ import InputTextCustom from "../../../../components/InputTextCustom";
 import ButtonCrudCustom from "../../../../components/ButtonCrudCustom";
 import ContainerWebCustom from "../../../../components/ContainerWebCustom";
 import ModoVisualizacionCustom from "../../../../components/ModoVisualizacionCustom";
+import {
+   CarreraActualizarIndividualRequest,
+   CarreraHistorialRegistrarIndividualRequest,
+   CarreraRegistrarIndividualRequest,
+} from "../../../../interfaces/resquests/carrera.request";
+import { CarreraListarIndividualResponse } from "../../../../interfaces/responses/carrera.response";
 
 const gestionar = () => {
    const { obtenerSesion, isteneSesion, mostrarNotificacion, activarCarga } =
@@ -43,9 +48,14 @@ const gestionar = () => {
       {} as OpcionesGestionPros
    );
    const [fechaRegistro, setFechaRegistro] = useState<Date>(new Date());
+   const [fechaActualizacion, setFechaActualizacion] = useState<Date>(
+      new Date()
+   );
    const [activo, setActivo] = useState<string>("");
    const [carreraId, setCarreraId] = useState<string>("");
    const [nombre, setNombre] = useState<string>("");
+   const [descripcion, setDescripcion] = useState<string>("");
+   const [usuarioActualizacion, setUsuarioActualizacion] = useState<string>("");
 
    const funCarreraListarIndividual = async (id: string) => {
       if (id === "") {
@@ -55,7 +65,11 @@ const gestionar = () => {
 
       await srvCarrera
          .listarIndividual(id)
-         .then((resp) => {
+         .then((resp: CarreraListarIndividualResponse) => {
+            setFechaRegistro(resp.fecha_registro);
+            setFechaActualizacion(resp.fecha_actualizacion);
+            setUsuarioActualizacion(resp.cls_usuario.usuario);
+            setDescripcion(resp.descripcion);
             setNombre(resp.nombre);
             setActivo(resp.activo ? "1" : "0");
          })
@@ -97,12 +111,21 @@ const gestionar = () => {
          return;
       }
 
-      const data: CarreraEntity = {
-         carrera_id: "",
-         nombre: nombre,
-         activo: activo === "1",
-         fecha_registro: fechaActualISO(),
+      const fecha_registro = fechaActualISO();
+      const dataHistorial: CarreraHistorialRegistrarIndividualRequest = {
+         fecha_registro: fecha_registro,
+         fk_carrera: "",
          fk_usuario: isteneSesion.usuario_id,
+      };
+
+      const data: CarreraRegistrarIndividualRequest = {
+         nombre: nombre,
+         descripcion: descripcion,
+         activo: activo === "1",
+         fecha_registro: fecha_registro,
+         fecha_actualizacion: fecha_registro,
+         fk_usuario: isteneSesion.usuario_id,
+         cls_carrera_historial: dataHistorial,
       };
       activarCarga(true);
       await srvCarrera
@@ -127,12 +150,19 @@ const gestionar = () => {
          return;
       }
 
-      const data: CarreraEntity = {
-         carrera_id: "",
-         nombre: nombre,
-         activo: activo === "1",
-         fecha_registro: fechaActualISO(),
+      const fecha_registro = fechaActualISO();
+      const dataHistorial: CarreraHistorialRegistrarIndividualRequest = {
+         fecha_registro: fecha_registro,
+         fk_carrera: "",
          fk_usuario: isteneSesion.usuario_id,
+      };
+      const data: CarreraActualizarIndividualRequest = {
+         nombre: nombre,
+         descripcion: descripcion,
+         activo: activo === "1",
+         fecha_actualizacion: fecha_registro,
+         fk_usuario: isteneSesion.usuario_id,
+         cls_carrera_historial: dataHistorial,
       };
       activarCarga(true);
       await srvCarrera
@@ -222,7 +252,11 @@ const gestionar = () => {
                      </View>
                   )}
                </View>
-               <TitleCustom text="Datos Sistema:" textSize={15} />
+               <TitleCustom
+                  text="Datos Sistema:"
+                  textSize={15}
+                  textoAlternativo={`${fechaActualizacion.toString()} - ${usuarioActualizacion}`}
+               />
                <InputDateTimeCustom
                   title="Fecha Registro"
                   value={fechaRegistro}
@@ -247,6 +281,16 @@ const gestionar = () => {
                   functionChangeText={setNombre}
                   keyboardType="default"
                   maxLength={45}
+                  inputIsEditable={opcionGestion.esEditable}
+                  inputIsRequired={true}
+               />
+               <InputTextCustom
+                  title="Descripción"
+                  placeholder="Ingrese descripción"
+                  value={descripcion}
+                  functionChangeText={setDescripcion}
+                  keyboardType="default"
+                  maxLength={300}
                   inputIsEditable={opcionGestion.esEditable}
                   inputIsRequired={true}
                />

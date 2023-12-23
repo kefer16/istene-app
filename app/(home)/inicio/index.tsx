@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ContainerCustom from "../../../components/ContainerCustom";
 import HeaderCustom from "../../../components/HeaderCustom";
 import TitleCustom from "../../../components/TitleCustom";
@@ -8,12 +8,97 @@ import ButtonOptionCustom from "../../../components/ButtonOptionCustom";
 import { IsteneSesionContext } from "../../../components/sesion/Sesion.component";
 import { router } from "expo-router";
 import ContainerWebCustom from "../../../components/ContainerWebCustom";
+import { CandidatoService } from "../../../services/candidato.service";
 
 const index = () => {
-   const { isteneSesion, obtenerSesion } = useContext(IsteneSesionContext);
+   const { isteneSesion, obtenerSesion, mostrarNotificacion, activarCarga } =
+      useContext(IsteneSesionContext);
+   const [nroCandidatosRegistrados, setNroCandidatosRegistrados] =
+      useState<number>(0);
+   const [nroCandidatosPendientes, setNroCandidatosPendientes] =
+      useState<number>(0);
+   const [nroCandidatosLlamados, setNroCandidatosLlamados] =
+      useState<number>(0);
+   const [nroCandidatosConfirmados, setNroCandidatosConfirmados] =
+      useState<number>(0);
+   const [nroCandidatosRechazados, setNroCandidatosRechazados] =
+      useState<number>(0);
+
+   const funObtenerEstadisticasRegistrados = async () => {
+      const srvCandidato = new CandidatoService();
+
+      await srvCandidato
+         .listarIndividualCantidadPorEstado("TODOS")
+         .then((resp) => {
+            setNroCandidatosRegistrados(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+         });
+   };
+
+   const funObtenerEstadisticasPendiente = async () => {
+      const srvCandidato = new CandidatoService();
+
+      await srvCandidato
+         .listarIndividualCantidadPorEstado("PEND")
+         .then((resp) => {
+            setNroCandidatosPendientes(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+         });
+   };
+   const funObtenerEstadisticasLlamados = async () => {
+      const srvCandidato = new CandidatoService();
+
+      await srvCandidato
+         .listarIndividualCantidadPorEstado("LLAM")
+         .then((resp) => {
+            setNroCandidatosLlamados(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+         });
+   };
+   const funObtenerEstadisticasConfirmados = async () => {
+      const srvCandidato = new CandidatoService();
+
+      await srvCandidato
+         .listarIndividualCantidadPorEstado("CONF")
+         .then((resp) => {
+            setNroCandidatosConfirmados(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+         });
+   };
+
+   const funObtenerEstadisticasRechazados = async () => {
+      const srvCandidato = new CandidatoService();
+
+      await srvCandidato
+         .listarIndividualCantidadPorEstado("RECH")
+         .then((resp) => {
+            setNroCandidatosRechazados(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+         });
+   };
 
    useEffect(() => {
-      obtenerSesion();
+      const obtenerData = async () => {
+         activarCarga(true);
+         obtenerSesion();
+         await funObtenerEstadisticasRegistrados();
+         await funObtenerEstadisticasPendiente();
+         await funObtenerEstadisticasLlamados();
+         await funObtenerEstadisticasConfirmados();
+         await funObtenerEstadisticasRechazados();
+         activarCarga(false);
+      };
+      obtenerData();
    }, []);
 
    return (
@@ -41,21 +126,28 @@ const index = () => {
                   <CardCustom
                      title="Total Registrados"
                      text="Hola"
+                     iconName={"person"}
+                     quantity={nroCandidatosRegistrados}
+                     viewBackgroundColor="#2A166D"
+                  />
+                  <CardCustom
+                     title="Total Pendientes"
+                     text="Hola"
                      iconName={"person-add"}
-                     quantity={1000}
+                     quantity={nroCandidatosPendientes}
                      viewBackgroundColor="#ff9800"
                   />
                   <CardCustom
                      title="Total Llamados"
                      text="Hola"
-                     quantity={100}
+                     quantity={nroCandidatosLlamados}
                      iconName={"call"}
                      viewBackgroundColor="#00bcd4"
                   />
                   <CardCustom
                      title="Total Confirmados"
                      text="Hola"
-                     quantity={100}
+                     quantity={nroCandidatosConfirmados}
                      iconName={"checkmark-circle"}
                      viewBackgroundColor="#8bc34a"
                   />
@@ -63,7 +155,7 @@ const index = () => {
                   <CardCustom
                      title="Total Rechazados"
                      text="Hola"
-                     quantity={100}
+                     quantity={nroCandidatosRechazados}
                      iconName={"close-circle"}
                      viewBackgroundColor="#f44336"
                   />

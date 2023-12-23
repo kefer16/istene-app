@@ -19,6 +19,7 @@ export class CandidatoService {
 
    private rspListarGrupalDNI: CandidatoListarGrupalDNIResponse[] = [];
    private rspListarGrupalActivos: CandidatoResponse[] = [];
+   private rspListarIndividualCantidadPorEstado: number = 0;
 
    //individual
    async registrarIndividual(
@@ -49,6 +50,17 @@ export class CandidatoService {
       return this.rspListarIndividual;
    }
 
+   async listarIndividualCantidadPorEstado(
+      abreviaturaEstado: string
+   ): Promise<number> {
+      await this.apiCandidato
+         .listarIndividualCantidadPorEstado(abreviaturaEstado)
+         .then((resp) => {
+            this.rspListarIndividualCantidadPorEstado = resp.data.data;
+         });
+      return this.rspListarIndividualCantidadPorEstado;
+   }
+
    //grupal
    async listarGrupalDni(
       dni: string
@@ -68,5 +80,21 @@ export class CandidatoService {
 
    obtenerIdDeURL(id: string): string {
       return typeof id === "undefined" ? "" : id;
+   }
+
+   static obtenerColorEstado(abreviaturaEstado: string): `#${string}` {
+      if (abreviaturaEstado === "PEND") {
+         return "#ff9800";
+      }
+      if (abreviaturaEstado === "LLAM") {
+         return "#00bcd4";
+      }
+      if (abreviaturaEstado === "CONF") {
+         return "#8bc34a";
+      }
+      if (abreviaturaEstado === "RECH") {
+         return "#f44336";
+      }
+      return "#000";
    }
 }

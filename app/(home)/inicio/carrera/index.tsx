@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import HeaderCustom from "../../../../components/HeaderCustom";
 import ContainerCustom from "../../../../components/ContainerCustom";
 import { IsteneSesionContext } from "../../../../components/sesion/Sesion.component";
-import { CarreraResponse } from "../../../../interfaces/responses/carrera.response";
+import { CarreraListarGrupalNombreResponse } from "../../../../interfaces/responses/carrera.response";
 import { CarreraService } from "../../../../services/carrera.service";
 import { View } from "react-native";
 import InputTextSearchCustom from "../../../../components/InputTextSearchCustom";
@@ -17,7 +17,9 @@ const index = () => {
       useContext(IsteneSesionContext);
 
    const [busqueda, setBusqueda] = useState<string>("");
-   const [arrayCarreras, setArrayCarreras] = useState<CarreraResponse[]>([]);
+   const [arrayCarreras, setArrayCarreras] = useState<
+      CarreraListarGrupalNombreResponse[]
+   >([]);
 
    const funCarreraListarGrupal = async (nombre: string) => {
       const srvCarrera = new CarreraService();
@@ -86,14 +88,16 @@ const index = () => {
                   // padding: 10,
                }}
             >
-               {arrayCarreras.map((item: CarreraResponse) => {
+               {arrayCarreras.map((item: CarreraListarGrupalNombreResponse) => {
                   return (
                      <CardButtonCustom
                         key={item.carrera_id}
-                        textTitle={""}
+                        textTitle={item.fecha_registro.toString()}
                         textDescription={item.nombre}
-                        footerTextFecha={item.fecha_registro.toString()}
-                        footerTextUsuario={"kefer"}
+                        footerTextFecha={item.fecha_actualizacion.toString()}
+                        footerTextUsuario={
+                           item.lst_carrera_historial[0].cls_usuario.usuario
+                        }
                         etiquetaValor={item.activo ? "ACTI" : "INAC"}
                         etiquetaColor={item.activo ? "#8bc34a" : "#f44336"}
                         onPress={() =>

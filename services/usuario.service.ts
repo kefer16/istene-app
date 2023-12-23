@@ -1,5 +1,6 @@
 import { UsuarioApi } from "../apis/usuario.api";
 import { UsuarioEntity } from "../entities/usuario.entity";
+import { UsuarioListarIndividualResponse } from "../interfaces/responses/usuario.response";
 import { LogeoUsuario } from "../interfaces/usuario.interface";
 
 export class UsuarioService {
@@ -8,6 +9,8 @@ export class UsuarioService {
    private rspLogearse: LogeoUsuario = {} as LogeoUsuario;
    private rspRegistrar: boolean = false;
    private rspActualizar: boolean = false;
+   private rspListarIndividual: UsuarioListarIndividualResponse =
+      {} as UsuarioListarIndividualResponse;
    private rspListarTodo: UsuarioEntity[] = [];
    private rspEliminarUno: boolean = false;
 
@@ -26,7 +29,7 @@ export class UsuarioService {
    }
 
    async actualizarIndividual(
-      usuario_id: number,
+      usuario_id: string,
       data: UsuarioEntity
    ): Promise<boolean> {
       await this.apiUsuario
@@ -37,6 +40,15 @@ export class UsuarioService {
       return this.rspActualizar;
    }
 
+   async listarIndividual(
+      id: string
+   ): Promise<UsuarioListarIndividualResponse> {
+      await this.apiUsuario.listarIndividual(id).then((resp) => {
+         this.rspListarIndividual = resp.data.data;
+      });
+      return this.rspListarIndividual;
+   }
+
    async listarGrupal(): Promise<UsuarioEntity[]> {
       await this.apiUsuario.listarGrupal().then((resp) => {
          this.rspListarTodo = resp.data.data;
@@ -44,7 +56,7 @@ export class UsuarioService {
       return this.rspListarTodo;
    }
 
-   async eliminarIndividual(usuario_id: number): Promise<boolean> {
+   async eliminarIndividual(usuario_id: string): Promise<boolean> {
       await this.apiUsuario.eliminarIndividual(usuario_id).then((resp) => {
          this.rspEliminarUno = resp.data.data;
       });

@@ -1,4 +1,4 @@
-import { Image, Text, View, useColorScheme } from "react-native";
+import { Text, View, useColorScheme } from "react-native";
 import InputTextCustom from "../../../components/InputTextCustom";
 import { useContext, useEffect, useState } from "react";
 import Colors from "../../../constants/Colors";
@@ -7,33 +7,55 @@ import ContainerCustom from "../../../components/ContainerCustom";
 import { IsteneSesionContext } from "../../../components/sesion/Sesion.component";
 import ButtonCustom from "../../../components/ButtonCustom";
 import ContainerWebCustom from "../../../components/ContainerWebCustom";
+import { UsuarioService } from "../../../services/usuario.service";
 
 const user = () => {
    const colorScheme = useColorScheme();
-   const { isteneSesion, obtenerSesion } = useContext(IsteneSesionContext);
+   const { isteneSesion, obtenerSesion, mostrarNotificacion, activarCarga } =
+      useContext(IsteneSesionContext);
+
+   const [fechaRegistro, setFechaRegistro] = useState<string>("");
+   const [dni, setDni] = useState<string>("");
    const [nombre, setNombre] = useState<string>("");
-   const [apellido, setApellido] = useState<string>("");
+   const [apellidoPaterno, setApellidoPaterno] = useState<string>("");
+   const [apellidoMaterno, setApellidoMaterno] = useState<string>("");
    const [telefono, setTelefono] = useState<string>("");
    const [direccion, setDireccion] = useState<string>("");
    const [correo, setCorreo] = useState<string>("");
    const [usuario, setUsuario] = useState<string>("");
-   const [privilegio, setPrivilegio] = useState<string>("");
 
-   const funActualizarPerfil = () => {};
+   const funUsuarioListarIndividual = async (id: string) => {
+      const srvUsuario = new UsuarioService();
+      await srvUsuario
+         .listarIndividual(id)
+         .then((resp) => {
+            setUsuario(resp.usuario);
+            setFechaRegistro(resp.fecha_registro);
+            setDni(resp.dni);
+            setNombre(resp.nombre);
+            setApellidoPaterno(resp.apellido_paterno);
+            setApellidoMaterno(resp.apellido_materno);
+            setCorreo(resp.correo);
+            setTelefono(resp.telefono);
+            setDireccion(resp.direccion);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
+         });
+   };
+
+   const funActualizarPerfil = () => {
+      mostrarNotificacion({ tipo: "warn", detalle: "Opción no habilitada" });
+   };
 
    useEffect(() => {
-      obtenerSesion();
-      setNombre(isteneSesion.nombre);
-      setApellido(isteneSesion.apellido);
-      setTelefono(isteneSesion.telefono);
-      setDireccion(isteneSesion.direccion);
-      setCorreo(isteneSesion.correo);
-      setUsuario(isteneSesion.usuario);
-      setPrivilegio(
-         isteneSesion.cls_privilegio === undefined
-            ? ""
-            : isteneSesion.cls_privilegio.tipo
-      );
+      const obtenerData = async () => {
+         activarCarga(true);
+         obtenerSesion();
+         await funUsuarioListarIndividual(isteneSesion.usuario_id);
+         activarCarga(false);
+      };
+      obtenerData();
    }, []);
 
    return (
@@ -53,17 +75,6 @@ const user = () => {
                   alignItems: "center",
                }}
             >
-               {/* <Image
-               style={{
-                  width: 70,
-                  height: 70,
-                  borderColor: Colors[colorScheme ?? "light"].card,
-                  objectFit: "scale-down",
-                  // borderWidth: 5,
-                  //  borderRadius: 50,
-               }}
-               source={require("../../../assets/images/image/favicon-gamertec.png")}
-            /> */}
                <Text
                   style={{
                      marginTop: 10,
@@ -74,17 +85,6 @@ const user = () => {
                   }}
                >
                   {usuario}
-               </Text>
-               <Text
-                  style={{
-                     fontFamily: "Poppins300",
-                     fontSize: 10,
-                     lineHeight: 13,
-                     color: Colors[colorScheme ?? "light"].textSubtitle,
-                     marginTop: 2,
-                  }}
-               >
-                  {privilegio}
                </Text>
             </View>
 
@@ -100,21 +100,64 @@ const user = () => {
                   style={{ display: "flex", flexDirection: "column", gap: 10 }}
                >
                   <InputTextCustom
-                     title="Nombre"
+                     title="Fecha Registro"
+                     placeholder=""
+                     value={fechaRegistro}
+                     functionChangeText={setFechaRegistro}
                      keyboardType="default"
+                     inputIsRequired={true}
+                     inputIsEditable={false}
+                  />
+                  <InputTextCustom
+                     title="DNI"
+                     placeholder="Ingrese DNI"
+                     value={dni}
+                     functionChangeText={setDni}
+                     keyboardType="number-pad"
+                     maxLength={8}
+                     inputIsRequired={true}
+                     inputIsEditable={false}
+                  />
+                  <InputTextCustom
+                     title="Nombre"
+                     placeholder="Ingrese nombre"
                      value={nombre}
                      functionChangeText={setNombre}
-                     maxLength={45}
-                     placeholder="Ingrese nombre"
-                  />
-
-                  <InputTextCustom
-                     title="Apellido"
                      keyboardType="default"
-                     value={apellido}
-                     functionChangeText={setApellido}
                      maxLength={45}
-                     placeholder="Ingrese apellido"
+                     inputIsRequired={true}
+                     inputIsEditable={false}
+                  />
+                  <InputTextCustom
+                     title="Apellido Paterno"
+                     placeholder="Ingrese apellido paterno"
+                     value={apellidoPaterno}
+                     functionChangeText={setApellidoPaterno}
+                     keyboardType="default"
+                     maxLength={45}
+                     inputIsRequired={true}
+                     inputIsEditable={false}
+                  />
+                  <InputTextCustom
+                     title="Apellido Materno"
+                     placeholder="Ingrese apellido materno"
+                     value={apellidoMaterno}
+                     functionChangeText={setApellidoMaterno}
+                     keyboardType="default"
+                     maxLength={45}
+                     inputIsRequired={true}
+                     inputIsEditable={false}
+                  />
+                  <InputTextCustom
+                     styleInput={{ textTransform: "lowercase" }}
+                     title="Correo"
+                     placeholder="Ingrese correo"
+                     value={correo}
+                     functionChangeText={setCorreo}
+                     keyboardType="default"
+                     maxLength={30}
+                     inputIsRequired={true}
+                     inputIsEditable={false}
                   />
                   <InputTextCustom
                      title="Teléfono"
@@ -123,15 +166,9 @@ const user = () => {
                      functionChangeText={setTelefono}
                      maxLength={45}
                      placeholder="Ingrese teléfono"
+                     inputIsEditable={false}
                   />
-                  <InputTextCustom
-                     title="Correo"
-                     keyboardType="email-address"
-                     value={correo}
-                     functionChangeText={setCorreo}
-                     maxLength={45}
-                     placeholder="Ingrese correo"
-                  />
+
                   <InputTextCustom
                      title="Direccion"
                      keyboardType="default"
@@ -139,9 +176,14 @@ const user = () => {
                      functionChangeText={setDireccion}
                      maxLength={45}
                      placeholder="Ingrese dirección"
+                     inputIsEditable={false}
                   />
                </View>
-               <ButtonCustom text="Actualizar" onPress={funActualizarPerfil} />
+               <ButtonCustom
+                  text="Actualizar"
+                  onPress={funActualizarPerfil}
+                  isEnabled={false}
+               />
             </View>
          </ContainerWebCustom>
       </ContainerCustom>

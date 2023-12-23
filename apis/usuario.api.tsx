@@ -44,7 +44,7 @@ export class UsuarioApi {
    }
 
    async actualizarIndividual(
-      ID: number,
+      ID: string,
       data: UsuarioEntity
    ): Promise<AxiosResponse> {
       try {
@@ -69,6 +69,27 @@ export class UsuarioApi {
          return Promise.reject(error);
       }
    }
+   async listarIndividual(ID: string): Promise<AxiosResponse> {
+      try {
+         const config = {
+            headers: {
+               Authorization: `Bearer ${UsuarioEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
+            params: {
+               usuario_id: ID,
+            },
+         };
+
+         return await axios.get(
+            `${UsuarioEntity.url}/listar_individual`,
+            config
+         );
+      } catch (error: any) {
+         error.message = personalizarMensajeError(error);
+         return Promise.reject(error);
+      }
+   }
 
    async listarGrupal(): Promise<AxiosResponse> {
       try {
@@ -86,7 +107,7 @@ export class UsuarioApi {
       }
    }
 
-   async eliminarIndividual(ID: number): Promise<AxiosResponse> {
+   async eliminarIndividual(ID: string): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {

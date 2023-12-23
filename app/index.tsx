@@ -65,7 +65,7 @@ export default function LoginScreen() {
                   flex: 1,
                   justifyContent: "center",
                   alignItems: "center",
-                  marginTop: 50,
+                  marginTop: Platform.OS === "android" ? 100 : 50,
                   marginBottom: 50,
                   marginHorizontal: "auto",
                   width: "100%",

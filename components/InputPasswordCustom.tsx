@@ -19,6 +19,8 @@ interface Props {
    functionChangeText: Dispatch<SetStateAction<string>>;
    functionActivePassword: () => void;
    style?: StyleProp<ViewStyle>;
+   inputIsRequired?: boolean;
+   inputIsEditable?: boolean;
 }
 
 export default function InputPasswordCustom({
@@ -29,6 +31,8 @@ export default function InputPasswordCustom({
    functionChangeText,
    functionActivePassword,
    style,
+   inputIsRequired = false,
+   inputIsEditable = true,
 }: Props) {
    const colorScheme = useColorScheme();
    const [focus, setfocus] = useState<boolean>(false);
@@ -39,27 +43,56 @@ export default function InputPasswordCustom({
       setfocus(false);
    };
    return (
-      <View
-         style={[
-            {
-               width: "100%",
-               padding: 10,
-               paddingTop: 10,
-               borderRadius: 5,
-               backgroundColor: Colors[colorScheme ?? "light"].inputContainer,
-               elevation: 5,
-               borderStyle: "solid",
-               borderWidth: 2,
-               borderColor: Colors[colorScheme ?? "light"].inputContainer,
-            },
-            focus && {
-               borderColor: "#007bff",
-            },
-         ]}
-      >
+      <View>
+         <TextInput
+            editable={inputIsEditable}
+            placeholderTextColor={
+               Colors[colorScheme ?? "light"].InputTextPlaceHolder
+            }
+            style={[
+               {
+                  display: "flex",
+                  width: "100%",
+                  fontSize: 15,
+                  lineHeight: 17,
+                  color: Colors[colorScheme ?? "light"].inputText,
+                  fontFamily: "Poppins300",
+                  paddingTop: 20,
+                  paddingBottom: 10,
+                  paddingLeft: 10,
+                  paddingRight: 50,
+                  borderRadius: 5,
+                  backgroundColor:
+                     Colors[colorScheme ?? "light"].inputContainer,
+                  borderStyle: "solid",
+                  borderWidth: 1,
+                  borderColor: Colors[colorScheme ?? "light"].inputBorder,
+               },
+               focus && {
+                  borderColor: "#007bff",
+               },
+               !inputIsEditable && {
+                  opacity: 0.6,
+               },
+            ]}
+            value={value}
+            placeholder={placeholder}
+            onChangeText={functionChangeText}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            keyboardType={"default"}
+            maxLength={20}
+            secureTextEntry={activePassword}
+            autoComplete="off"
+         />
+
          <Text
             style={[
                {
+                  position: "absolute",
+                  top: 10,
+                  left: 10,
+                  zIndex: 1,
                   width: "100%",
                   fontSize: 11,
                   lineHeight: 13,
@@ -72,31 +105,8 @@ export default function InputPasswordCustom({
                },
             ]}
          >
-            {title}
+            {`${title} ${inputIsRequired ? "*" : ""}`}
          </Text>
-         <TextInput
-            placeholderTextColor={
-               Colors[colorScheme ?? "light"].InputTextPlaceHolder
-            }
-            style={[
-               {
-                  display: "flex",
-                  width: "100%",
-                  fontSize: 15,
-                  lineHeight: 17,
-                  color: Colors[colorScheme ?? "light"].inputText,
-                  overflow: "hidden",
-                  fontFamily: "Poppins300",
-               },
-            ]}
-            value={value}
-            placeholder={placeholder}
-            onChangeText={functionChangeText}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            secureTextEntry={activePassword}
-            autoComplete="off"
-         />
          <TouchableOpacity
             style={{
                position: "absolute",
@@ -108,7 +118,6 @@ export default function InputPasswordCustom({
                display: "flex",
                alignItems: "center",
                justifyContent: "center",
-               // backgroundColor: "red",
             }}
             onPress={functionActivePassword}
          >

@@ -78,6 +78,30 @@ export class CandidatoApi {
       }
    }
 
+   async listarIndividualCantidadPorEstado(
+      abreviaturaEstado: string
+   ): Promise<AxiosResponse> {
+      try {
+         const config = {
+            headers: {
+               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
+            params: {
+               abreviatura: abreviaturaEstado,
+            },
+         };
+
+         return await axios.get(
+            `${CandidatoEntity.url}/listar_individual_cantidad_estado`,
+            config
+         );
+      } catch (error: any) {
+         error.message = personalizarMensajeError(error);
+         return Promise.reject(error);
+      }
+   }
+
    //grupal
    async listarGrupalDni(dni: string): Promise<AxiosResponse> {
       try {

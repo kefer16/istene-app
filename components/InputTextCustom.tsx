@@ -82,6 +82,7 @@ export default function InputTextCustom({
                !inputIsEditable && {
                   opacity: 0.6,
                },
+               styleInput,
             ]}
             value={value}
             placeholder={placeholder}

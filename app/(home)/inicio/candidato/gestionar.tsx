@@ -200,6 +200,13 @@ const gestionar = () => {
    };
 
    const funValidarCamposCorrectos = (): boolean => {
+      if (fkCandidatoEstado === "0") {
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "Seleccione el estado del candidato",
+         });
+         return false;
+      }
       if (!dni) {
          mostrarNotificacion({ tipo: "warn", detalle: "Ingrese DNI" });
          return false;
@@ -222,12 +229,27 @@ const gestionar = () => {
          });
          return false;
       }
+      if (fkOperador === "0") {
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "Seleccione un operador",
+         });
+         return false;
+      }
       if (!telefono) {
          mostrarNotificacion({ tipo: "warn", detalle: "Ingrese telefono" });
          return false;
       }
       if (!direccion) {
          mostrarNotificacion({ tipo: "warn", detalle: "Ingrese direccion" });
+         return false;
+      }
+
+      if (carreraOpcionUno === "0") {
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "Seleccione por lo menos una carrera",
+         });
          return false;
       }
 
