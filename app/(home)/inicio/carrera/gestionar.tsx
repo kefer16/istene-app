@@ -1,14 +1,14 @@
 import { View, useColorScheme } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { IsteneSesionContext } from "../../../../components/sesion/Sesion.component";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import {
    OpcionGestion,
    OpcionesGestionPros,
    funValidarOpcionGestion,
 } from "../../../../constants/OpcionGestion";
 import { CarreraService } from "../../../../services/carrera.service";
-import { fechaActualISO } from "../../../../utils/funciones.util";
+import { fechaActualISO, formatoFecha } from "../../../../utils/funciones.util";
 import ContainerCustom from "../../../../components/ContainerCustom";
 import HeaderCustom from "../../../../components/HeaderCustom";
 import Colors from "../../../../constants/Colors";
@@ -33,7 +33,7 @@ const gestionar = () => {
    const colorScheme = useColorScheme();
 
    const [estadosCombo] = useState<Option[]>([
-      { label: "Selec. Opción", value: "-1" },
+      { label: "-SELECCIONE-", value: "-1" },
       { label: "ACTIVO", value: "1" },
       { label: "INACTIVO", value: "0" },
    ]);
@@ -47,18 +47,20 @@ const gestionar = () => {
    const [opcionGestion, setOpcionGestion] = useState<OpcionesGestionPros>(
       {} as OpcionesGestionPros
    );
-   const [fechaRegistro, setFechaRegistro] = useState<Date>(new Date());
-   const [fechaActualizacion, setFechaActualizacion] = useState<Date>(
-      new Date()
+   const [fechaRegistro, setFechaRegistro] = useState<string>(fechaActualISO());
+   const [fechaActualizacion, setFechaActualizacion] = useState<string>(
+      fechaActualISO()
    );
    const [activo, setActivo] = useState<string>("");
    const [carreraId, setCarreraId] = useState<string>("");
    const [nombre, setNombre] = useState<string>("");
    const [descripcion, setDescripcion] = useState<string>("");
+   const [usuarioRegistro, setUsuarioRegistro] = useState<string>("");
    const [usuarioActualizacion, setUsuarioActualizacion] = useState<string>("");
 
    const funCarreraListarIndividual = async (id: string) => {
       if (id === "") {
+         setUsuarioRegistro(isteneSesion.usuario);
          return;
       }
       const srvCarrera = new CarreraService();
@@ -67,8 +69,11 @@ const gestionar = () => {
          .listarIndividual(id)
          .then((resp: CarreraListarIndividualResponse) => {
             setFechaRegistro(resp.fecha_registro);
+            setUsuarioRegistro(resp.cls_usuario.usuario);
             setFechaActualizacion(resp.fecha_actualizacion);
-            setUsuarioActualizacion(resp.cls_usuario.usuario);
+            setUsuarioActualizacion(
+               resp.lst_carrera_historial[0].cls_usuario.usuario
+            );
             setDescripcion(resp.descripcion);
             setNombre(resp.nombre);
             setActivo(resp.activo ? "1" : "0");
@@ -141,6 +146,7 @@ const gestionar = () => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
       activarCarga(false);
+      router.replace("/(home)/inicio/carrera/");
    };
 
    const funCarreraActualizarIndividual = async (id: string) => {
@@ -252,19 +258,35 @@ const gestionar = () => {
                      </View>
                   )}
                </View>
-               <TitleCustom
-                  text="Datos Sistema:"
-                  textSize={15}
-                  textoAlternativo={`${fechaActualizacion.toString()} - ${usuarioActualizacion}`}
-               />
+               {opcionGestion.tipo === OpcionGestion.REGISTRAR ? (
+                  <TitleCustom text="Datos Registro:" textSize={15} />
+               ) : (
+                  <TitleCustom
+                     text="Datos Registro:"
+                     textSize={15}
+                     usuarioActualizacion={usuarioActualizacion}
+                     fechaActualizacion={formatoFecha(fechaActualizacion)}
+                  />
+               )}
+
                <InputDateTimeCustom
-                  title="Fecha Registro"
+                  title="Fecha"
                   value={fechaRegistro}
-                  onChange={setFechaRegistro}
+                  functionChangeText={setFechaRegistro}
                   inputIsEditable={false}
                   inputIsRequired={true}
                />
-
+               <InputTextCustom
+                  title="Usuario"
+                  placeholder="Ingrese usuario"
+                  value={usuarioRegistro}
+                  functionChangeText={setUsuarioRegistro}
+                  keyboardType="default"
+                  maxLength={45}
+                  inputIsEditable={false}
+                  inputIsRequired={true}
+               />
+               <TitleCustom text="Datos Estado:" textSize={15} />
                <SelectCustom
                   title="Estado Carrera"
                   value={activo}

@@ -48,7 +48,9 @@ const SelectCustom = ({
                borderColor: "#007bff",
             },
             !pickerIsEditable && {
-               opacity: 0.6,
+               opacity: 0.5,
+               backgroundColor:
+                  colorScheme === "light" ? "#00000020" : "#ffffff40",
             },
          ]}
       >
@@ -88,27 +90,50 @@ const SelectCustom = ({
                );
             })}
          </Picker>
-         <Text
-            style={[
-               {
-                  position: "absolute",
-                  top: 10,
-                  left: 10,
-                  zIndex: 1,
-                  width: "100%",
-                  fontSize: 11,
-                  lineHeight: 13,
-                  textAlign: "left",
-                  color: Colors[colorScheme ?? "light"].inputTitle,
-                  fontFamily: "Poppins500",
-               },
-               focus && {
-                  color: "#007bff",
-               },
-            ]}
+         <View
+            style={{
+               position: "absolute",
+               top: 10,
+               left: 10,
+               zIndex: 1,
+               // width: "100%",
+               flexDirection: "row",
+               // backgroundColor: "green",
+            }}
          >
-            {`${title} ${pickerIsRequired ? "*" : ""}`}
-         </Text>
+            <Text
+               style={[
+                  {
+                     fontSize: 11,
+                     lineHeight: 13,
+                     textAlign: "left",
+                     color: Colors[colorScheme ?? "light"].inputTitle,
+                     fontFamily: "Poppins500",
+                  },
+                  focus && {
+                     color: "#007bff",
+                  },
+               ]}
+            >
+               {title}
+            </Text>
+            {pickerIsRequired && (
+               <Text
+                  style={[
+                     {
+                        fontSize: 11,
+                        lineHeight: 13,
+                        color: "#f44336",
+                     },
+                     focus && {
+                        color: "#007bff",
+                     },
+                  ]}
+               >
+                  {` *`}{" "}
+               </Text>
+            )}
+         </View>
       </View>
    );
 };

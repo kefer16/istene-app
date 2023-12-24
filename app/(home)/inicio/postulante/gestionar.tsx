@@ -10,9 +10,9 @@ import Colors from "../../../../constants/Colors";
 import TitleCustom from "../../../../components/TitleCustom";
 import InputDateTimeCustom from "../../../../components/InputDateTimeCustom";
 import SelectCustom, { Option } from "../../../../components/SelectCustom";
-import { CandidatoService } from "../../../../services/candidato.service";
-import { fechaActualISO } from "../../../../utils/funciones.util";
-import { useLocalSearchParams } from "expo-router";
+
+import { fechaActualISO, formatoFecha } from "../../../../utils/funciones.util";
+import { router, useLocalSearchParams } from "expo-router";
 import ButtonIconCustom from "../../../../components/ButtonIconCustom";
 import {
    OpcionGestion,
@@ -21,25 +21,27 @@ import {
 } from "../../../../constants/OpcionGestion";
 import ButtonCrudCustom from "../../../../components/ButtonCrudCustom";
 import ContainerWebCustom from "../../../../components/ContainerWebCustom";
-import { CandidatoEstadoService } from "../../../../services/candidato_estado.service";
+import { PostulanteEstadoService } from "../../../../services/postulante_estado.service";
 import { CarreraService } from "../../../../services/carrera.service";
 import {
-   CandidatoActualizarRequest,
-   CandidatoCarreraRequest,
-   CandidatoHistorialRequest,
-   CandidatoRequest,
-} from "../../../../interfaces/resquests/candidato.request";
+   PostulanteActualizarRequest,
+   PostulanteCarreraRequest,
+   PostulanteHistorialRequest,
+   PostulanteRequest,
+} from "../../../../interfaces/resquests/postulante.request";
 import { OperadorService } from "../../../../services/operador.service";
-import { CandidatoListarIndividualResponse } from "../../../../interfaces/responses/candidato.response";
+import { PostulanteListarIndividualResponse } from "../../../../interfaces/responses/postulante.response";
 import ModoVisualizacionCustom from "../../../../components/ModoVisualizacionCustom";
+import * as Contacts from "expo-contacts";
+import { PostulanteService } from "../../../../services/postulante.service";
 
 const gestionar = () => {
    const { obtenerSesion, isteneSesion, mostrarNotificacion, activarCarga } =
       useContext(IsteneSesionContext);
    const colorScheme = useColorScheme();
 
-   const { url_candidato_id, url_opcion_gestion } = useLocalSearchParams<{
-      url_candidato_id: string;
+   const { url_postulante_id, url_opcion_gestion } = useLocalSearchParams<{
+      url_postulante_id: string;
       url_opcion_gestion: string;
    }>();
 
@@ -47,11 +49,11 @@ const gestionar = () => {
    const [opcionGestion, setOpcionGestion] = useState<OpcionesGestionPros>(
       {} as OpcionesGestionPros
    );
-   const [fechaRegistro, setFechaRegistro] = useState<Date>(new Date());
-   const [fechaActualizacion, setFechaActualizacion] = useState<Date>(
-      new Date()
+   const [fechaRegistro, setFechaRegistro] = useState<string>(fechaActualISO());
+   const [fechaActualizacion, setFechaActualizacion] = useState<string>(
+      fechaActualISO()
    );
-   const [candidatoId, setCandidatoId] = useState<string>("");
+   const [postulanteId, setPostulanteId] = useState<string>("");
    const [dni, setDni] = useState<string>("");
    const [nombre, setNombre] = useState<string>("");
    const [apellidoPaterno, setApellidoPaterno] = useState<string>("");
@@ -59,11 +61,12 @@ const gestionar = () => {
    const [telefono, setTelefono] = useState<string>("");
    const [direccion, setDireccion] = useState<string>("");
    const [observacion, setObservacion] = useState<string>("");
+   const [usuarioRegistro, setUsuarioRegistro] = useState<string>("");
    const [usuarioActualizacion, setUsuarioActualizacion] = useState<string>("");
-   const [arrayCandidatoEstado, setArrayCandidatoEstado] = useState<Option[]>(
+   const [arrayPostulanteEstado, setArrayPostulanteEstado] = useState<Option[]>(
       []
    );
-   const [fkCandidatoEstado, setFkCandidatoEstado] = useState<string>("0");
+   const [fkPostulanteEstado, setFkPostulanteEstado] = useState<string>("0");
 
    const [arrayCarrera, setArrayCarrera] = useState<Option[]>([]);
    const [arrayOperador, setArrayOperador] = useState<Option[]>([]);
@@ -85,13 +88,13 @@ const gestionar = () => {
          });
    };
 
-   const funLlenarComboCandidatoEstado = async () => {
-      const srvCandEstado = new CandidatoEstadoService();
+   const funLlenarComboPostulanteEstado = async () => {
+      const srvCandEstado = new PostulanteEstadoService();
 
       await srvCandEstado
          .llenarCombo()
          .then((resp) => {
-            setArrayCandidatoEstado(resp);
+            setArrayPostulanteEstado(resp);
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "warn", detalle: error.message });
@@ -110,17 +113,23 @@ const gestionar = () => {
             mostrarNotificacion({ tipo: "warn", detalle: error.message });
          });
    };
-   const funCandidatoListarIndividual = async (id: string) => {
+   const funPostulanteListarIndividual = async (id: string) => {
       if (id === "") {
+         setUsuarioRegistro(isteneSesion.usuario);
          return;
       }
-      const srvCandidato = new CandidatoService();
+      const srvPostulante = new PostulanteService();
 
-      await srvCandidato
+      await srvPostulante
          .listarIndividual(id)
-         .then((resp: CandidatoListarIndividualResponse) => {
+         .then((resp: PostulanteListarIndividualResponse) => {
+            setFechaRegistro(resp.fecha_registro);
+            setUsuarioRegistro(resp.cls_usuario.usuario);
             setFechaActualizacion(resp.fecha_actualizacion);
-            setFkCandidatoEstado(resp.fk_candidato_estado);
+            setUsuarioActualizacion(
+               resp.lst_postulante_historial[0].cls_usuario.usuario
+            );
+            setFkPostulanteEstado(resp.fk_postulante_estado);
             setDni(resp.dni);
             setNombre(resp.nombre);
             setApellidoPaterno(resp.apellido_paterno);
@@ -129,22 +138,18 @@ const gestionar = () => {
             setTelefono(resp.telefono);
             setDireccion(resp.direccion);
             setObservacion(resp.observacion);
-            setUsuarioActualizacion(
-               resp.lst_candidato_historial[0].cls_usuario.usuario
-            );
-
             setCarreraOpcionUno(
-               resp.lst_candidato_carrera.find(
+               resp.lst_postulante_carrera.find(
                   (item) => item.numero_opcion === 1
                )?.fk_carrera ?? "0"
             );
             setCarreraOpcionDos(
-               resp.lst_candidato_carrera.find(
+               resp.lst_postulante_carrera.find(
                   (item) => item.numero_opcion === 2
                )?.fk_carrera ?? "0"
             );
             setCarreraOpcionTres(
-               resp.lst_candidato_carrera.find(
+               resp.lst_postulante_carrera.find(
                   (item) => item.numero_opcion === 3
                )?.fk_carrera ?? "0"
             );
@@ -162,14 +167,14 @@ const gestionar = () => {
       const obtenerDatos = async () => {
          activarCarga(true);
          obtenerSesion();
-         const srvCandidato = new CandidatoService();
-         setCandidatoId(srvCandidato.obtenerIdDeURL(url_candidato_id));
+         const srvPostulante = new PostulanteService();
+         setPostulanteId(srvPostulante.obtenerIdDeURL(url_postulante_id));
          setOpcionGestion(funValidarOpcionGestion(url_opcion_gestion));
-         await funLlenarComboCandidatoEstado();
+         await funLlenarComboPostulanteEstado();
          await funLlenarComboOperador();
          await funLlenarComboCarrera();
-         await funCandidatoListarIndividual(
-            srvCandidato.obtenerIdDeURL(url_candidato_id)
+         await funPostulanteListarIndividual(
+            srvPostulante.obtenerIdDeURL(url_postulante_id)
          );
          activarCarga(false);
       };
@@ -200,10 +205,10 @@ const gestionar = () => {
    };
 
    const funValidarCamposCorrectos = (): boolean => {
-      if (fkCandidatoEstado === "0") {
+      if (fkPostulanteEstado === "0") {
          mostrarNotificacion({
             tipo: "warn",
-            detalle: "Seleccione el estado del candidato",
+            detalle: "Seleccione el estado del postulante",
          });
          return false;
       }
@@ -256,20 +261,20 @@ const gestionar = () => {
       return true;
    };
 
-   const funCandidatoRegistarIndividual = async () => {
-      const srvCandidato = new CandidatoService();
+   const funPostulanteRegistarIndividual = async () => {
+      const srvPostulante = new PostulanteService();
 
       if (!funValidarCamposCorrectos()) {
          return;
       }
 
-      const arrayCandCarrera: CandidatoCarreraRequest[] = [];
+      const arrayCandCarrera: PostulanteCarreraRequest[] = [];
 
       if (carreraOpcionUno !== "0") {
          arrayCandCarrera.push({
             numero_opcion: 1,
             activo: true,
-            fk_candidato: "",
+            fk_postulante: "",
             fk_carrera: carreraOpcionUno,
          });
       }
@@ -278,7 +283,7 @@ const gestionar = () => {
          arrayCandCarrera.push({
             numero_opcion: 2,
             activo: true,
-            fk_candidato: "",
+            fk_postulante: "",
             fk_carrera: carreraOpcionDos,
          });
       }
@@ -287,18 +292,18 @@ const gestionar = () => {
          arrayCandCarrera.push({
             numero_opcion: 3,
             activo: true,
-            fk_candidato: "",
+            fk_postulante: "",
             fk_carrera: carreraOpcionTres,
          });
       }
       const fecha_registro = fechaActualISO();
-      const dataHistorial: CandidatoHistorialRequest = {
+      const dataHistorial: PostulanteHistorialRequest = {
          fecha_registro: fecha_registro,
-         fk_candidato: "",
+         fk_postulante: "",
          fk_usuario: isteneSesion.usuario_id,
       };
 
-      const data: CandidatoRequest = {
+      const data: PostulanteRequest = {
          dni: dni,
          nombre: nombre,
          apellido_paterno: apellidoPaterno,
@@ -311,41 +316,43 @@ const gestionar = () => {
          fecha_actualizacion: fecha_registro,
          fk_operador: fkOperador,
          fk_usuario: isteneSesion.usuario_id,
-         fk_candidato_estado: fkCandidatoEstado,
-         lst_candidato_carrera: arrayCandCarrera,
-         cls_candidato_historial: dataHistorial,
+         fk_postulante_estado: fkPostulanteEstado,
+         lst_postulante_carrera: arrayCandCarrera,
+         cls_postulante_historial: dataHistorial,
       };
 
       activarCarga(true);
-      await srvCandidato
+      await srvPostulante
          .registrarIndividual(data)
          .then(() => {
             setOpcionGestion(funValidarOpcionGestion("0"));
             mostrarNotificacion({
                tipo: "success",
-               detalle: "Candidato registrado exitosamente",
+               detalle: "Postulante registrado exitosamente",
             });
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+
       activarCarga(false);
+      router.replace("/(home)/inicio/postulante/");
    };
 
-   const funCandidatoActualizarIndividual = async (id: string) => {
-      const srvCandidato = new CandidatoService();
+   const funPostulanteActualizarIndividual = async (id: string) => {
+      const srvPostulante = new PostulanteService();
 
       if (!funValidarCamposCorrectos()) {
          return;
       }
 
-      const arrayCandCarrera: CandidatoCarreraRequest[] = [];
+      const arrayCandCarrera: PostulanteCarreraRequest[] = [];
 
       if (carreraOpcionUno !== "0") {
          arrayCandCarrera.push({
             numero_opcion: 1,
             activo: true,
-            fk_candidato: "",
+            fk_postulante: "",
             fk_carrera: carreraOpcionUno,
          });
       }
@@ -354,7 +361,7 @@ const gestionar = () => {
          arrayCandCarrera.push({
             numero_opcion: 2,
             activo: true,
-            fk_candidato: "",
+            fk_postulante: "",
             fk_carrera: carreraOpcionDos,
          });
       }
@@ -363,17 +370,17 @@ const gestionar = () => {
          arrayCandCarrera.push({
             numero_opcion: 3,
             activo: true,
-            fk_candidato: "",
+            fk_postulante: "",
             fk_carrera: carreraOpcionTres,
          });
       }
       const fecha_registro = fechaActualISO();
-      const dataHistorial: CandidatoHistorialRequest = {
+      const dataHistorial: PostulanteHistorialRequest = {
          fecha_registro: fecha_registro,
-         fk_candidato: "",
+         fk_postulante: "",
          fk_usuario: isteneSesion.usuario_id,
       };
-      const data: CandidatoActualizarRequest = {
+      const data: PostulanteActualizarRequest = {
          dni: dni,
          nombre: nombre,
          apellido_paterno: apellidoPaterno,
@@ -382,20 +389,20 @@ const gestionar = () => {
          telefono: telefono,
          observacion: observacion,
          fecha_actualizacion: fecha_registro,
-         fk_candidato_estado: fkCandidatoEstado,
+         fk_postulante_estado: fkPostulanteEstado,
          fk_operador: fkOperador,
          fk_usuario: isteneSesion.usuario_id,
-         lst_candidato_carrera: arrayCandCarrera,
-         cls_candidato_historial: dataHistorial,
+         lst_postulante_carrera: arrayCandCarrera,
+         cls_postulante_historial: dataHistorial,
       };
       activarCarga(true);
-      await srvCandidato
+      await srvPostulante
          .actualizarIndividual(id, data)
          .then(() => {
             setOpcionGestion(funValidarOpcionGestion("0"));
             mostrarNotificacion({
                tipo: "success",
-               detalle: "Candidato actualizado exitosamente",
+               detalle: "Postulante actualizado exitosamente",
             });
          })
          .catch((error: Error) => {
@@ -404,12 +411,35 @@ const gestionar = () => {
       activarCarga(false);
    };
 
+   const AddContact = async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status === "granted") {
+         const contact: Contacts.Contact = {
+            [Contacts.Fields.ID]: "JJJ-UNIQUE",
+            [Contacts.Fields.ContactType]: "person",
+            [Contacts.Fields.Name]: "Nuevo Numero",
+            [Contacts.Fields.PhoneNumbers]: [
+               {
+                  id: "JJJ-UNIQUE",
+                  label: "JJJ",
+                  number: "(81) 8420-0123",
+                  digits: "8184200123",
+               },
+            ],
+            [Contacts.Fields.FirstName]: "Bird",
+            [Contacts.Fields.LastName]: "Man",
+            [Contacts.Fields.Company]: "Young Money",
+         };
+         await Contacts.addContactAsync(contact);
+      }
+   };
+
    return (
       <ContainerCustom>
          <HeaderCustom
-            title="Candidato / Gestionar"
+            title="Postulante / Gestionar"
             isSecondaryPage={true}
-            urlBack={"/(home)/inicio/candidato/"}
+            urlBack={"/(home)/inicio/postulante/"}
          />
          <ContainerWebCustom>
             <View
@@ -456,12 +486,12 @@ const gestionar = () => {
                            iconColor="#F6A626"
                            onPress={() => {
                               if (opcionGestion.tipo === OpcionGestion.EDITAR) {
-                                 const srvCandidato = new CandidatoService();
+                                 const srvPostulante = new PostulanteService();
                                  setOpcionGestion(funValidarOpcionGestion("0"));
 
-                                 funCandidatoListarIndividual(
-                                    srvCandidato.obtenerIdDeURL(
-                                       url_candidato_id
+                                 funPostulanteListarIndividual(
+                                    srvPostulante.obtenerIdDeURL(
+                                       url_postulante_id
                                     )
                                  );
                               } else {
@@ -477,29 +507,45 @@ const gestionar = () => {
                         <ButtonIconCustom
                            iconName={"call"}
                            iconColor="#00bcd4"
-                           onPress={() => {}}
+                           onPress={AddContact}
                         />
                      </View>
                   )}
                </View>
-               <TitleCustom
-                  text="Datos Sistema:"
-                  textSize={15}
-                  textoAlternativo={`${fechaActualizacion.toString()} - ${usuarioActualizacion}`}
-               />
+               {opcionGestion.tipo === OpcionGestion.REGISTRAR ? (
+                  <TitleCustom text="Datos Sistema:" textSize={15} />
+               ) : (
+                  <TitleCustom
+                     text="Datos Registro:"
+                     textSize={15}
+                     usuarioActualizacion={usuarioActualizacion}
+                     fechaActualizacion={formatoFecha(fechaActualizacion)}
+                  />
+               )}
 
                <InputDateTimeCustom
-                  title="Fecha Registro"
+                  title="Fecha"
                   value={fechaRegistro}
-                  onChange={setFechaRegistro}
+                  functionChangeText={setFechaRegistro}
                   inputIsEditable={false}
                   inputIsRequired={true}
                />
+               <InputTextCustom
+                  title="Usuario"
+                  placeholder="Ingrese usuario"
+                  value={usuarioRegistro}
+                  functionChangeText={setUsuarioRegistro}
+                  keyboardType="default"
+                  maxLength={45}
+                  inputIsEditable={false}
+                  inputIsRequired={true}
+               />
+               <TitleCustom text="Datos Estado:" textSize={15} />
                <SelectCustom
-                  title="Estado Candidato"
-                  value={fkCandidatoEstado}
-                  onChangeValue={setFkCandidatoEstado}
-                  items={arrayCandidatoEstado}
+                  title="Estado Postulante"
+                  value={fkPostulanteEstado}
+                  onChangeValue={setFkPostulanteEstado}
+                  items={arrayPostulanteEstado}
                   pickerIsEditable={opcionGestion.esEditable}
                   pickerIsRequired={true}
                />
@@ -616,8 +662,8 @@ const gestionar = () => {
                   }
                   onPress={() => {
                      opcionGestion.tipo === OpcionGestion.REGISTRAR
-                        ? funCandidatoRegistarIndividual()
-                        : funCandidatoActualizarIndividual(candidatoId);
+                        ? funPostulanteRegistarIndividual()
+                        : funPostulanteActualizarIndividual(postulanteId);
                   }}
                />
             </View>

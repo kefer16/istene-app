@@ -1,18 +1,18 @@
 import axios, { AxiosResponse } from "axios";
-import { CandidatoEstadoEntity } from "../entities/candidato_estado.entity";
+import { PostulanteEstadoEntity } from "../entities/postulante_estado.entity";
 import { personalizarMensajeError } from "../utils/funciones.util";
 
-export class CandidatoEstadoApi {
+export class PostulanteEstadoApi {
    async listarGrupal(): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
-               Authorization: `Bearer ${CandidatoEstadoEntity.bearer}`,
+               Authorization: `Bearer ${PostulanteEstadoEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
          return await axios.get(
-            `${CandidatoEstadoEntity.url}/listar_grupal`,
+            `${PostulanteEstadoEntity.url}/listar_grupal`,
             config
          );
       } catch (error: any) {
@@ -25,13 +25,13 @@ export class CandidatoEstadoApi {
       try {
          const config = {
             headers: {
-               Authorization: `Bearer ${CandidatoEstadoEntity.bearer}`,
+               Authorization: `Bearer ${PostulanteEstadoEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
 
          return await axios.get(
-            `${CandidatoEstadoEntity.url}/listar_grupal_activos`,
+            `${PostulanteEstadoEntity.url}/listar_grupal_activos`,
             config
          );
       } catch (error: any) {

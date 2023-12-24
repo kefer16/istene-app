@@ -72,7 +72,23 @@ export class CarreraService {
       await this.apiCarrera.listarGrupalActivos().then((resp) => {
          this.rspLlenarCombo.push({
             value: "0",
-            label: "Selec. Opción",
+            label: "-SELECCIONE-",
+         });
+         resp.data.data.map((element: CarreraResponse) => {
+            this.rspLlenarCombo.push({
+               value: element.carrera_id,
+               label: element.nombre,
+            });
+         });
+      });
+      return this.rspLlenarCombo;
+   }
+
+   async llenarComboFiltro(): Promise<Option[]> {
+      await this.apiCarrera.listarGrupalActivos().then((resp) => {
+         this.rspLlenarCombo.push({
+            value: "-1",
+            label: "TODOS",
          });
          resp.data.data.map((element: CarreraResponse) => {
             this.rspLlenarCombo.push({

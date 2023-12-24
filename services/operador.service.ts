@@ -29,7 +29,7 @@ export class OperadorService {
       await this.apiOperador.listarGrupalActivos().then((resp) => {
          this.rspLlenarCombo.push({
             value: "0",
-            label: "Selec. Opción",
+            label: "-SELECCIONE-",
          });
          resp.data.data.map((element: OperadorReponse) => {
             this.rspLlenarCombo.push({

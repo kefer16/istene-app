@@ -5,9 +5,8 @@ const _layout = () => {
    return (
       <Stack>
          <Stack.Screen name="index" options={{ headerShown: false }} />
-         <Stack.Screen name="candidato" options={{ headerShown: false }} />
+         <Stack.Screen name="postulante" options={{ headerShown: false }} />
          <Stack.Screen name="carrera" options={{ headerShown: false }} />
-         <Stack.Screen name="exportar" options={{ headerShown: false }} />
       </Stack>
    );
 };

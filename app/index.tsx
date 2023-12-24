@@ -138,7 +138,7 @@ export default function LoginScreen() {
                   }
                />
 
-               <Text
+               {/* <Text
                   style={{
                      width: "100%",
                      textAlign: "right",
@@ -150,7 +150,7 @@ export default function LoginScreen() {
                   }}
                >
                   Has olvidado tu contraseña?
-               </Text>
+               </Text> */}
                <ButtonCustom text="Iniciar Sesión" onPress={funIniciarSesion} />
 
                <View

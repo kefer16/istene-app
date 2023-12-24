@@ -1,25 +1,25 @@
 import axios, { AxiosResponse } from "axios";
-import { CandidatoEntity } from "../entities/candidato.entity";
+import { PostulanteEntity } from "../entities/postulante.entity";
 import { personalizarMensajeError } from "../utils/funciones.util";
 import {
-   CandidatoActualizarRequest,
-   CandidatoRequest,
-} from "../interfaces/resquests/candidato.request";
+   PostulanteActualizarRequest,
+   PostulanteRequest,
+} from "../interfaces/resquests/postulante.request";
 
-export class CandidatoApi {
+export class PostulanteApi {
    //individual
-   async registrarIndividual(data: CandidatoRequest): Promise<AxiosResponse> {
+   async registrarIndividual(data: PostulanteRequest): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
-               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               Authorization: `Bearer ${PostulanteEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
          const body = JSON.stringify(data);
 
          return await axios.post(
-            `${CandidatoEntity.url}/registrar_individual`,
+            `${PostulanteEntity.url}/registrar_individual`,
             body,
             config
          );
@@ -31,22 +31,22 @@ export class CandidatoApi {
 
    async actualizarIndividual(
       id: string,
-      data: CandidatoActualizarRequest
+      data: PostulanteActualizarRequest
    ): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
-               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               Authorization: `Bearer ${PostulanteEntity.bearer}`,
                "Content-Type": "application/json",
             },
             params: {
-               candidato_id: id,
+               postulante_id: id,
             },
          };
          const body = JSON.stringify(data);
 
          return await axios.put(
-            `${CandidatoEntity.url}/actualizar_individual`,
+            `${PostulanteEntity.url}/actualizar_individual`,
             body,
             config
          );
@@ -60,16 +60,16 @@ export class CandidatoApi {
       try {
          const config = {
             headers: {
-               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               Authorization: `Bearer ${PostulanteEntity.bearer}`,
                "Content-Type": "application/json",
             },
             params: {
-               candidato_id: id,
+               postulante_id: id,
             },
          };
 
          return await axios.get(
-            `${CandidatoEntity.url}/listar_individual`,
+            `${PostulanteEntity.url}/listar_individual`,
             config
          );
       } catch (error: any) {
@@ -84,7 +84,7 @@ export class CandidatoApi {
       try {
          const config = {
             headers: {
-               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               Authorization: `Bearer ${PostulanteEntity.bearer}`,
                "Content-Type": "application/json",
             },
             params: {
@@ -93,7 +93,7 @@ export class CandidatoApi {
          };
 
          return await axios.get(
-            `${CandidatoEntity.url}/listar_individual_cantidad_estado`,
+            `${PostulanteEntity.url}/listar_individual_cantidad_estado`,
             config
          );
       } catch (error: any) {
@@ -103,20 +103,24 @@ export class CandidatoApi {
    }
 
    //grupal
-   async listarGrupalDni(dni: string): Promise<AxiosResponse> {
+   async listarGrupalDni(
+      dni: string,
+      estadoPostulante: string
+   ): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
-               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               Authorization: `Bearer ${PostulanteEntity.bearer}`,
                "Content-Type": "application/json",
             },
             params: {
                dni: dni,
+               fk_postulante_estado: estadoPostulante,
             },
          };
 
          return await axios.get(
-            `${CandidatoEntity.url}/listar_grupal_dni`,
+            `${PostulanteEntity.url}/listar_grupal_dni`,
             config
          );
       } catch (error: any) {
@@ -129,13 +133,13 @@ export class CandidatoApi {
       try {
          const config = {
             headers: {
-               Authorization: `Bearer ${CandidatoEntity.bearer}`,
+               Authorization: `Bearer ${PostulanteEntity.bearer}`,
                "Content-Type": "application/json",
             },
          };
 
          return await axios.get(
-            `${CandidatoEntity.url}/listar_grupal_activos`,
+            `${PostulanteEntity.url}/listar_grupal_activos`,
             config
          );
       } catch (error: any) {

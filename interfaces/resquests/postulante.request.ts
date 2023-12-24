@@ -1,4 +1,4 @@
-export interface CandidatoRequest {
+export interface PostulanteRequest {
    dni: string;
    nombre: string;
    apellido_paterno: string;
@@ -9,26 +9,26 @@ export interface CandidatoRequest {
    activo: boolean;
    fecha_registro: string;
    fecha_actualizacion: string;
-   fk_candidato_estado: string;
+   fk_postulante_estado: string;
    fk_operador: string;
    fk_usuario: string;
-   lst_candidato_carrera: CandidatoCarreraRequest[];
-   cls_candidato_historial: CandidatoHistorialRequest;
+   lst_postulante_carrera: PostulanteCarreraRequest[];
+   cls_postulante_historial: PostulanteHistorialRequest;
 }
-export interface CandidatoCarreraRequest {
+export interface PostulanteCarreraRequest {
    numero_opcion: number;
    activo: boolean;
-   fk_candidato: string;
+   fk_postulante: string;
    fk_carrera: string;
 }
 
-export interface CandidatoHistorialRequest {
+export interface PostulanteHistorialRequest {
    fecha_registro: string;
-   fk_candidato: string;
+   fk_postulante: string;
    fk_usuario: string;
 }
 
-export interface CandidatoActualizarRequest {
+export interface PostulanteActualizarRequest {
    dni: string;
    nombre: string;
    apellido_paterno: string;
@@ -37,22 +37,22 @@ export interface CandidatoActualizarRequest {
    telefono: string;
    observacion: string;
    fecha_actualizacion: string;
-   fk_candidato_estado: string;
+   fk_postulante_estado: string;
    fk_operador: string;
    fk_usuario: string;
-   lst_candidato_carrera: CandidatoCarreraRequest[];
-   cls_candidato_historial: CandidatoHistorialRequest;
+   lst_postulante_carrera: PostulanteCarreraRequest[];
+   cls_postulante_historial: PostulanteHistorialRequest;
 }
 
-export interface CandidatoCarreraActualizarRequest {
+export interface PostulanteCarreraActualizarRequest {
    numero_opcion: number;
    activo: boolean;
-   fk_candidato: string;
+   fk_postulante: string;
    fk_carrera: string;
 }
 
-export interface CandidatoHistorialRequest {
+export interface PostulanteHistorialRequest {
    fecha_registro: string;
-   fk_candidato: string;
+   fk_postulante: string;
    fk_usuario: string;
 }

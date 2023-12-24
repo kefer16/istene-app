@@ -2,9 +2,9 @@ import { API_URL, BEARER_TOKEN } from "@env";
 const ENV_API_URL: string = API_URL ?? "";
 const ENV_BEARER_TOKEN: string = BEARER_TOKEN ?? "";
 
-export class CandidatoEntity {
+export class PostulanteEntity {
    constructor(
-      public candidato_id: string,
+      public postulante_id: string,
       public dni: string,
       public nombre: string,
       public apellido_paterno: string,
@@ -18,5 +18,5 @@ export class CandidatoEntity {
       public fk_usuario: string
    ) {}
    public static bearer = ENV_BEARER_TOKEN;
-   public static url = `${ENV_API_URL}/candidato`;
+   public static url = `${ENV_API_URL}/postulante`;
 }

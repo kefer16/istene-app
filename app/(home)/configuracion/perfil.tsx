@@ -8,6 +8,7 @@ import { IsteneSesionContext } from "../../../components/sesion/Sesion.component
 import ButtonCustom from "../../../components/ButtonCustom";
 import ContainerWebCustom from "../../../components/ContainerWebCustom";
 import { UsuarioService } from "../../../services/usuario.service";
+import { formatoFecha } from "../../../utils/funciones.util";
 
 const user = () => {
    const colorScheme = useColorScheme();
@@ -30,7 +31,7 @@ const user = () => {
          .listarIndividual(id)
          .then((resp) => {
             setUsuario(resp.usuario);
-            setFechaRegistro(resp.fecha_registro);
+            setFechaRegistro(formatoFecha(resp.fecha_registro));
             setDni(resp.dni);
             setNombre(resp.nombre);
             setApellidoPaterno(resp.apellido_paterno);

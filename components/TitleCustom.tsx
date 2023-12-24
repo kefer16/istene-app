@@ -1,11 +1,4 @@
-import {
-   StyleProp,
-   Text,
-   TextStyle,
-   View,
-   ViewStyle,
-   useColorScheme,
-} from "react-native";
+import { StyleProp, Text, TextStyle, View, useColorScheme } from "react-native";
 import React from "react";
 import Colors from "../constants/Colors";
 
@@ -13,17 +6,21 @@ interface Props {
    textStyle?: StyleProp<TextStyle>;
    text: string;
    textSize: number;
-   textoAlternativo?: string;
+   usuarioActualizacion?: string;
+   fechaActualizacion?: string;
 }
 const TitleCustom = ({
    textStyle,
    textSize,
    text,
-   textoAlternativo,
+   usuarioActualizacion,
+   fechaActualizacion,
 }: Props) => {
    const colorScheme = useColorScheme();
    return (
-      <View style={{ display: "flex", flexDirection: "row" }}>
+      <View
+         style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+      >
          <Text
             style={[
                {
@@ -37,16 +34,20 @@ const TitleCustom = ({
          >
             {text}
          </Text>
-         <Text
-            style={{
-               flex: 1,
-               textAlign: "right",
-               fontFamily: "Poppins300",
-               fontSize: 10,
-            }}
-         >
-            {textoAlternativo}
-         </Text>
+
+         {(usuarioActualizacion || fechaActualizacion) && (
+            <Text
+               style={{
+                  flex: 1,
+                  textAlign: "right",
+                  fontFamily: "Poppins300",
+                  fontSize: 10,
+                  color: Colors[colorScheme ?? "light"].textTitle,
+               }}
+            >
+               {`Editado por: ${usuarioActualizacion} - ${fechaActualizacion}`}
+            </Text>
+         )}
       </View>
    );
 };

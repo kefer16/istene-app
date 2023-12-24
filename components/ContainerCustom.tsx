@@ -4,7 +4,7 @@ import Colors from "../constants/Colors";
 const ContainerCustom = (props: any) => {
    const colorScheme = useColorScheme();
 
-   // const RutasSinScroll: string[] = ["/inicio/candidato"];
+   // const RutasSinScroll: string[] = ["/inicio/postulante"];
    return (
       <View
          style={[

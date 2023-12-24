@@ -8,29 +8,29 @@ import ButtonOptionCustom from "../../../components/ButtonOptionCustom";
 import { IsteneSesionContext } from "../../../components/sesion/Sesion.component";
 import { router } from "expo-router";
 import ContainerWebCustom from "../../../components/ContainerWebCustom";
-import { CandidatoService } from "../../../services/candidato.service";
+import { PostulanteService } from "../../../services/postulante.service";
 
 const index = () => {
    const { isteneSesion, obtenerSesion, mostrarNotificacion, activarCarga } =
       useContext(IsteneSesionContext);
-   const [nroCandidatosRegistrados, setNroCandidatosRegistrados] =
+   const [nroPostulantesRegistrados, setNroPostulantesRegistrados] =
       useState<number>(0);
-   const [nroCandidatosPendientes, setNroCandidatosPendientes] =
+   const [nroPostulantesPendientes, setNroPostulantesPendientes] =
       useState<number>(0);
-   const [nroCandidatosLlamados, setNroCandidatosLlamados] =
+   const [nroPostulantesLlamados, setNroPostulantesLlamados] =
       useState<number>(0);
-   const [nroCandidatosConfirmados, setNroCandidatosConfirmados] =
+   const [nroPostulantesConfirmados, setNroPostulantesConfirmados] =
       useState<number>(0);
-   const [nroCandidatosRechazados, setNroCandidatosRechazados] =
+   const [nroPostulantesRechazados, setNroPostulantesRechazados] =
       useState<number>(0);
 
    const funObtenerEstadisticasRegistrados = async () => {
-      const srvCandidato = new CandidatoService();
+      const srvPostulante = new PostulanteService();
 
-      await srvCandidato
+      await srvPostulante
          .listarIndividualCantidadPorEstado("TODOS")
          .then((resp) => {
-            setNroCandidatosRegistrados(resp);
+            setNroPostulantesRegistrados(resp);
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "warn", detalle: error.message });
@@ -38,36 +38,36 @@ const index = () => {
    };
 
    const funObtenerEstadisticasPendiente = async () => {
-      const srvCandidato = new CandidatoService();
+      const srvPostulante = new PostulanteService();
 
-      await srvCandidato
+      await srvPostulante
          .listarIndividualCantidadPorEstado("PEND")
          .then((resp) => {
-            setNroCandidatosPendientes(resp);
+            setNroPostulantesPendientes(resp);
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "warn", detalle: error.message });
          });
    };
    const funObtenerEstadisticasLlamados = async () => {
-      const srvCandidato = new CandidatoService();
+      const srvPostulante = new PostulanteService();
 
-      await srvCandidato
+      await srvPostulante
          .listarIndividualCantidadPorEstado("LLAM")
          .then((resp) => {
-            setNroCandidatosLlamados(resp);
+            setNroPostulantesLlamados(resp);
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "warn", detalle: error.message });
          });
    };
    const funObtenerEstadisticasConfirmados = async () => {
-      const srvCandidato = new CandidatoService();
+      const srvPostulante = new PostulanteService();
 
-      await srvCandidato
+      await srvPostulante
          .listarIndividualCantidadPorEstado("CONF")
          .then((resp) => {
-            setNroCandidatosConfirmados(resp);
+            setNroPostulantesConfirmados(resp);
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "warn", detalle: error.message });
@@ -75,12 +75,12 @@ const index = () => {
    };
 
    const funObtenerEstadisticasRechazados = async () => {
-      const srvCandidato = new CandidatoService();
+      const srvPostulante = new PostulanteService();
 
-      await srvCandidato
-         .listarIndividualCantidadPorEstado("RECH")
+      await srvPostulante
+         .listarIndividualCantidadPorEstado("RETI")
          .then((resp) => {
-            setNroCandidatosRechazados(resp);
+            setNroPostulantesRechazados(resp);
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "warn", detalle: error.message });
@@ -108,15 +108,24 @@ const index = () => {
             isSecondaryPage={false}
          />
          <ContainerWebCustom>
-            <View style={{ flex: 1, paddingHorizontal: 10 }}>
+            <View
+               style={{
+                  flex: 1,
+                  flexDirection: "column",
+                  paddingHorizontal: 10,
+               }}
+            >
                <TitleCustom
                   textStyle={{ marginTop: 10 }}
                   textSize={20}
-                  text="Estadisticas de Candidatos"
+                  text="Estadísticas de Postulantes"
                />
                <View
                   style={{
-                     flex: 1,
+                     // backgroundColor: "green",
+                     // flex: 1,
+                     width: "100%",
+                     height: "auto",
                      flexDirection: "row",
                      flexWrap: "wrap",
                      paddingVertical: 10,
@@ -127,35 +136,35 @@ const index = () => {
                      title="Total Registrados"
                      text="Hola"
                      iconName={"person"}
-                     quantity={nroCandidatosRegistrados}
+                     quantity={nroPostulantesRegistrados}
                      viewBackgroundColor="#2A166D"
                   />
                   <CardCustom
                      title="Total Pendientes"
                      text="Hola"
                      iconName={"person-add"}
-                     quantity={nroCandidatosPendientes}
+                     quantity={nroPostulantesPendientes}
                      viewBackgroundColor="#ff9800"
                   />
                   <CardCustom
                      title="Total Llamados"
                      text="Hola"
-                     quantity={nroCandidatosLlamados}
+                     quantity={nroPostulantesLlamados}
                      iconName={"call"}
                      viewBackgroundColor="#00bcd4"
                   />
                   <CardCustom
                      title="Total Confirmados"
                      text="Hola"
-                     quantity={nroCandidatosConfirmados}
+                     quantity={nroPostulantesConfirmados}
                      iconName={"checkmark-circle"}
                      viewBackgroundColor="#8bc34a"
                   />
 
                   <CardCustom
-                     title="Total Rechazados"
+                     title="Total Retirados"
                      text="Hola"
-                     quantity={nroCandidatosRechazados}
+                     quantity={nroPostulantesRechazados}
                      iconName={"close-circle"}
                      viewBackgroundColor="#f44336"
                   />
@@ -174,11 +183,11 @@ const index = () => {
                   }}
                >
                   <ButtonOptionCustom
-                     textTitle="Candidato"
-                     textDescription="Gestionar datos de los candidatos"
+                     textTitle="Postulante"
+                     textDescription="Gestionar datos de los postulantes"
                      iconName={"person"}
                      onPress={() => {
-                        router.push("/(home)/inicio/candidato/");
+                        router.push("/(home)/inicio/postulante/");
                      }}
                   />
 
@@ -188,14 +197,6 @@ const index = () => {
                      iconName={"school"}
                      onPress={() => {
                         router.push("/(home)/inicio/carrera/");
-                     }}
-                  />
-                  <ButtonOptionCustom
-                     textTitle="Exportar"
-                     textDescription="Generar reportes en Excel u otros"
-                     iconName={"attach"}
-                     onPress={() => {
-                        router.push("/(home)/inicio/exportar/");
                      }}
                   />
                </View>

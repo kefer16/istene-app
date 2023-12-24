@@ -1,12 +1,5 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import {
-   Pressable,
-   useColorScheme,
-   View,
-   Text,
-   StyleSheet,
-} from "react-native";
+import { Tabs } from "expo-router";
+import { useColorScheme, View, Text, StyleSheet } from "react-native";
 import Colors from "../../constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect } from "react";
@@ -31,11 +24,11 @@ export default function TabLayout() {
             name="inicio"
             options={{
                title: "",
-               tabBarIcon: ({ color }) => (
+               tabBarIcon: ({ focused, color }) => (
                   <View style={styles.tabContainer}>
                      <Ionicons
                         style={styles.tabIcon}
-                        name={"home"}
+                        name={focused ? "home" : "home-outline"}
                         color={color}
                      />
                      <Text style={[styles.tabText, { color: `${color}` }]}>
@@ -43,39 +36,22 @@ export default function TabLayout() {
                      </Text>
                   </View>
                ),
-               headerRight: () => (
-                  <Link href="/modal" asChild>
-                     <Pressable>
-                        {({ pressed }) => (
-                           <FontAwesome
-                              name="info-circle"
-                              size={25}
-                              color={Colors[colorScheme ?? "light"].text}
-                              style={{
-                                 marginRight: 15,
-                                 opacity: pressed ? 0.5 : 1,
-                              }}
-                           />
-                        )}
-                     </Pressable>
-                  </Link>
-               ),
             }}
          />
 
          <Tabs.Screen
-            name="calendario"
+            name="reportes"
             options={{
                title: "",
-               tabBarIcon: ({ color }) => (
+               tabBarIcon: ({ focused, color }) => (
                   <View style={styles.tabContainer}>
                      <Ionicons
                         style={styles.tabIcon}
-                        name={"calendar"}
+                        name={focused ? "stats-chart" : "stats-chart-outline"}
                         color={color}
                      />
                      <Text style={[styles.tabText, { color: `${color}` }]}>
-                        Calendario
+                        Reportes
                      </Text>
                   </View>
                ),
@@ -85,11 +61,11 @@ export default function TabLayout() {
             name="configuracion"
             options={{
                title: "",
-               tabBarIcon: ({ color }) => (
+               tabBarIcon: ({ focused, color }) => (
                   <View style={styles.tabContainer}>
                      <Ionicons
                         style={styles.tabIcon}
-                        name={"settings"}
+                        name={focused ? "settings" : "settings-outline"}
                         color={color}
                      />
                      <Text style={[styles.tabText, { color: `${color}` }]}>
@@ -105,17 +81,16 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
    tabContainer: {
-      display: "flex",
       flexDirection: "column",
       alignItems: "center",
+      justifyContent: "center",
    },
    tabIcon: {
-      marginTop: 15,
+      marginTop: 10,
       fontSize: 18,
    },
    tabText: {
-      marginTop: 2,
-      fontSize: 9,
+      fontSize: 10,
       fontFamily: "Poppins400",
    },
 });

@@ -11,6 +11,7 @@ import { router } from "expo-router";
 import { OpcionGestion } from "../../../../constants/OpcionGestion";
 import CardButtonCustom from "../../../../components/CardButtonCustom";
 import ContainerWebCustom from "../../../../components/ContainerWebCustom";
+import { formatoFecha } from "../../../../utils/funciones.util";
 
 const index = () => {
    const { mostrarNotificacion, activarCarga } =
@@ -92,9 +93,9 @@ const index = () => {
                   return (
                      <CardButtonCustom
                         key={item.carrera_id}
-                        textTitle={item.fecha_registro.toString()}
+                        textTitle={formatoFecha(item.fecha_registro)}
                         textDescription={item.nombre}
-                        footerTextFecha={item.fecha_actualizacion.toString()}
+                        footerTextFecha={formatoFecha(item.fecha_actualizacion)}
                         footerTextUsuario={
                            item.lst_carrera_historial[0].cls_usuario.usuario
                         }

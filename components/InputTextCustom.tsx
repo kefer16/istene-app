@@ -80,7 +80,9 @@ export default function InputTextCustom({
                   borderColor: "#007bff",
                },
                !inputIsEditable && {
-                  opacity: 0.6,
+                  opacity: 0.5,
+                  backgroundColor:
+                     colorScheme === "light" ? "#00000020" : "#ffffff40",
                },
                styleInput,
             ]}
@@ -92,27 +94,51 @@ export default function InputTextCustom({
             keyboardType={keyboardType}
             maxLength={maxLength}
          />
-         <Text
-            style={[
-               {
-                  position: "absolute",
-                  top: 10,
-                  left: 10,
-                  zIndex: 1,
-                  width: "100%",
-                  fontSize: 11,
-                  lineHeight: 13,
-                  textAlign: "left",
-                  color: Colors[colorScheme ?? "light"].inputTitle,
-                  fontFamily: "Poppins500",
-               },
-               focus && {
-                  color: "#007bff",
-               },
-            ]}
+         <View
+            style={{
+               position: "absolute",
+               top: 10,
+               left: 10,
+               zIndex: 1,
+               // width: "100%",
+               flexDirection: "row",
+               // backgroundColor: "green",
+            }}
          >
-            {`${title} ${inputIsRequired ? "*" : ""}`}
-         </Text>
+            <Text
+               style={[
+                  {
+                     fontSize: 11,
+                     lineHeight: 13,
+                     textAlign: "left",
+                     color: Colors[colorScheme ?? "light"].inputTitle,
+                     fontFamily: "Poppins500",
+                  },
+                  focus && {
+                     color: "#007bff",
+                  },
+               ]}
+            >
+               {title}
+            </Text>
+            {inputIsRequired && (
+               <Text
+                  style={[
+                     {
+                        fontSize: 11,
+                        lineHeight: 13,
+                        color: "#f44336",
+                     },
+                     focus && {
+                        color: "#007bff",
+                     },
+                  ]}
+               >
+                  {` *`}{" "}
+               </Text>
+            )}
+         </View>
+
          {!inputIsEditable && (
             <TouchableOpacity
                style={{

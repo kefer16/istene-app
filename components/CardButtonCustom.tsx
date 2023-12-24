@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import React from "react";
 import Colors from "../constants/Colors";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface Props {
    styleTouchable?: StyleProp<TextStyle>;
@@ -95,80 +94,35 @@ const CardButtonCustom = ({
                   ? textDescription
                   : `${textDescription.substring(0, 29)}...`}
             </Text>
+
             <View
                style={{
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  paddingTop: 5,
                }}
             >
                <Text
                   style={{
-                     fontSize: 10,
+                     fontSize: 9,
                      fontFamily: "Poppins600",
                      color: Colors[colorScheme ?? "light"].textTitle,
                   }}
                >
-                  {footerTextFecha}
+                  Editado por:
                </Text>
                <Text
                   style={{
-                     fontSize: 10,
+                     fontSize: 9,
                      fontFamily: "Poppins300",
                      color: Colors[colorScheme ?? "light"].textSubtitle,
                   }}
                >
-                  {`Editado por: ${footerTextUsuario}`}
+                  {`${footerTextUsuario} - ${footerTextFecha}`}
                </Text>
             </View>
          </View>
-         {/* <View
-            style={{
-               width: "10%",
-               display: "flex",
-               justifyContent: "center",
-               alignItems: "center",
-            }}
-         > */}
-         {/* <TouchableOpacity
-               style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: 30,
-                  height: 30,
-                  borderRadius: 50,
-                  backgroundColor: "#0000003f",
-               }}
-            >
-               <Ionicons
-                  style={{
-                     fontSize: 15,
-                     color: "#ffc107",
-                  }}
-                  name={"create"}
-               />
-            </TouchableOpacity> */}
-         {/* <TouchableOpacity
-               style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: 30,
-                  height: 30,
-                  borderRadius: 50,
-                  backgroundColor: "#0000003f",
-               }}
-            >
-               <Ionicons
-                  style={{
-                     fontSize: 15,
-                     color: "#f44336",
-                  }}
-                  name={"trash"}
-               />
-            </TouchableOpacity> */}
-         {/* </View> */}
       </TouchableOpacity>
    );
 };

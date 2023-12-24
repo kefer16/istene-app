@@ -49,13 +49,6 @@ const index = () => {
                   textTitle="Contraseña"
                   textDescription="Cambiar Contraseña"
                />
-
-               <ButtonOptionCustom
-                  iconName={"notifications"}
-                  textTitle="Notificaciones"
-                  textDescription="Gestionar Notificaciones"
-               />
-
                <TouchableOpacity
                   style={{
                      padding: 15,

@@ -257,6 +257,7 @@ export default function RegistroScreen() {
                   functionActivePassword={() =>
                      setEsconderContrasenia(!esconderContrasenia)
                   }
+                  inputIsRequired={true}
                />
                <InputPasswordCustom
                   title="Repetir Contraseña"
@@ -267,6 +268,7 @@ export default function RegistroScreen() {
                   functionActivePassword={() =>
                      setEsconderRepetirContrasenia(!esconderRepetirContrasenia)
                   }
+                  inputIsRequired={true}
                />
 
                <TouchableOpacity

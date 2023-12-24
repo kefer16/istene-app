@@ -54,15 +54,20 @@ export function crearFechaISO(): string {
    return fecha_ISO;
 }
 
-export function formatoFecha(fecha: string): string {
-   if (fecha.substring(0, 8) === "1/1/1900") {
+export function formatoFecha(fechaString: string): string {
+   if (fechaString === "") {
       return "";
    }
-   let fechaObj = new Date(fecha);
-   let dia = fechaObj.getDate().toString().padStart(2, "0");
-   let mes = (fechaObj.getMonth() + 1).toString().padStart(2, "0");
-   let anio = fechaObj.getFullYear();
-   return dia + "/" + mes + "/" + anio;
+   const fecha = new Date(
+      new Date(fechaString).setHours(new Date(fechaString).getHours() + 5)
+   );
+   const anio = fecha.getFullYear().toString();
+   const mes = (fecha.getMonth() + 1).toString().padStart(2, "0"); // Los meses comienzan desde 0
+   const dia = fecha.getDate().toString().padStart(2, "0");
+   const hora = fecha.getHours().toString().padStart(2, "0");
+   const minuto = fecha.getMinutes().toString().padStart(2, "0");
+   const second = fecha.getSeconds().toString().padStart(2, "0");
+   return `${dia}/${mes}/${anio} ${hora}:${minuto}:${second}`;
 }
 export function fechaActualISO(): string {
    return new Date(
