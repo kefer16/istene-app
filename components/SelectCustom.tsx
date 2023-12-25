@@ -1,4 +1,4 @@
-import { Text, View, useColorScheme } from "react-native";
+import { Text, View, useColorScheme, Platform } from "react-native";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import Colors from "../constants/Colors";
@@ -32,7 +32,105 @@ const SelectCustom = ({
    const onBlur = () => {
       setFocus(false);
    };
-   return (
+
+   return Platform.OS === "web" ? (
+      <div
+         style={{
+            display: "flex",
+            flexDirection: "column",
+            position: "relative",
+         }}
+      >
+         <select
+            disabled={!pickerIsEditable}
+            style={{
+               display: "flex",
+               width: "100%",
+               fontSize: 15,
+               lineHeight: 17,
+               color: Colors[colorScheme ?? "light"].inputText,
+               fontFamily: "Poppins300",
+               paddingTop: 20,
+               paddingBottom: 10,
+               paddingLeft: 10,
+               paddingRight: 50,
+               borderRadius: 5,
+               backgroundColor: !pickerIsEditable
+                  ? colorScheme === "light"
+                     ? "#00000020"
+                     : "#ffffff40"
+                  : Colors[colorScheme ?? "light"].inputContainer,
+               borderStyle: "solid",
+               borderWidth: 1,
+               borderColor: focus
+                  ? "#007bff"
+                  : Colors[colorScheme ?? "light"].inputBorder,
+               opacity: !pickerIsEditable ? 0.5 : 1,
+            }}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            value={value}
+            onChange={(e) => {
+               if (pickerIsEditable) {
+                  onChangeValue(e.target.value);
+               }
+            }}
+         >
+            {items.map((option: Option, index: number) => {
+               return (
+                  <option
+                     key={index}
+                     style={{
+                        fontSize: 15,
+                        fontFamily: "Poppins300",
+                     }}
+                     value={option.value}
+                  >
+                     {option.label}
+                  </option>
+               );
+            })}
+         </select>
+         <div
+            style={{
+               display: "flex",
+               top: 3,
+               left: 10,
+               position: "absolute",
+               zIndex: 1,
+            }}
+         >
+            <p
+               style={{
+                  display: "flex",
+                  margin: 0,
+                  padding: 0,
+                  fontSize: 11,
+
+                  color: focus
+                     ? "#007bff"
+                     : Colors[colorScheme ?? "light"].inputTitle,
+                  fontFamily: "Poppins500",
+               }}
+            >
+               {title}
+            </p>
+            {pickerIsRequired && (
+               <p
+                  style={{
+                     display: "flex",
+                     fontSize: 11,
+                     margin: 0,
+                     padding: 0,
+                     color: focus ? "#007bff" : "#f44336",
+                  }}
+               >
+                  {` *`}
+               </p>
+            )}
+         </div>
+      </div>
+   ) : (
       <View
          style={[
             {

@@ -9,6 +9,7 @@ import { IsteneSesionContext } from "../../../components/sesion/Sesion.component
 import { router } from "expo-router";
 import ContainerWebCustom from "../../../components/ContainerWebCustom";
 import { PostulanteService } from "../../../services/postulante.service";
+import { CarreraService } from "../../../services/carrera.service";
 
 const index = () => {
    const { isteneSesion, obtenerSesion, mostrarNotificacion, activarCarga } =
@@ -23,6 +24,7 @@ const index = () => {
       useState<number>(0);
    const [nroPostulantesRechazados, setNroPostulantesRechazados] =
       useState<number>(0);
+   const [nroCarrerasActivas, setNroCarrerasActivas] = useState<number>(0);
 
    const funObtenerEstadisticasRegistrados = async () => {
       const srvPostulante = new PostulanteService();
@@ -33,7 +35,7 @@ const index = () => {
             setNroPostulantesRegistrados(resp);
          })
          .catch((error: Error) => {
-            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
    };
 
@@ -46,7 +48,7 @@ const index = () => {
             setNroPostulantesPendientes(resp);
          })
          .catch((error: Error) => {
-            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
    };
    const funObtenerEstadisticasLlamados = async () => {
@@ -58,7 +60,7 @@ const index = () => {
             setNroPostulantesLlamados(resp);
          })
          .catch((error: Error) => {
-            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
    };
    const funObtenerEstadisticasConfirmados = async () => {
@@ -70,7 +72,7 @@ const index = () => {
             setNroPostulantesConfirmados(resp);
          })
          .catch((error: Error) => {
-            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
    };
 
@@ -83,7 +85,20 @@ const index = () => {
             setNroPostulantesRechazados(resp);
          })
          .catch((error: Error) => {
-            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
+         });
+   };
+
+   const funObtenerEstadisticasCarreras = async () => {
+      const srvCarrera = new CarreraService();
+
+      await srvCarrera
+         .listarIndividualNroActivos()
+         .then((resp) => {
+            setNroCarrerasActivas(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
    };
 
@@ -96,6 +111,7 @@ const index = () => {
          await funObtenerEstadisticasLlamados();
          await funObtenerEstadisticasConfirmados();
          await funObtenerEstadisticasRechazados();
+         await funObtenerEstadisticasCarreras();
          activarCarga(false);
       };
       obtenerData();
@@ -134,28 +150,28 @@ const index = () => {
                >
                   <CardCustom
                      title="Total Registrados"
-                     text="Hola"
-                     iconName={"person"}
+                     text=""
+                     iconName={"person-add"}
                      quantity={nroPostulantesRegistrados}
                      viewBackgroundColor="#2A166D"
                   />
                   <CardCustom
                      title="Total Pendientes"
-                     text="Hola"
-                     iconName={"person-add"}
+                     text=""
+                     iconName={"person"}
                      quantity={nroPostulantesPendientes}
                      viewBackgroundColor="#ff9800"
                   />
                   <CardCustom
                      title="Total Llamados"
-                     text="Hola"
+                     text=""
                      quantity={nroPostulantesLlamados}
                      iconName={"call"}
                      viewBackgroundColor="#00bcd4"
                   />
                   <CardCustom
                      title="Total Confirmados"
-                     text="Hola"
+                     text=""
                      quantity={nroPostulantesConfirmados}
                      iconName={"checkmark-circle"}
                      viewBackgroundColor="#8bc34a"
@@ -163,10 +179,17 @@ const index = () => {
 
                   <CardCustom
                      title="Total Retirados"
-                     text="Hola"
+                     text=""
                      quantity={nroPostulantesRechazados}
                      iconName={"close-circle"}
                      viewBackgroundColor="#f44336"
+                  />
+                  <CardCustom
+                     title="Total Carreras Activas"
+                     text=""
+                     quantity={nroCarrerasActivas}
+                     iconName={"school"}
+                     viewBackgroundColor="#009688"
                   />
                </View>
                <TitleCustom

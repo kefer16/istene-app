@@ -22,6 +22,8 @@ export class CarreraService {
    private rspListarGrupalActivos: CarreraResponse[] = [];
    private rspLlenarCombo: Option[] = [];
 
+   private rspListarIndividualNroActivos: number = 0;
+
    //individual
    async registrarIndividual(
       data: CarreraRegistrarIndividualRequest
@@ -49,6 +51,13 @@ export class CarreraService {
          this.rspListarIndividual = resp.data.data;
       });
       return this.rspListarIndividual;
+   }
+
+   async listarIndividualNroActivos(): Promise<number> {
+      await this.apiCarrera.listarIndividualNroActivos().then((resp) => {
+         this.rspListarIndividualNroActivos = resp.data.data;
+      });
+      return this.rspListarIndividualNroActivos;
    }
 
    //grupal

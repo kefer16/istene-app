@@ -80,6 +80,25 @@ export class CarreraApi {
       }
    }
 
+   async listarIndividualNroActivos(): Promise<AxiosResponse> {
+      try {
+         const config = {
+            headers: {
+               Authorization: `Bearer ${CarreraEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
+         };
+
+         return await axios.get(
+            `${CarreraEntity.url}/listar_individual_nro_activos`,
+            config
+         );
+      } catch (error: any) {
+         error.message = personalizarMensajeError(error);
+         return Promise.reject(error);
+      }
+   }
+
    //grupal
    async listarGrupalNombre(nombre: string): Promise<AxiosResponse> {
       try {

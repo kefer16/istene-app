@@ -13,7 +13,8 @@ const ContainerWebCustom = (props: any) => {
             },
             Platform.OS === "web" && {
                marginHorizontal: "auto",
-               width: 700,
+               width: "100%",
+               maxWidth: 900,
             },
          ]}
       >

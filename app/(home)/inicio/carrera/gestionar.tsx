@@ -250,11 +250,6 @@ const gestionar = () => {
                            iconColor="#f44336"
                            onPress={() => {}}
                         />
-                        <ButtonIconCustom
-                           iconName={"call"}
-                           iconColor="#00bcd4"
-                           onPress={() => {}}
-                        />
                      </View>
                   )}
                </View>

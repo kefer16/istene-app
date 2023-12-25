@@ -1,8 +1,9 @@
-import { RENIEC_URL, RENIEC_TOKEN } from "@env";
+import { API_URL, BEARER_TOKEN } from "@env";
+const ENV_API_URL: string = API_URL ?? "";
+const ENV_BEARER_TOKEN: string = BEARER_TOKEN ?? "";
 
 export class ReniecEntity {
    constructor(public dni: string = "") {}
-
-   public static token = RENIEC_TOKEN ?? "";
-   public static url_dni = `${RENIEC_URL ?? ""}/dni?numero=`;
+   public static bearer = ENV_BEARER_TOKEN;
+   public static url = `${ENV_API_URL}/reniec`;
 }

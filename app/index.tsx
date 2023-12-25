@@ -70,7 +70,6 @@ export default function LoginScreen() {
                   marginHorizontal: "auto",
                   width: "100%",
                   height: 80,
-                  // backgroundColor: "red",
                   alignSelf: "center",
                }}
             >
