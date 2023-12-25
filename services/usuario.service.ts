@@ -1,7 +1,14 @@
 import { UsuarioApi } from "../apis/usuario.api";
+import { Option } from "../components/SelectCustom";
 import { UsuarioEntity } from "../entities/usuario.entity";
-import { UsuarioListarIndividualResponse } from "../interfaces/responses/usuario.response";
-import { LogeoUsuario } from "../interfaces/usuario.interface";
+import {
+   UsuarioListarGrupalActivosResponse,
+   UsuarioListarIndividualResponse,
+} from "../interfaces/responses/usuario.response";
+import {
+   ActualizarIndividualContraseniaRequest,
+   LogeoUsuario,
+} from "../interfaces/usuario.interface";
 
 export class UsuarioService {
    private apiUsuario = new UsuarioApi();
@@ -12,7 +19,9 @@ export class UsuarioService {
    private rspListarIndividual: UsuarioListarIndividualResponse =
       {} as UsuarioListarIndividualResponse;
    private rspListarTodo: UsuarioEntity[] = [];
+   private rspLlenarCombo: Option[] = [];
    private rspEliminarUno: boolean = false;
+   private rspActualizarContrasenia: number = 0;
 
    async logearse(usuario: string, contrasenia: string): Promise<LogeoUsuario> {
       await this.apiUsuario.logearse(usuario, contrasenia).then((resp) => {
@@ -49,11 +58,39 @@ export class UsuarioService {
       return this.rspListarIndividual;
    }
 
+   async actualizarIndividualContrasenia(
+      id: string,
+      data: ActualizarIndividualContraseniaRequest
+   ): Promise<number> {
+      await this.apiUsuario
+         .actualizarIndividualContrasenia(id, data)
+         .then((resp) => {
+            this.rspActualizarContrasenia = resp.data.data;
+         });
+      return this.rspActualizarContrasenia;
+   }
+
    async listarGrupal(): Promise<UsuarioEntity[]> {
       await this.apiUsuario.listarGrupal().then((resp) => {
          this.rspListarTodo = resp.data.data;
       });
       return this.rspListarTodo;
+   }
+
+   async llenarComboFiltro(): Promise<Option[]> {
+      await this.apiUsuario.listarGrupalActivos().then((resp) => {
+         this.rspLlenarCombo.push({
+            value: "-1",
+            label: "TODOS",
+         });
+         resp.data.data.map((element: UsuarioListarGrupalActivosResponse) => {
+            this.rspLlenarCombo.push({
+               value: element.usuario_id,
+               label: element.usuario,
+            });
+         });
+      });
+      return this.rspLlenarCombo;
    }
 
    async eliminarIndividual(usuario_id: string): Promise<boolean> {

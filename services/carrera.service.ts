@@ -20,6 +20,7 @@ export class CarreraService {
 
    private rspListarGrupalNombre: CarreraListarGrupalNombreResponse[] = [];
    private rspListarGrupalActivos: CarreraResponse[] = [];
+   private rspEliminarIndividual: number = 0;
    private rspLlenarCombo: Option[] = [];
 
    private rspListarIndividualNroActivos: number = 0;
@@ -33,7 +34,12 @@ export class CarreraService {
       });
       return this.rspRegistrarIndivial;
    }
-
+   async eliminarIndividual(id: string): Promise<number> {
+      await this.apiCarrera.eliminarIndividual(id).then((resp) => {
+         this.rspEliminarIndividual = resp.data.data;
+      });
+      return this.rspEliminarIndividual;
+   }
    async actualizarIndividual(
       id: string,
       data: CarreraActualizarIndividualRequest
@@ -62,9 +68,10 @@ export class CarreraService {
 
    //grupal
    async listarGrupalNombre(
-      nombre: string
+      nombre: string,
+      activo: string
    ): Promise<CarreraListarGrupalNombreResponse[]> {
-      await this.apiCarrera.listarGrupalNombre(nombre).then((resp) => {
+      await this.apiCarrera.listarGrupalNombre(nombre, activo).then((resp) => {
          this.rspListarGrupalNombre = resp.data.data;
       });
       return this.rspListarGrupalNombre;

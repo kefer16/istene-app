@@ -78,6 +78,28 @@ export class PostulanteApi {
       }
    }
 
+   async eliminarIndividual(id: string): Promise<AxiosResponse> {
+      try {
+         const config = {
+            headers: {
+               Authorization: `Bearer ${PostulanteEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
+            params: {
+               postulante_id: id,
+            },
+         };
+
+         return await axios.delete(
+            `${PostulanteEntity.url}/eliminar_individual`,
+            config
+         );
+      } catch (error: any) {
+         error.message = personalizarMensajeError(error);
+         return Promise.reject(error);
+      }
+   }
+
    async listarIndividualCantidadPorEstado(
       abreviaturaEstado: string
    ): Promise<AxiosResponse> {
@@ -140,6 +162,34 @@ export class PostulanteApi {
 
          return await axios.get(
             `${PostulanteEntity.url}/listar_grupal_activos`,
+            config
+         );
+      } catch (error: any) {
+         error.message = personalizarMensajeError(error);
+         return Promise.reject(error);
+      }
+   }
+
+   async listarGrupalReportesFiltro(
+      fk_postulante_estado: string,
+      fk_postulante_carrera: string,
+      fk_usuario: string
+   ): Promise<AxiosResponse> {
+      try {
+         const config = {
+            headers: {
+               Authorization: `Bearer ${PostulanteEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
+            params: {
+               fk_postulante_estado,
+               fk_postulante_carrera,
+               fk_usuario,
+            },
+         };
+
+         return await axios.get(
+            `${PostulanteEntity.url}/listar_grupal_reportes_filtro`,
             config
          );
       } catch (error: any) {

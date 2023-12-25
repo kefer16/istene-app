@@ -10,3 +10,8 @@ export interface UsuarioListarIndividualResponse {
    direccion: string;
    telefono: string;
 }
+
+export interface UsuarioListarGrupalActivosResponse {
+   usuario_id: string;
+   usuario: string;
+}

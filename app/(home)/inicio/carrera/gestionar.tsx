@@ -1,4 +1,4 @@
-import { View, useColorScheme } from "react-native";
+import { Alert, Platform, View, useColorScheme } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { IsteneSesionContext } from "../../../../components/sesion/Sesion.component";
 import { router, useLocalSearchParams } from "expo-router";
@@ -105,6 +105,14 @@ const gestionar = () => {
          mostrarNotificacion({ tipo: "warn", detalle: "Ingrese nombre" });
          return false;
       }
+      if (activo === "-1") {
+         mostrarNotificacion({ tipo: "warn", detalle: "Seleccione Estado" });
+         return false;
+      }
+      if (!descripcion) {
+         mostrarNotificacion({ tipo: "warn", detalle: "Ingrese descripción" });
+         return false;
+      }
 
       return true;
    };
@@ -141,12 +149,12 @@ const gestionar = () => {
                tipo: "success",
                detalle: "Carrera registrada exitosamente",
             });
+            router.replace("/(home)/inicio/carrera/");
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
       activarCarga(false);
-      router.replace("/(home)/inicio/carrera/");
    };
 
    const funCarreraActualizarIndividual = async (id: string) => {
@@ -182,6 +190,47 @@ const gestionar = () => {
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
+         });
+      activarCarga(false);
+   };
+
+   const funMensajeConfirmacionEliminar = (id: string) => {
+      if (Platform.OS === "web") {
+         const opcion = confirm(
+            `Seguro de querer eliminar la carrera: ${nombre}`
+         );
+         if (opcion) {
+            funEliminarIndividual(id);
+         }
+      } else {
+         Alert.alert(
+            "Confirmación",
+            `Seguro de querer eliminar la carrera: ${nombre}`,
+            [
+               {
+                  text: "Cancelar",
+                  style: "cancel",
+               },
+               { text: "Si", onPress: () => funEliminarIndividual(id) },
+            ]
+         );
+      }
+   };
+   const funEliminarIndividual = async (id: string) => {
+      const srvCarrera = new CarreraService();
+      activarCarga(true);
+      await srvCarrera
+         .eliminarIndividual(id)
+         .then(() => {
+            mostrarNotificacion({
+               tipo: "success",
+               detalle: "Se eliminó la carrera correctamente",
+            });
+            router.replace("/(home)/inicio/carrera/");
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
+            return;
          });
       activarCarga(false);
    };
@@ -248,7 +297,9 @@ const gestionar = () => {
                         <ButtonIconCustom
                            iconName={"trash"}
                            iconColor="#f44336"
-                           onPress={() => {}}
+                           onPress={() => {
+                              funMensajeConfirmacionEliminar(carreraId);
+                           }}
                         />
                      </View>
                   )}

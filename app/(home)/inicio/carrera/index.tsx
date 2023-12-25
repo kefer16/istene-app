@@ -12,6 +12,8 @@ import { OpcionGestion } from "../../../../constants/OpcionGestion";
 import CardButtonCustom from "../../../../components/CardButtonCustom";
 import ContainerWebCustom from "../../../../components/ContainerWebCustom";
 import { formatoFecha } from "../../../../utils/funciones.util";
+import TitleCustom from "../../../../components/TitleCustom";
+import SelectCustom, { Option } from "../../../../components/SelectCustom";
 
 const index = () => {
    const { mostrarNotificacion, activarCarga } =
@@ -21,12 +23,18 @@ const index = () => {
    const [arrayCarreras, setArrayCarreras] = useState<
       CarreraListarGrupalNombreResponse[]
    >([]);
+   const [activo, setActivo] = useState<string>("-1");
+   const [estadosCombo] = useState<Option[]>([
+      { label: "TODOS", value: "-1" },
+      { label: "ACTIVO", value: "1" },
+      { label: "INACTIVO", value: "0" },
+   ]);
 
-   const funCarreraListarGrupal = async (nombre: string) => {
+   const funCarreraListarGrupal = async (nombre: string, activo: string) => {
       const srvCarrera = new CarreraService();
 
       await srvCarrera
-         .listarGrupalNombre(nombre)
+         .listarGrupalNombre(nombre, activo)
          .then((resp) => {
             setArrayCarreras(resp);
          })
@@ -38,7 +46,7 @@ const index = () => {
    useEffect(() => {
       const obtenerDatos = async () => {
          activarCarga(true);
-         await funCarreraListarGrupal(busqueda);
+         await funCarreraListarGrupal(busqueda, "-1");
          activarCarga(false);
       };
       obtenerDatos();
@@ -60,13 +68,22 @@ const index = () => {
                   gap: 10,
                }}
             >
+               <TitleCustom text="Búsqueda de Carrera" textSize={15} />
+               <SelectCustom
+                  title="Estado"
+                  value={activo}
+                  onChangeValue={setActivo}
+                  items={estadosCombo}
+               />
                <InputTextSearchCustom
                   title="Buscar por Nombre"
                   placeholder="Ingrese nombre a buscar"
                   keyboardType="web-search"
                   value={busqueda}
                   functionChangeText={setBusqueda}
-                  funButtonSearch={() => funCarreraListarGrupal(busqueda)}
+                  funButtonSearch={() =>
+                     funCarreraListarGrupal(busqueda, activo)
+                  }
                />
                <ButtonCrudCustom
                   buttonBackgroundColor="#8bc34a"

@@ -26,6 +26,9 @@ const index = () => {
    const funIrScreenUsuario = () => {
       router.push("/(home)/configuracion/perfil");
    };
+   const funIrScreenCambiarContrasenia = () => {
+      router.push("/(home)/configuracion/cambiar_contrasenia");
+   };
 
    return (
       <ContainerCustom>
@@ -48,6 +51,7 @@ const index = () => {
                   iconName={"lock-closed"}
                   textTitle="Contraseña"
                   textDescription="Cambiar Contraseña"
+                  onPress={funIrScreenCambiarContrasenia}
                />
                <TouchableOpacity
                   style={{
@@ -57,11 +61,11 @@ const index = () => {
                      alignItems: "center",
                      borderRadius: 10,
                      backgroundColor: Colors[colorScheme ?? "light"].card,
-                     shadowColor: "#51006a92",
-                     shadowOffset: { width: -2, height: 4 },
-                     shadowOpacity: 0.2,
+                     shadowColor: "#970606c7",
+                     shadowOffset: { width: -2, height: 5 },
+                     shadowOpacity: 0.5,
                      shadowRadius: 3,
-                     elevation: 20,
+                     elevation: 5,
                   }}
                   onPress={funCerrarSesion}
                >

@@ -5,7 +5,6 @@ import Colors from "../../../constants/Colors";
 import HeaderCustom from "../../../components/HeaderCustom";
 import ContainerCustom from "../../../components/ContainerCustom";
 import { IsteneSesionContext } from "../../../components/sesion/Sesion.component";
-import ButtonCustom from "../../../components/ButtonCustom";
 import ContainerWebCustom from "../../../components/ContainerWebCustom";
 import { UsuarioService } from "../../../services/usuario.service";
 import { formatoFecha } from "../../../utils/funciones.util";
@@ -20,8 +19,6 @@ const user = () => {
    const [nombre, setNombre] = useState<string>("");
    const [apellidoPaterno, setApellidoPaterno] = useState<string>("");
    const [apellidoMaterno, setApellidoMaterno] = useState<string>("");
-   const [telefono, setTelefono] = useState<string>("");
-   const [direccion, setDireccion] = useState<string>("");
    const [correo, setCorreo] = useState<string>("");
    const [usuario, setUsuario] = useState<string>("");
 
@@ -37,16 +34,10 @@ const user = () => {
             setApellidoPaterno(resp.apellido_paterno);
             setApellidoMaterno(resp.apellido_materno);
             setCorreo(resp.correo);
-            setTelefono(resp.telefono);
-            setDireccion(resp.direccion);
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
-   };
-
-   const funActualizarPerfil = () => {
-      mostrarNotificacion({ tipo: "warn", detalle: "Opción no habilitada" });
    };
 
    useEffect(() => {
@@ -160,7 +151,7 @@ const user = () => {
                      inputIsRequired={true}
                      inputIsEditable={false}
                   />
-                  <InputTextCustom
+                  {/* <InputTextCustom
                      title="Teléfono"
                      keyboardType="phone-pad"
                      value={telefono}
@@ -178,13 +169,13 @@ const user = () => {
                      maxLength={45}
                      placeholder="Ingrese dirección"
                      inputIsEditable={false}
-                  />
+                  /> */}
                </View>
-               <ButtonCustom
+               {/* <ButtonCustom
                   text="Actualizar"
                   onPress={funActualizarPerfil}
                   isEnabled={false}
-               />
+               /> */}
             </View>
          </ContainerWebCustom>
       </ContainerCustom>

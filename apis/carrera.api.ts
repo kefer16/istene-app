@@ -79,6 +79,27 @@ export class CarreraApi {
          return Promise.reject(error);
       }
    }
+   async eliminarIndividual(id: string): Promise<AxiosResponse> {
+      try {
+         const config = {
+            headers: {
+               Authorization: `Bearer ${CarreraEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
+            params: {
+               carrera_id: id,
+            },
+         };
+
+         return await axios.delete(
+            `${CarreraEntity.url}/eliminar_individual`,
+            config
+         );
+      } catch (error: any) {
+         error.message = personalizarMensajeError(error);
+         return Promise.reject(error);
+      }
+   }
 
    async listarIndividualNroActivos(): Promise<AxiosResponse> {
       try {
@@ -100,7 +121,10 @@ export class CarreraApi {
    }
 
    //grupal
-   async listarGrupalNombre(nombre: string): Promise<AxiosResponse> {
+   async listarGrupalNombre(
+      nombre: string,
+      activo: string
+   ): Promise<AxiosResponse> {
       try {
          const config = {
             headers: {
@@ -108,7 +132,8 @@ export class CarreraApi {
                "Content-Type": "application/json",
             },
             params: {
-               nombre: nombre,
+               nombre,
+               activo,
             },
          };
 

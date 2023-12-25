@@ -17,3 +17,8 @@ export interface PrivilegioLogin {
    abreviatura: privilegio;
    tipo: string;
 }
+
+export interface ActualizarIndividualContraseniaRequest {
+   contrasenia_actual: string;
+   contrasenia_nueva: string;
+}

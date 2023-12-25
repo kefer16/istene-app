@@ -10,17 +10,10 @@ import ContainerWebCustom from "../../../components/ContainerWebCustom";
 import TitleCustom from "../../../components/TitleCustom";
 import ButtonCustom from "../../../components/ButtonCustom";
 import { CarreraService } from "../../../services/carrera.service";
-const html = `
-   <html>
-   
-   <body style="text-align: center;">
-      <h1 style="font-size: 50px; font-family: Helvetica Neue; font-weight: normal;">
-         Hello Expo!
-      </h1>
-      
-   </body>
-   </html>
-   `;
+import { PostulanteService } from "../../../services/postulante.service";
+import { PostulanteReportesListarGrupal } from "../../../interfaces/responses/postulante.response";
+import { UsuarioService } from "../../../services/usuario.service";
+
 const Index = () => {
    const { mostrarNotificacion, activarCarga } =
       useContext(IsteneSesionContext);
@@ -29,14 +22,17 @@ const Index = () => {
       []
    );
    const [arrayCarrera, setArrayCarrera] = useState<Option[]>([]);
+   const [arrayUsuario, setArrayUsuario] = useState<Option[]>([]);
    const [selectedPrinter] = useState<Print.Printer>();
    const [fkPostulanteEstado, setFkPostulanteEstado] = useState<string>("-1");
-   const [carreraOpcionUno, setCarreraOpcionUno] = useState<string>("-1");
+   const [fkCarrera, setFkCarrera] = useState<string>("-1");
+   const [fkUsuario, setFkUsuario] = useState<string>("-1");
 
    useEffect(() => {
       const obtenerData = async () => {
          await funLlenarComboPostulanteEstado();
          await funLlenarComboCarrera();
+         await funLlenarComboUsuario();
       };
       obtenerData();
    }, []);
@@ -63,15 +59,61 @@ const Index = () => {
             setArrayCarrera(resp);
          })
          .catch((error: Error) => {
-            mostrarNotificacion({ tipo: "warn", detalle: error.message });
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
       activarCarga(false);
    };
-   const funImprimir = async () => {
+   const funLlenarComboUsuario = async () => {
+      const srvUsuario = new UsuarioService();
+      activarCarga(true);
+      await srvUsuario
+         .llenarComboFiltro()
+         .then((resp) => {
+            setArrayUsuario(resp);
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
+         });
+      activarCarga(false);
+   };
+
+   const funImprimir = async (
+      fk_estado: string,
+      fk_carrera: string,
+      fk_usuario: string
+   ) => {
+      const srvPostulante = new PostulanteService();
+      let arrayPostulantes: PostulanteReportesListarGrupal[] = [];
+
+      activarCarga(true);
+      await srvPostulante
+         .listarGrupalReportesFiltro(fk_estado, fk_carrera, fk_usuario)
+         .then((resp) => {
+            arrayPostulantes = resp;
+         })
+         .catch((error: Error) => {
+            mostrarNotificacion({ tipo: "error", detalle: error.message });
+         });
+
+      fk_estado =
+         arrayPostulanteEstado.find((item) => item.value === fk_estado)
+            ?.label ?? "";
+      fk_carrera =
+         arrayCarrera.find((item) => item.value === fk_carrera)?.label ?? "";
+      fk_usuario =
+         arrayUsuario.find((item) => item.value === fk_usuario)?.label ?? "";
+
+      const html = srvPostulante.obtenerFormatoHTML(
+         fk_estado,
+         fk_carrera,
+         fk_usuario,
+         arrayPostulantes
+      );
       await Print.printAsync({
          html,
          printerUrl: selectedPrinter?.url, // iOS only
       });
+      activarCarga(false);
    };
 
    return (
@@ -105,11 +147,22 @@ const Index = () => {
                />
                <SelectCustom
                   title="Carrera Postulante"
-                  value={carreraOpcionUno}
-                  onChangeValue={setCarreraOpcionUno}
+                  value={fkCarrera}
+                  onChangeValue={setFkCarrera}
                   items={arrayCarrera}
                />
-               <ButtonCustom text="Impimir" onPress={funImprimir} />
+               <SelectCustom
+                  title="Usuario Registrado"
+                  value={fkUsuario}
+                  onChangeValue={setFkUsuario}
+                  items={arrayUsuario}
+               />
+               <ButtonCustom
+                  text="Impimir"
+                  onPress={() =>
+                     funImprimir(fkPostulanteEstado, fkCarrera, fkUsuario)
+                  }
+               />
             </View>
          </ContainerWebCustom>
       </ContainerCustom>

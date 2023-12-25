@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { UsuarioEntity } from "../entities/usuario.entity";
 import { personalizarMensajeError } from "../utils/funciones.util";
+import { ActualizarIndividualContraseniaRequest } from "../interfaces/usuario.interface";
 
 export class UsuarioApi {
    async logearse(
@@ -69,6 +70,32 @@ export class UsuarioApi {
          return Promise.reject(error);
       }
    }
+
+   async actualizarIndividualContrasenia(
+      ID: string,
+      data: ActualizarIndividualContraseniaRequest
+   ): Promise<AxiosResponse> {
+      try {
+         const config = {
+            headers: {
+               Authorization: `Bearer ${UsuarioEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
+            params: {
+               usuario_id: ID,
+            },
+         };
+         const body = JSON.stringify(data);
+         return await axios.put(
+            `${UsuarioEntity.url}/actualizar_individual_contrasenia`,
+            body,
+            config
+         );
+      } catch (error: any) {
+         error.message = personalizarMensajeError(error);
+         return Promise.reject(error);
+      }
+   }
    async listarIndividual(ID: string): Promise<AxiosResponse> {
       try {
          const config = {
@@ -101,6 +128,25 @@ export class UsuarioApi {
          };
 
          return await axios.get(`${UsuarioEntity.url}/listar_grupal`, config);
+      } catch (error: any) {
+         error.message = personalizarMensajeError(error);
+         return Promise.reject(error);
+      }
+   }
+
+   async listarGrupalActivos(): Promise<AxiosResponse> {
+      try {
+         const config = {
+            headers: {
+               Authorization: `Bearer ${UsuarioEntity.bearer}`,
+               "Content-Type": "application/json",
+            },
+         };
+
+         return await axios.get(
+            `${UsuarioEntity.url}/listar_grupal_activos`,
+            config
+         );
       } catch (error: any) {
          error.message = personalizarMensajeError(error);
          return Promise.reject(error);
