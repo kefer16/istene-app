@@ -41,37 +41,37 @@ export default function RegistroScreen() {
       setContrasenia("");
       setRepetirContrasenia("");
    };
-   const funCrearCuenta = async () => {
+   const funEsDatosCorrectos = (): boolean => {
       if (!dni) {
          mostrarNotificacion({ tipo: "warn", detalle: "Ingrese un dni" });
-         return;
+         return false;
       }
       if (!nombre) {
          mostrarNotificacion({ tipo: "warn", detalle: "Ingrese un nombre" });
-         return;
+         return false;
       }
       if (!apellidoPaterno) {
          mostrarNotificacion({
             tipo: "warn",
             detalle: "Ingrese un apellido paterno",
          });
-         return;
+         return false;
       }
       if (!apellidoMaterno) {
          mostrarNotificacion({
             tipo: "warn",
             detalle: "Ingrese un apellido materno",
          });
-         return;
+         return false;
       }
       if (!correo) {
          mostrarNotificacion({ tipo: "warn", detalle: "Ingrese un correo" });
-         return;
+         return false;
       }
 
       if (!usuario) {
          mostrarNotificacion({ tipo: "warn", detalle: "Ingrese un usuario" });
-         return;
+         return false;
       }
 
       if (!contrasenia) {
@@ -79,12 +79,12 @@ export default function RegistroScreen() {
             tipo: "warn",
             detalle: "Ingrese una contraseña",
          });
-         return;
+         return false;
       }
 
       if (!repetirContrasenia) {
          mostrarNotificacion({ tipo: "warn", detalle: "Repita su contraseña" });
-         return;
+         return false;
       }
 
       if (contrasenia !== repetirContrasenia) {
@@ -92,9 +92,22 @@ export default function RegistroScreen() {
             tipo: "warn",
             detalle: "Las contraseñas deben ser iguales",
          });
-         return;
+         return false;
       }
 
+      if (contrasenia.length <= 7) {
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "La contraseña debe debe ser mínimo de 8 caracteres",
+         });
+         return false;
+      }
+      return true;
+   };
+   const funCrearCuenta = async () => {
+      if (!funEsDatosCorrectos()) {
+         return;
+      }
       const data: UsuarioEntity = new UsuarioEntity(
          "",
          dni,

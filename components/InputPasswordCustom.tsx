@@ -81,7 +81,7 @@ export default function InputPasswordCustom({
             onFocus={onFocus}
             onBlur={onBlur}
             keyboardType={"default"}
-            maxLength={20}
+            maxLength={15}
             secureTextEntry={activePassword}
             autoComplete="off"
          />

@@ -253,9 +253,54 @@ const gestionar = () => {
       if (carreraOpcionUno === "0") {
          mostrarNotificacion({
             tipo: "warn",
-            detalle: "Seleccione por lo menos una carrera",
+            detalle: "Seleccione la opcion 1 de carreras",
          });
          return false;
+      }
+      if (
+         carreraOpcionUno !== "0" &&
+         carreraOpcionDos !== "0" &&
+         carreraOpcionTres === "0"
+      ) {
+         if (carreraOpcionUno === carreraOpcionDos) {
+            mostrarNotificacion({
+               tipo: "warn",
+               detalle:
+                  "Seleccionaste la misma carrera varias veces, porfavor revisar",
+            });
+            return false;
+         }
+      }
+
+      if (
+         carreraOpcionUno !== "0" &&
+         carreraOpcionDos !== "0" &&
+         carreraOpcionTres !== "0"
+      ) {
+         if (carreraOpcionUno === carreraOpcionDos) {
+            mostrarNotificacion({
+               tipo: "warn",
+               detalle:
+                  "Seleccionaste la misma carrera varias veces, porfavor revisar",
+            });
+            return false;
+         }
+         if (carreraOpcionUno === carreraOpcionTres) {
+            mostrarNotificacion({
+               tipo: "warn",
+               detalle:
+                  "Seleccionaste la misma carrera varias veces, porfavor revisar",
+            });
+            return false;
+         }
+         if (carreraOpcionDos === carreraOpcionTres) {
+            mostrarNotificacion({
+               tipo: "warn",
+               detalle:
+                  "Seleccionaste la misma carrera varias veces, porfavor revisar",
+            });
+            return false;
+         }
       }
 
       return true;
@@ -690,12 +735,13 @@ const gestionar = () => {
                />
                <TitleCustom text="Datos Complementarios:" textSize={15} />
                <InputTextCustom
+                  inputIsMultiline={true}
                   title="Observación"
                   placeholder="Ingrese observación"
                   value={observacion}
                   functionChangeText={setObservacion}
                   keyboardType="default"
-                  maxLength={500}
+                  maxLength={300}
                   inputIsEditable={opcionGestion.esEditable}
                />
                <ButtonCrudCustom

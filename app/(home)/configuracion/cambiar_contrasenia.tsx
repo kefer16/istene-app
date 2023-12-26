@@ -69,6 +69,13 @@ const cambiar_contrasenia = () => {
          });
          return false;
       }
+      if (contraseniaNueva.length <= 7) {
+         mostrarNotificacion({
+            tipo: "warn",
+            detalle: "La contraseña nueva debe debe ser mínimo de 8 caracteres",
+         });
+         return false;
+      }
 
       return true;
    };

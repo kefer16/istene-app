@@ -24,6 +24,7 @@ interface Props {
    maxLength?: number;
    inputIsRequired?: boolean;
    inputIsEditable?: boolean;
+   inputIsMultiline?: boolean;
 }
 export default function InputTextCustom({
    title,
@@ -36,6 +37,7 @@ export default function InputTextCustom({
    maxLength,
    inputIsRequired = false,
    inputIsEditable = true,
+   inputIsMultiline = false,
 }: Props) {
    const colorScheme = useColorScheme();
    const [focus, setfocus] = useState<boolean>(false);
@@ -53,6 +55,7 @@ export default function InputTextCustom({
    return (
       <View>
          <TextInput
+            multiline={inputIsMultiline}
             editable={inputIsEditable}
             placeholderTextColor={
                Colors[colorScheme ?? "light"].InputTextPlaceHolder

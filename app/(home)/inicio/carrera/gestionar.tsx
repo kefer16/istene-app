@@ -361,6 +361,7 @@ const gestionar = () => {
                   maxLength={300}
                   inputIsEditable={opcionGestion.esEditable}
                   inputIsRequired={true}
+                  inputIsMultiline={true}
                />
 
                <ButtonCrudCustom
