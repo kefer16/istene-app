@@ -27,7 +27,7 @@ const index = () => {
    const [arrayPostulanteEstado, setArrayPostulanteEstado] = useState<Option[]>(
       []
    );
-   const [fkPostulanteEstado, setFkPostulanteEstado] = useState<string>("0");
+   const [fkPostulanteEstado, setFkPostulanteEstado] = useState<string>("-1");
 
    const funLlenarComboPostulanteEstado = async () => {
       const srvCandEstado = new PostulanteEstadoService();
