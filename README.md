@@ -52,3 +52,9 @@ abreviatura para crear el componente incial deacuerdo al nombre del archivo
 ```js
 rnfe
 ```
+
+```bash
+npx expo start --web --clear
+```
+
+

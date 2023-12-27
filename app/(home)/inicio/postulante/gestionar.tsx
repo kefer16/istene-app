@@ -32,7 +32,7 @@ import {
 import { OperadorService } from "../../../../services/operador.service";
 import { PostulanteListarIndividualResponse } from "../../../../interfaces/responses/postulante.response";
 import ModoVisualizacionCustom from "../../../../components/ModoVisualizacionCustom";
-import * as Contacts from "expo-contacts";
+import * as Clipboard from "expo-clipboard";
 import { PostulanteService } from "../../../../services/postulante.service";
 
 const gestionar = () => {
@@ -500,27 +500,8 @@ const gestionar = () => {
       activarCarga(false);
    };
 
-   const AddContact = async () => {
-      const { status } = await Contacts.requestPermissionsAsync();
-      if (status === "granted") {
-         const contact: Contacts.Contact = {
-            [Contacts.Fields.ID]: "JJJ-UNIQUE",
-            [Contacts.Fields.ContactType]: "person",
-            [Contacts.Fields.Name]: "Nuevo Numero",
-            [Contacts.Fields.PhoneNumbers]: [
-               {
-                  id: "JJJ-UNIQUE",
-                  label: "JJJ",
-                  number: "(81) 8420-0123",
-                  digits: "8184200123",
-               },
-            ],
-            [Contacts.Fields.FirstName]: "Bird",
-            [Contacts.Fields.LastName]: "Man",
-            [Contacts.Fields.Company]: "Young Money",
-         };
-         await Contacts.addContactAsync(contact);
-      }
+   const funCopiarTelefono = async () => {
+      await Clipboard.setStringAsync(telefono);
    };
 
    return (
@@ -598,7 +579,7 @@ const gestionar = () => {
                         <ButtonIconCustom
                            iconName={"call"}
                            iconColor="#00bcd4"
-                           onPress={AddContact}
+                           onPress={funCopiarTelefono}
                         />
                      </View>
                   )}
