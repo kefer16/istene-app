@@ -8,7 +8,6 @@ import { UsuarioEntity } from "../entities/usuario.entity";
 import { crearFechaISO } from "../utils/funciones.util";
 import ContainerCustom from "../components/ContainerCustom";
 import Colors from "../constants/Colors";
-import HeaderCustom from "../components/HeaderCustom";
 import InputTextSearchCustom from "../components/InputTextSearchCustom";
 import { ReniecService } from "../services/reniec.service";
 import { IsteneSesionContext } from "../components/sesion/Sesion.component";
@@ -166,8 +165,12 @@ export default function RegistroScreen() {
    };
 
    return (
-      <ContainerCustom>
-         <HeaderCustom title="Registro" isSecondaryPage={true} urlBack="/" />
+      <ContainerCustom
+         isVisible={true}
+         title="Registro"
+         isSecondaryPage={true}
+         urlBack="/"
+      >
          <ContainerWebCustom>
             <View
                style={{

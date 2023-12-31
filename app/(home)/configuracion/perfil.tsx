@@ -2,7 +2,6 @@ import { Text, View, useColorScheme } from "react-native";
 import InputTextCustom from "../../../components/InputTextCustom";
 import { useContext, useEffect, useState } from "react";
 import Colors from "../../../constants/Colors";
-import HeaderCustom from "../../../components/HeaderCustom";
 import ContainerCustom from "../../../components/ContainerCustom";
 import { IsteneSesionContext } from "../../../components/sesion/Sesion.component";
 import ContainerWebCustom from "../../../components/ContainerWebCustom";
@@ -51,12 +50,12 @@ const user = () => {
    }, []);
 
    return (
-      <ContainerCustom>
-         <HeaderCustom
-            title="Perfil"
-            isSecondaryPage={true}
-            urlBack={"/(home)/configuracion"}
-         />
+      <ContainerCustom
+         isVisible={true}
+         title="Perfil"
+         isSecondaryPage={true}
+         urlBack={"/(home)/configuracion"}
+      >
          <ContainerWebCustom>
             <View
                style={{

@@ -1,7 +1,6 @@
 import { View, useColorScheme } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import ContainerCustom from "../../../components/ContainerCustom";
-import HeaderCustom from "../../../components/HeaderCustom";
 import ContainerWebCustom from "../../../components/ContainerWebCustom";
 import TitleCustom from "../../../components/TitleCustom";
 import Colors from "../../../constants/Colors";
@@ -115,12 +114,12 @@ const cambiar_contrasenia = () => {
    }, []);
 
    return (
-      <ContainerCustom>
-         <HeaderCustom
-            title="Contraseña"
-            isSecondaryPage={true}
-            urlBack={"/(home)/configuracion"}
-         />
+      <ContainerCustom
+         isVisible={true}
+         title="Contraseña"
+         isSecondaryPage={true}
+         urlBack={"/(home)/configuracion"}
+      >
          <ContainerWebCustom>
             <View
                style={{

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import ContainerCustom from "../../../../components/ContainerCustom";
-import HeaderCustom from "../../../../components/HeaderCustom";
 import { View } from "react-native";
 import InputTextSearchCustom from "../../../../components/InputTextSearchCustom";
 import CardButtonCustom from "../../../../components/CardButtonCustom";
@@ -69,12 +68,12 @@ const index = () => {
    }, []);
 
    return (
-      <ContainerCustom>
-         <HeaderCustom
-            title="Postulante"
-            isSecondaryPage={true}
-            urlBack={"/(home)/inicio/"}
-         />
+      <ContainerCustom
+         isVisible={true}
+         title="Postulante"
+         isSecondaryPage={true}
+         urlBack={"/(home)/inicio/"}
+      >
          <ContainerWebCustom>
             <View
                style={{

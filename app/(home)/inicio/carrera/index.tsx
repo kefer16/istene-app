@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import HeaderCustom from "../../../../components/HeaderCustom";
 import ContainerCustom from "../../../../components/ContainerCustom";
 import { IsteneSesionContext } from "../../../../components/sesion/Sesion.component";
 import { CarreraListarGrupalNombreResponse } from "../../../../interfaces/responses/carrera.response";
@@ -32,7 +31,7 @@ const index = () => {
 
    const funCarreraListarGrupal = async (nombre: string, activo: string) => {
       const srvCarrera = new CarreraService();
-
+      activarCarga(true);
       await srvCarrera
          .listarGrupalNombre(nombre, activo)
          .then((resp) => {
@@ -41,23 +40,22 @@ const index = () => {
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
          });
+      activarCarga(false);
    };
 
    useEffect(() => {
       const obtenerDatos = async () => {
-         activarCarga(true);
          await funCarreraListarGrupal(busqueda, "-1");
-         activarCarga(false);
       };
       obtenerDatos();
    }, []);
    return (
-      <ContainerCustom>
-         <HeaderCustom
-            title="Carrera"
-            isSecondaryPage={true}
-            urlBack={"/(home)/inicio/"}
-         />
+      <ContainerCustom
+         isVisible={true}
+         title="Carrera"
+         isSecondaryPage={true}
+         urlBack={"/(home)/inicio/"}
+      >
          <ContainerWebCustom>
             <View
                style={{

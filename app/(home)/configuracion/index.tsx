@@ -7,7 +7,6 @@ import { useContext, useEffect } from "react";
 import { IsteneSesionContext } from "../../../components/sesion/Sesion.component";
 import Colors from "../../../constants/Colors";
 import ContainerCustom from "../../../components/ContainerCustom";
-import HeaderCustom from "../../../components/HeaderCustom";
 import TitleCustom from "../../../components/TitleCustom";
 import ContainerWebCustom from "../../../components/ContainerWebCustom";
 
@@ -31,8 +30,11 @@ const index = () => {
    };
 
    return (
-      <ContainerCustom>
-         <HeaderCustom title="Configuración" isSecondaryPage={false} />
+      <ContainerCustom
+         isVisible={true}
+         title="Configuración"
+         isSecondaryPage={false}
+      >
          <ContainerWebCustom>
             <View style={{ padding: 10, paddingVertical: 10, gap: 7 }}>
                <TitleCustom

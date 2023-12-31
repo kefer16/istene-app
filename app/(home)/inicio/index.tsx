@@ -1,7 +1,6 @@
 import { View } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import ContainerCustom from "../../../components/ContainerCustom";
-import HeaderCustom from "../../../components/HeaderCustom";
 import TitleCustom from "../../../components/TitleCustom";
 import CardCustom from "../../../components/CardCustom";
 import ButtonOptionCustom from "../../../components/ButtonOptionCustom";
@@ -118,11 +117,11 @@ const index = () => {
    }, []);
 
    return (
-      <ContainerCustom>
-         <HeaderCustom
-            title={`Bienvenid@ ${isteneSesion.usuario} `}
-            isSecondaryPage={false}
-         />
+      <ContainerCustom
+         isVisible={true}
+         title={`Bienvenid@ ${isteneSesion.usuario} `}
+         isSecondaryPage={false}
+      >
          <ContainerWebCustom>
             <View
                style={{

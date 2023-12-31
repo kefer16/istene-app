@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { View } from "react-native";
 import * as Print from "expo-print";
 import ContainerCustom from "../../../components/ContainerCustom";
-import HeaderCustom from "../../../components/HeaderCustom";
 import { PostulanteEstadoService } from "../../../services/postulante_estado.service";
 import { IsteneSesionContext } from "../../../components/sesion/Sesion.component";
 import SelectCustom, { Option } from "../../../components/SelectCustom";
@@ -117,13 +116,12 @@ const Index = () => {
    };
 
    return (
-      <ContainerCustom>
-         <HeaderCustom
-            title="Reportes"
-            isSecondaryPage={false}
-            urlBack={"/(home)/inicio/"}
-         />
-
+      <ContainerCustom
+         isVisible={true}
+         title="Reportes"
+         isSecondaryPage={false}
+         urlBack={"/(home)/inicio/"}
+      >
          <ContainerWebCustom>
             <View
                style={{

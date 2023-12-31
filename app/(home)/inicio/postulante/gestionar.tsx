@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import ContainerCustom from "../../../../components/ContainerCustom";
-import HeaderCustom from "../../../../components/HeaderCustom";
 import InputTextSearchCustom from "../../../../components/InputTextSearchCustom";
 import { ReniecService } from "../../../../services/reniec.service";
 import { IsteneSesionContext } from "../../../../components/sesion/Sesion.component";
@@ -375,6 +374,7 @@ const gestionar = () => {
                tipo: "success",
                detalle: "Postulante registrado exitosamente",
             });
+            router.back();
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
@@ -382,7 +382,6 @@ const gestionar = () => {
          });
 
       activarCarga(false);
-      router.replace("/(home)/inicio/postulante/");
    };
 
    const funPostulanteActualizarIndividual = async (id: string) => {
@@ -491,7 +490,7 @@ const gestionar = () => {
                tipo: "success",
                detalle: "Se eliminó el postulante correctamente",
             });
-            router.replace("/(home)/inicio/postulante/");
+            router.back();
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
@@ -505,12 +504,12 @@ const gestionar = () => {
    };
 
    return (
-      <ContainerCustom>
-         <HeaderCustom
-            title="Postulante / Gestionar"
-            isSecondaryPage={true}
-            urlBack={"/(home)/inicio/postulante/"}
-         />
+      <ContainerCustom
+         isVisible={true}
+         title="Postulante / Gestionar"
+         isSecondaryPage={true}
+         urlBack={"/(home)/inicio/postulante/"}
+      >
          <ContainerWebCustom>
             <View
                style={{

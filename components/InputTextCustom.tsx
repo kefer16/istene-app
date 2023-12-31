@@ -105,7 +105,7 @@ export default function InputTextCustom({
                zIndex: 1,
                // width: "100%",
                flexDirection: "row",
-               // backgroundColor: "green",
+               borderRadius: 2,
             }}
          >
             <Text

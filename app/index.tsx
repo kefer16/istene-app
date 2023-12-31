@@ -58,7 +58,7 @@ export default function LoginScreen() {
    };
 
    return (
-      <ContainerCustom>
+      <ContainerCustom isVisible={false}>
          <ContainerWebCustom>
             <View
                style={{

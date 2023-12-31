@@ -10,7 +10,6 @@ import {
 import { CarreraService } from "../../../../services/carrera.service";
 import { fechaActualISO, formatoFecha } from "../../../../utils/funciones.util";
 import ContainerCustom from "../../../../components/ContainerCustom";
-import HeaderCustom from "../../../../components/HeaderCustom";
 import Colors from "../../../../constants/Colors";
 import TitleCustom from "../../../../components/TitleCustom";
 import ButtonIconCustom from "../../../../components/ButtonIconCustom";
@@ -149,7 +148,7 @@ const gestionar = () => {
                tipo: "success",
                detalle: "Carrera registrada exitosamente",
             });
-            router.replace("/(home)/inicio/carrera/");
+            router.back();
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
@@ -226,7 +225,7 @@ const gestionar = () => {
                tipo: "success",
                detalle: "Se eliminó la carrera correctamente",
             });
-            router.replace("/(home)/inicio/carrera/");
+            router.back();
          })
          .catch((error: Error) => {
             mostrarNotificacion({ tipo: "error", detalle: error.message });
@@ -235,12 +234,12 @@ const gestionar = () => {
       activarCarga(false);
    };
    return (
-      <ContainerCustom>
-         <HeaderCustom
-            title="Carrera / Gestionar"
-            isSecondaryPage={true}
-            urlBack={"/(home)/inicio/carrera/"}
-         />
+      <ContainerCustom
+         isVisible={true}
+         title="Carrera / Gestionar"
+         isSecondaryPage={true}
+         urlBack={"/(home)/inicio/carrera/"}
+      >
          <ContainerWebCustom>
             <View
                style={{
